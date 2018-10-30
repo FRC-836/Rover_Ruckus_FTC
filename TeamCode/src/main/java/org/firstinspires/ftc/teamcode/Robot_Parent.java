@@ -30,17 +30,24 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        getReady();
+        initializeRobot();
 
         waitForStart();
 
-        go();
+        startRobot();
 
     }
 
-    abstract public void getReady();
+    abstract public void initializeRobot();
 
-    abstract public void go();
+    abstract public void startRobot();
+
+    protected void setDrive(double leftPower, double rightPower){
+        backLeftDrive.setPower(leftPower);
+        backRightDrive.setPower(rightPower);
+        frontLeftDrive.setPower(leftPower);
+        frontRightDrive.setPower(rightPower);
+    }
 
     protected void setDrive(double forwardPower, double turnPower, double strafePower) {
         backLeftDrive.setPower(forwardPower + turnPower - strafePower);
