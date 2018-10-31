@@ -35,6 +35,11 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
+        setupImu();
+
+        Heading.setImu(imu);
+        Heading.setFieldOffset(0.0f);
+
         getReady();
 
         waitForStart();
