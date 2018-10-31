@@ -38,7 +38,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         setupImu();
 
         Heading.setImu(imu);
-        Heading.setFieldOffset(0.0f);
+        Heading.setFieldOffset(-Heading.getAbsoluteHeading());
 
         getReady();
 
@@ -57,13 +57,6 @@ public abstract class Robot_Parent extends LinearOpMode {
         backRightDrive.setPower(forwardPower - turnPower + strafePower);
         frontLeftDrive.setPower(forwardPower + turnPower + strafePower);
         frontRightDrive.setPower(forwardPower - turnPower - strafePower);
-    }
-    protected double getTurnPosition() {
-        double position = backLeftDrive.getCurrentPosition() - backRightDrive.getCurrentPosition()
-                + frontLeftDrive.getCurrentPosition() - frontRightDrive.getCurrentPosition();
-        position /= 4.0;
-        position /= EC_PER_DEGREE;
-        return position;
     }
 
     private void setupImu() {
