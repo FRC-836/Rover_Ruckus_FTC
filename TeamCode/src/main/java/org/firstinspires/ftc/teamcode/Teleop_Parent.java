@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode;
 public abstract class Teleop_Parent extends Robot_Parent {
 
     @Override
-    public void getReady() {
+    public void initializeRobot() {
 
     }
 
     @Override
-    public void go() {
+    public void startRobot() {
         begin();
         while (opModeIsActive()) {
             run();
