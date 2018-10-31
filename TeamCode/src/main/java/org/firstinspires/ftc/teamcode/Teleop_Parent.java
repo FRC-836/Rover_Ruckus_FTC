@@ -4,6 +4,7 @@ public abstract class Teleop_Parent extends Robot_Parent {
 
     @Override
     public void initializeRobot() {
+        gamepad1.setJoystickDeadzone(0.1f);
 
     }
 
