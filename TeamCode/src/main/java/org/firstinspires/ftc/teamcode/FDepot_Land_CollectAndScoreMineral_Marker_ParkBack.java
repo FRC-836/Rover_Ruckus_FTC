@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-public class FDepot_Land_Marker_ParkBack extends Autonomous_Parent{
+public class FDepot_Land_CollectAndScoreMineral_Marker_ParkBack extends Autonomous_Parent{
+
     @Override
     public void setup() {
 
@@ -9,7 +10,8 @@ public class FDepot_Land_Marker_ParkBack extends Autonomous_Parent{
     @Override
     public void begin() {
         land();
-        driveToDepot(true, false);
+        driveToDepot(false, true);
+        scoreMineralInDepot();
         placeTeamMarker();
         driveFromDepotToPark(false);
     }

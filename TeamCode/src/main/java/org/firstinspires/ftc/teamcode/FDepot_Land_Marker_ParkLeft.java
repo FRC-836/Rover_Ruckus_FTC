@@ -9,7 +9,7 @@ public class FDepot_Land_Marker_ParkLeft extends Autonomous_Parent{
     @Override
     public void begin() {
         land();
-        driveToDepot(true);
+        driveToDepot(true, false);
         placeTeamMarker();
         driveFromDepotToPark(true);
     }
