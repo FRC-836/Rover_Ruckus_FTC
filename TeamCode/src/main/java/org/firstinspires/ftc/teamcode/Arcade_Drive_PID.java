@@ -47,10 +47,12 @@ public class Arcade_Drive_PID extends Teleop_Parent {
         double turnPower = gamepad1.right_stick_x;
         double pidTurnPower = holdTurnPID.update(heading.getRelativeHeading());
 
-        if (Math.abs(forwardPower) > Math.abs(strafePower))
-            strafePower = 0.0;
-        else
-            forwardPower = 0.0;
+        if (Math.abs(strafePower) > JOYSTICK_DEAD_ZONE) {
+            if (Math.abs(forwardPower / strafePower) > 1.732)
+                strafePower = 0.0;
+            if (Math.abs(forwardPower / strafePower) < 0.57735)
+                forwardPower = 0.0;
+        }
 
         if (Math.abs(turnPower) < JOYSTICK_DEAD_ZONE && Math.abs(forwardPower) < JOYSTICK_DEAD_ZONE
                 && Math.abs(strafePower) < JOYSTICK_DEAD_ZONE) {
