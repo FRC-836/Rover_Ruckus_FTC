@@ -30,7 +30,6 @@ public class Arcade_Drive extends Teleop_Parent {
         double strafePower = gamepad1.left_stick_x;
         double turnPower = gamepad1.right_stick_x;
         double pidTurnPower = holdTurnPID.update(heading.getRelativeHeading());
-
         // If user is trying to turn
         if (Math.abs(turnPower) > JOYSTICK_DEAD_ZONE) {
             // Do what user says

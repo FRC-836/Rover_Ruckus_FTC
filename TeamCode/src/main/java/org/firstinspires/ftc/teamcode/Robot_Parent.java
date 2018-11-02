@@ -19,7 +19,11 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor frontRightDrive;
 
     protected PID_Controller goToTurnPID = new PID_Controller(0.025, 0.0, 0.0);
-    protected PID_Controller holdTurnPID = new PID_Controller(0.015, 0.0, 0.001);
+
+    public double p = 0.02;
+    public double d = 0.00293;
+
+    protected PID_Controller holdTurnPID = new PID_Controller(p, 0.0, d);
 
     private BNO055IMU imu;
 
