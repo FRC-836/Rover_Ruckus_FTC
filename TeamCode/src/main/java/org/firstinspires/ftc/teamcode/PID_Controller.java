@@ -16,7 +16,6 @@ public class PID_Controller{
     private double lastError = 0.0;
     private double time = 0.0;
     private double lastTime = 0.0;
-    private double lastInput = 0.0;
     private double pValue = 0.0;
     private double PGAIN;
     private double iValue = 0.0;
@@ -43,8 +42,7 @@ public class PID_Controller{
         time = runtime.seconds();
         pValue = PGAIN * error;
         iValue += IGAIN * (lastError + error) * (0.5) * (time - lastTime);
-        dValue = DGAIN * (lastInput - input) / (time - lastTime);
-        lastInput = input;
+        dValue = DGAIN * (error - lastError) / (time - lastTime);
         return getPID();
     }
 
