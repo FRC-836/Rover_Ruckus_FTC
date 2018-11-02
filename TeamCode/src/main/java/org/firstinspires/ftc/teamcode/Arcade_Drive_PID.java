@@ -2,12 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "Teleop Octo")
-public class Arcade_Drive extends Teleop_Parent {
+@TeleOp(name = "Teleop Octo PID")
+public class Arcade_Drive_PID extends Teleop_Parent{
 
     //Team is using Regular/H drive train
-
     Heading heading;
+    boolean isTurning = false;
 
     @Override
     public void setup() {
@@ -16,11 +16,9 @@ public class Arcade_Drive extends Teleop_Parent {
 
     @Override
     public void begin() {
-
         heading = Heading.createRelativeHeading(0.0f);
         holdTurnPID.resetPID();
         holdTurnPID.setSetpoint(0.0);
-
     }
 
     @Override
@@ -29,17 +27,28 @@ public class Arcade_Drive extends Teleop_Parent {
         double forwardPower = -gamepad1.left_stick_y;
         double strafePower = gamepad1.left_stick_x;
         double turnPower = gamepad1.right_stick_x;
+
         double pidTurnPower = holdTurnPID.update(heading.getRelativeHeading());
 
         // If user is trying to turn
-        if (Math.abs(turnPower) > JOYSTICK_DEAD_ZONE) {
+        if (Math.abs(turnPower) > JOYSTICK_DEAD_ZONE)
+        {
             // Do what user says
-            setDrive(forwardPower, turnPower, strafePower);
-        } else // If the user isn't trying to turn
+            setDrive(forwardPower,turnPower,strafePower);
+
+            isTurning = true;
+        }
+        else // If the user isn't trying to turn
         {
             // Listen to the PID Controller
-            setDrive(forwardPower, pidTurnPower, strafePower);
+            if (isTurning) {
+                heading.setRelativeOffset(-Heading.getFieldHeading());
+            }
+
+            setDrive(forwardPower,pidTurnPower,strafePower);
+            isTurning = false;
         }
-        setDrive(forwardPower, turnPower, strafePower);
+
     }
+
 }

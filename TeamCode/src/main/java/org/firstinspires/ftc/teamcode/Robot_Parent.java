@@ -7,12 +7,19 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public abstract class Robot_Parent extends LinearOpMode {
 
+    public final boolean IS_OCTO = true;
+
     protected DcMotor leftDrive;
     protected DcMotor rightDrive;
     protected DcMotor middleDrive;
 
+    protected DcMotor backLeftDrive;
+    protected DcMotor backRightDrive;
+    protected DcMotor frontLeftDrive;
+    protected DcMotor frontRightDrive;
+
     protected PID_Controller goToTurnPID = new PID_Controller(0.025, 0.0, 0.0);
-    protected PID_Controller holdTurnPID = new PID_Controller(0.0,0.0,0.0);
+    protected PID_Controller holdTurnPID = new PID_Controller(0.015, 0.0, 0.001);
 
     private BNO055IMU imu;
 
@@ -21,19 +28,36 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-        leftDrive = hardwareMap.get(DcMotor.class, "ld");
-        rightDrive = hardwareMap.get(DcMotor.class, "rd");
-        middleDrive = hardwareMap.get(DcMotor.class, "md");
+        if (IS_OCTO) {
+            backLeftDrive = hardwareMap.get(DcMotor.class, "bld");
+            backRightDrive = hardwareMap.get(DcMotor.class, "brd");
+            frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
+            frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
 
-        leftDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightDrive.setDirection(DcMotor.Direction.FORWARD);
-        middleDrive.setDirection(DcMotor.Direction.FORWARD);
+            backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+            backRightDrive.setDirection(DcMotor.Direction.FORWARD);
+            frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+            frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        //middle drive assumes motor faces backwards. Switch if motor faces forwards
+            backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        } else {
+            leftDrive = hardwareMap.get(DcMotor.class, "ld");
+            rightDrive = hardwareMap.get(DcMotor.class, "rd");
+            middleDrive = hardwareMap.get(DcMotor.class, "md");
 
-        leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        middleDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            leftDrive.setDirection(DcMotor.Direction.REVERSE);
+            rightDrive.setDirection(DcMotor.Direction.FORWARD);
+            middleDrive.setDirection(DcMotor.Direction.FORWARD);
+            //middle drive assumes motor faces backwards. Switch if motor faces forwards
+
+            leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            middleDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        }
+
 
         setupImu();
 
@@ -48,16 +72,26 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     public abstract void initialize();
+
     public abstract void play();
+
     public abstract void setup();
+
     public abstract void begin();
 
     // Functions
 
     protected void setDrive(double forwardPower, double turnPower, double strafePower) {
-        leftDrive.setPower(forwardPower + turnPower);
-        rightDrive.setPower(forwardPower - turnPower);
-        middleDrive.setPower(strafePower);
+        if (IS_OCTO) {
+            backLeftDrive.setPower(forwardPower + turnPower - strafePower);
+            backRightDrive.setPower(forwardPower - turnPower + strafePower);
+            frontLeftDrive.setPower(forwardPower + turnPower + strafePower);
+            frontRightDrive.setPower(forwardPower - turnPower - strafePower);
+        } else {
+            leftDrive.setPower(forwardPower + turnPower);
+            rightDrive.setPower(forwardPower - turnPower);
+            middleDrive.setPower(strafePower);
+        }
     }
 
     private void setupImu() {
