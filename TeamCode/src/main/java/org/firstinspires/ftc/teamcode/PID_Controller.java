@@ -11,6 +11,7 @@ public class PID_Controller{
 
     ElapsedTime runtime;
 
+    private double lastInput = 0.0;
     private double setpoint = 0.0;
     private double error = 0.0;
     private double lastError = 0.0;
@@ -35,6 +36,10 @@ public class PID_Controller{
         this.setpoint = newSetpoint;
     }
 
+    public double getSetpoint() {
+        return this.setpoint;
+    }
+
     public double update(double input){
         lastError = error;
         lastTime = time;
@@ -42,7 +47,9 @@ public class PID_Controller{
         time = runtime.seconds();
         pValue = PGAIN * error;
         iValue += IGAIN * (lastError + error) * (0.5) * (time - lastTime);
-        dValue = DGAIN * (error - lastError) / (time - lastTime);
+        dValue = DGAIN * (lastInput - input) / (time - lastTime);
+
+        lastInput = input;
         return getPID();
     }
 
