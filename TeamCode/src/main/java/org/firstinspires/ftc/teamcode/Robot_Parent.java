@@ -59,9 +59,9 @@ public abstract class Robot_Parent extends LinearOpMode {
             middleDrive.setDirection(DcMotor.Direction.FORWARD);
             //middle drive assumes motor faces backwards. Switch if motor faces forwards
 
-            leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            middleDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            middleDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
 
@@ -110,6 +110,5 @@ public abstract class Robot_Parent extends LinearOpMode {
         imuParameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         imu.initialize(imuParameters);
-    }
     }
 }
