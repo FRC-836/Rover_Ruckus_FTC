@@ -3,13 +3,12 @@ package org.firstinspires.ftc.teamcode;
 public abstract class Teleop_Parent extends Robot_Parent {
 
     @Override
-    public void initializeRobot() {
-        gamepad1.setJoystickDeadzone(0.1f);
+    public void getReady() {
 
     }
 
     @Override
-    public void startRobot() {
+    public void go() {
         begin();
         while (opModeIsActive()) {
             run();

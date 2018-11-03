@@ -11,7 +11,6 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor backRightDrive;
     protected DcMotor frontLeftDrive;
     protected DcMotor frontRightDrive;
-
     protected PID_Controller holdTurnPID = new PID_Controller(0.025, 0.0, 0.0);
 
     @Override
@@ -31,24 +30,17 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        initializeRobot();
+        getReady();
 
         waitForStart();
 
-        startRobot();
+        go();
 
     }
 
-    abstract public void initializeRobot();
+    abstract public void getReady();
 
-    abstract public void startRobot();
-
-    protected void setDrive(double leftPower, double rightPower){
-        backLeftDrive.setPower(leftPower);
-        backRightDrive.setPower(rightPower);
-        frontLeftDrive.setPower(leftPower);
-        frontRightDrive.setPower(rightPower);
-    }
+    abstract public void go();
 
     protected void setDrive(double forwardPower, double turnPower, double strafePower) {
         backLeftDrive.setPower(forwardPower + turnPower - strafePower);
