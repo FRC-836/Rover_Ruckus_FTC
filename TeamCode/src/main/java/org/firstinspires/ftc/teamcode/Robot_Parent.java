@@ -21,9 +21,10 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected PID_Controller goToTurnPID = new PID_Controller(0.025, 0.0, 0.0);
 
-    public double p = 0.02;
-    public double d = 0.00293;
+    public double p = 0.0854;
+    public double d = 0.00760;
     //Stable Gains: P = 0.02 D = 0.00293
+    //Testing gains p = 0.0854 d = 0.00760
 
     protected PID_Controller holdTurnPID = new PID_Controller(p, 0.0, d);
 
