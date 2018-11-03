@@ -25,22 +25,6 @@ public class Arcade_Drive_PID extends Teleop_Parent {
 
     @Override
     public void repeat() {
-        if (gamepad1.dpad_up || gamepad1.dpad_down) {
-            if (!dpadPressed) {
-                if (gamepad1.dpad_up)
-                    p *= 1.1;
-                if (gamepad1.dpad_down)
-                    p /= 1.1;
-                holdTurnPID = new PID_Controller(p, 0.0, d);
-                holdTurnPID.setSetpoint(0.0);
-                holdTurnPID.resetPID();
-            }
-            dpadPressed = true;
-        } else {
-            dpadPressed = false;
-        }
-
-
         // Get powers
         double forwardPower = -gamepad1.left_stick_y;
         double strafePower = gamepad1.left_stick_x;
@@ -75,14 +59,11 @@ public class Arcade_Drive_PID extends Teleop_Parent {
                     heading.setRelativeOffset(-Heading.getFieldHeading());
                 }
 
-                setDrive(forwardPower, pidTurnPower, strafePower);
+                double turnMult = (holdTurnMultiplier - 1.0) * Math.max(Math.abs(forwardPower), Math.abs(strafePower)) + 1.0;
+
+                setDrive(forwardPower, pidTurnPower * turnMult, strafePower);
                 isTurning = false;
             }
         }
-
-        telemetry.addData("pgain", p);
-        telemetry.addData("dgain", d);
-        telemetry.update();
     }
-
 }
