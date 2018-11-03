@@ -18,10 +18,12 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor frontLeftDrive;
     protected DcMotor frontRightDrive;
 
+
     protected PID_Controller goToTurnPID = new PID_Controller(0.025, 0.0, 0.0);
 
     public double p = 0.02;
     public double d = 0.00293;
+    //Stable Gains: P = 0.02 D = 0.00293
 
     protected PID_Controller holdTurnPID = new PID_Controller(p, 0.0, d);
 
@@ -43,10 +45,10 @@ public abstract class Robot_Parent extends LinearOpMode {
             frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
             frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
-            backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         } else {
             leftDrive = hardwareMap.get(DcMotor.class, "ld");
             rightDrive = hardwareMap.get(DcMotor.class, "rd");
@@ -108,5 +110,6 @@ public abstract class Robot_Parent extends LinearOpMode {
         imuParameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         imu.initialize(imuParameters);
+    }
     }
 }
