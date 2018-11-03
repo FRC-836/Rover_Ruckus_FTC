@@ -11,7 +11,7 @@ public class Arm_PID_Test extends LinearOpMode{
 
     private boolean repeated = false;
 
-    protected PID_Controller moveArmPid = new PID_Controller(0.003,0.00028,0.00042 );
+    protected PID_Controller moveArmPid = new PID_Controller(0.00165,0.000,0.000375 );
     @Override
     public void runOpMode() throws InterruptedException {
         armMotor = hardwareMap.get(DcMotor.class, "arm");
@@ -46,4 +46,6 @@ public class Arm_PID_Test extends LinearOpMode{
 p : 0.003
 i : 0.00028
 d : 0.00042
+
+Integral for weight: 0.00017
  */
