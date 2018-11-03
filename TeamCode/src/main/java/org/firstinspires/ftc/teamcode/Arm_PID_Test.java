@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 @Autonomous (name = "Arm PID Testing", group = "A")
 public class Arm_PID_Test extends LinearOpMode{
     private DcMotor armMotor;
-    protected PID_Controller moveArmPid = new PID_Controller(0.0,0.00028,0.0    );
+    protected PID_Controller moveArmPid = new PID_Controller(0.00042,0.00028,0.0 );
     @Override
     public void runOpMode() throws InterruptedException {
         armMotor = hardwareMap.get(DcMotor.class, "arm");
