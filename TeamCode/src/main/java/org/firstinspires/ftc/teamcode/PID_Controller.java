@@ -35,9 +35,6 @@ public class PID_Controller{
     public void setSetpoint(double newSetpoint) {
         this.setpoint = newSetpoint;
     }
-    public double getSetpoint() {
-        return this.setpoint;
-    }
 
     public double getSetpoint() {
         return this.setpoint;
