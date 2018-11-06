@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.configuration.WebcamConfiguration;
 
 import org.corningrobotics.enderbots.endercv.OpenCVPipeline;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -21,6 +23,7 @@ public abstract class Base_Detector extends OpenCVPipeline {
     private List<Base_Image_Triangulator> scorers = new ArrayList<>();
     private Size firstSize;
     private Size adjustedSize;
+    WebcamName webcamName;
     private Mat mainMat = new Mat();
 
     public Speed_Settings.detectionSpeed speed = Speed_Settings.detectionSpeed.MODERATE;
