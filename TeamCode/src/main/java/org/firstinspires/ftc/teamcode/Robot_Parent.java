@@ -56,16 +56,6 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontLeftDrive.setPower(forwardPower + turnPower + strafePower);
         frontRightDrive.setPower(forwardPower - turnPower - strafePower);
     }
-    
-    protected void driveForward(double forwardPower) {
-        setDrive(forwardPower, 0.0, 0.0);
-    }
-    protected void driveTurn(double turnPower) {
-        setDrive(0.0, turnPower, 0.0);
-    }
-    protected void driveStrafe(double strafePower) {
-        setDrive(0.0, 0.0, strafePower);
-    }
 
     private void setupImu() {
         BNO055IMU.Parameters imuParameters = new BNO055IMU.Parameters();
