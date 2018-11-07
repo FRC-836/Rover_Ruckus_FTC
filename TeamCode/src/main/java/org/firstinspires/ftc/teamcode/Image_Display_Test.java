@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,7 +12,8 @@ import org.opencv.core.Mat;
 public class Image_Display_Test extends OpMode {
     //private Gold_Detector detector;
 
-    private Base_Detector detector;
+    private Gold_Detector detector;
+
     @Override
     public void init() {
 
@@ -20,40 +22,24 @@ public class Image_Display_Test extends OpMode {
         detector = new Gold_Detector();
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), 0);
         detector.useDefaults();
-        //detector.alignSize = 100;
-        //detector.alignPosOffset = 0;
+        detector.alignSize = 100;
+        detector.alignPosOffset = 0;
         detector.reducedImageRatio = 0.4;
 
-        //detector.triangulator.perfectRatio = 1.0;
-        //detector.triangulator.saturation = 0.005;
-        //detector.perfect_difference_triangulator.weight = 0.005;
+        detector.triangulator.perfectRatio = 1.0;
+        detector.triangulator.saturation = 0.005;
+        detector.perfect_difference_triangulator.weight = 0.005;
 
         detector.enable();
-
-
     }
-
     @Override
-    public void init_loop() {
-    }
-
-
-    @Override
-    public void start() {
-
-    }
-
-
-    @Override
-    public void loop() {
-        //telemetry.addData("IsAligned" , detector.getAligned());
-        //telemetry.addData("X Pos" , detector.getXPosition());
-    }
+    public void loop(){}
 
     @Override
     public void stop() {
         detector.disable();
     }
-
 }
+
+
 
