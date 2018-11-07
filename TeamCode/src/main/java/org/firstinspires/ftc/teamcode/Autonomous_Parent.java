@@ -1,10 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import static com.sun.tools.doclint.Entity.and;
-import static com.sun.tools.doclint.Entity.mu;
-import static com.sun.tools.doclint.Entity.or;
-import static com.sun.tools.doclint.Entity.thorn;
-
 public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
