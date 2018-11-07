@@ -10,8 +10,7 @@ import org.opencv.core.Mat;
 
 @TeleOp(name = "Image_Display_Test", group = "main")
 public class Image_Display_Test extends OpMode {
-    //private Gold_Detector detector;
-
+//PHONES HAVE TO BE VERTICAL FOR ANY OF THIS TO WORK
     private Gold_Detector detector;
 
     @Override
@@ -31,15 +30,22 @@ public class Image_Display_Test extends OpMode {
         detector.perfect_difference_triangulator.weight = 0.005;
 
         detector.enable();
-    }
-    @Override
-    public void loop(){}
+        }
+        @Override
+        public void loop(){
+            double goldXPos = detector.getXPosition();
+            telemetry.addData("X Position", goldXPos);
 
-    @Override
-    public void stop() {
+
+
+        }
+
+        @Override
+        public void stop(){
         detector.disable();
+        }
     }
-}
+//57 to 45
 
 
 

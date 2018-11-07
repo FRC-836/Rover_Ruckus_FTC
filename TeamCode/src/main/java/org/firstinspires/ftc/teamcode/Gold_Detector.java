@@ -23,6 +23,8 @@ public class Gold_Detector extends Base_Detector {
     private boolean found = false;//If we've seen the gold yet
     private boolean aligned = false;
     private double  goldXPos = 0;
+    private double  goldYPos = 0;
+
 
     // Detector settings
     public boolean debugAlignment = true;
@@ -62,7 +64,7 @@ public class Gold_Detector extends Base_Detector {
         double bestDifference = Double.MAX_VALUE;
 
         for (MatOfPoint cont : contoursYellow) {
-            double score = calculateScore(cont); // Get the diffrence score using the scoring API
+            double score = calculateScore(cont); // Get the difference score using the scoring API
 
             // Get bounding rect of contour
             Rect rect = Imgproc.boundingRect(cont);
@@ -79,13 +81,16 @@ public class Gold_Detector extends Base_Detector {
         double alignXMin = alignX - (alignSize / 2); // Min X Pos in pixels
         double alignXMax = alignX +(alignSize / 2); // Max X pos in pixels
         double xPos;
+        double yPos;
 
         if (bestRect != null) {
             Imgproc.rectangle(displayMat, bestRect.tl(), bestRect.br(), new Scalar(255, 0, 0), 4);
             Imgproc.putText(displayMat, "Chosen", bestRect.tl(), 0, 1, new Scalar(255, 255, 255));
 
             xPos = bestRect.x + (bestRect.width / 2);
+            yPos = bestRect.x + (bestRect.height / 2);
             goldXPos = xPos;
+            goldYPos = yPos;
 
             Imgproc.circle(displayMat, new Point( xPos, bestRect.y + (bestRect.height / 2)), 5, new Scalar(0,255,0),2);
 
@@ -132,6 +137,9 @@ public class Gold_Detector extends Base_Detector {
         return goldXPos;
     }
 
+    public double getYPosition(){
+        return goldYPos;
+    }
 
 
     public boolean isFound() {
