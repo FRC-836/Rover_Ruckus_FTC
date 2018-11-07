@@ -14,7 +14,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     private final double EC_PER_IN = 104.7;
     private final double SECONDS_PER_IN = 0.16;
     private final double SECONDS_PER_DEGREE = 0.03;
-    private final long CYCLE_TIME_MS = 5;
 
     @Override
     public void getReady() {
@@ -48,12 +47,9 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         holdTurnPID.setSetpoint(0.0);
         forwardPID.resetPID();
         holdTurnPID.resetPID();
-        int iterations = 0;
-        int numIterations = (int) (SECONDS_PER_IN * 1000.0 * inches / CYCLE_TIME_MS);
-        while (opModeIsActive() && (iterations <= numIterations)) {
+        long endTime = System.currentTimeMillis() + (long) (SECONDS_PER_IN * 1000.0 * Math.abs(inches));
+        while (opModeIsActive() && (System.currentTimeMillis() <= endTime)) {
             setDrive(forwardPID.update(getForwardPosition()), holdTurnPID.update(retain.getRelativeHeading()), 0.0);
-            iterations++;
-            sleep(CYCLE_TIME_MS);
         }
         setDrive(0.0, 0.0, 0.0);
     }
@@ -64,12 +60,9 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         holdTurnPID.setSetpoint(0.0);
         strafePID.resetPID();
         holdTurnPID.resetPID();
-        int iterations = 0;
-        int numIterations = (int) (SECONDS_PER_IN * 1000.0 * inches / CYCLE_TIME_MS);
-        while (opModeIsActive() && (iterations <= numIterations)) {
+        long endTime = System.currentTimeMillis() + (long) (SECONDS_PER_IN * 1000.0 * Math.abs(inches));
+        while (opModeIsActive() && (System.currentTimeMillis() <= endTime)) {
             setDrive(0.0, holdTurnPID.update(retain.getRelativeHeading()), strafePID.update(getStrafePosition()));
-            iterations++;
-            sleep(CYCLE_TIME_MS);
         }
         setDrive(0.0, 0.0, 0.0);
     }
@@ -78,12 +71,9 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         Heading goal = Heading.createRelativeHeading((float) degrees);
         turnPID.setSetpoint(0.0);
         turnPID.resetPID();
-        int iterations = 0;
-        int numIterations = (int) (SECONDS_PER_DEGREE * 1000.0 * degrees / CYCLE_TIME_MS);
-        while (opModeIsActive() && (iterations <= numIterations)) {
+        long endTime = System.currentTimeMillis() + (long) (SECONDS_PER_DEGREE * 1000.0 * Math.abs(degrees));
+        while (opModeIsActive() && (System.currentTimeMillis() <= endTime)) {
             setDrive(0.0, turnPID.update(goal.getRelativeOffset()), 0.0);
-            iterations++;
-            sleep(CYCLE_TIME_MS);
         }
         setDrive(0.0, 0.0, 0.0);
     }
