@@ -1,24 +1,31 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.internal.camera.WebcamExample;
 import org.opencv.core.Mat;
+
+import java.security.Policy;
 
 @TeleOp(name = "Image_Display_Test", group = "main")
 public class Image_Display_Test extends OpMode {
 //PHONES HAVE TO BE VERTICAL FOR ANY OF THIS TO WORK
     private Gold_Detector detector;
+    WebcamName webcamName;
 
     @Override
     public void init() {
+        webcamName = hardwareMap.get(WebcamName.class, "w");
 
         telemetry.addData("Status", "Gold_Test");
 
         detector = new Gold_Detector();
+
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), 0);
         detector.useDefaults();
         detector.alignSize = 100;

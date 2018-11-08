@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.hardware.Camera;
+
 import com.sun.tools.javac.util.Position;
 
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
