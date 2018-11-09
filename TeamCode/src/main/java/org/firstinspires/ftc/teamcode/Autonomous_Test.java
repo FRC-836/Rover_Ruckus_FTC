@@ -45,6 +45,12 @@ public class Autonomous_Test extends Autonomous_Parent {
         if (degrees < 0.0)
             multiplier = -1.0;
 
+        telemetry.addData("Degrees", degrees);
+        telemetry.addData("Multiplier", multiplier);
+        telemetry.addData("Current Relative Heading", goalHeading.getRelativeHeading());
+        telemetry.update();
+        sleep(3000);
+
         setDrive(0.0, multiplier, 0.0);
         while (multiplier * goalHeading.getRelativeHeading() < 0.0) {
             setDrive(0.0, multiplier, 0.0);
