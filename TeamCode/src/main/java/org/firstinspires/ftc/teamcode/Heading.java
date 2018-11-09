@@ -43,10 +43,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
         return sumOfHeadings;
     }
     public static Heading createFieldHeading(float relativeOffset) {
-        return new Heading(relativeOffset);
+        return new Heading(-relativeOffset);
     }
     public static Heading createRelativeHeading(float relativeOffset){
-        return new Heading(errorCorrecter(relativeOffset + getFieldHeading()));
+        return new Heading(errorCorrecter(-relativeOffset - getFieldHeading()));
     }
     public void setRelativeOffset(float relativeOffset){
         this.relativeOffset = relativeOffset;
