@@ -6,7 +6,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     private final double ENCODER_COUNTS_PER_INCH = 81.19;
 
     protected PID_Controller forwardPID = new PID_Controller(0.071,0.0,0.0);
-    protected PID_Controller strafePID = new PID_Controller(0.071,0.0,0.0);
 
     @Override
     public void initialize()
@@ -23,17 +22,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected double getForwardPosition() {
         double position = backLeftDrive.getCurrentPosition() +
                 frontLeftDrive.getCurrentPosition() + frontRightDrive.getCurrentPosition() +
-                backRightDrive.getCurrentPosition();
-
-        position /= 4.0;
-        position /= ENCODER_COUNTS_PER_INCH;
-
-        return position;
-    }
-
-    protected double getStrafePosition() {
-        double position = -backLeftDrive.getCurrentPosition() +
-                frontLeftDrive.getCurrentPosition() - frontRightDrive.getCurrentPosition() +
                 backRightDrive.getCurrentPosition();
 
         position /= 4.0;
