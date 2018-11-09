@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-public class Heading {
+    public class Heading {
     private static float fieldOffset;
     private static BNO055IMU imu;
 
@@ -43,10 +43,10 @@ public class Heading {
         return sumOfHeadings;
     }
     public static Heading createFieldHeading(float relativeOffset) {
-        return new Heading(relativeOffset);
+        return new Heading(-relativeOffset);
     }
     public static Heading createRelativeHeading(float relativeOffset){
-        return new Heading(errorCorrecter(relativeOffset + getFieldHeading()));
+        return new Heading(errorCorrecter(-relativeOffset - getFieldHeading()));
     }
     public void setRelativeOffset(float relativeOffset){
         this.relativeOffset = relativeOffset;
