@@ -20,13 +20,8 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected double getForwardPosition() {
         double position;
-        if (IS_OCTO) {
-            position = backLeftDrive.getCurrentPosition() + backRightDrive.getCurrentPosition() + frontLeftDrive.getCurrentPosition() + frontLeftDrive.getCurrentPosition();
-            position /= 4.0;
-        } else {
-            position = leftDrive.getCurrentPosition() + rightDrive.getCurrentPosition();
-            position /= 2.0;
-        }
+        position = backLeftDrive.getCurrentPosition() + backRightDrive.getCurrentPosition() + frontLeftDrive.getCurrentPosition() + frontLeftDrive.getCurrentPosition();
+        position /= 4.0;
 
         position /= ENCODER_COUNTS_PER_INCH;
 

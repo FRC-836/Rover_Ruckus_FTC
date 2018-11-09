@@ -7,12 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public abstract class Robot_Parent extends LinearOpMode {
 
-    public final boolean IS_OCTO = true;
-
-    protected DcMotor leftDrive;
-    protected DcMotor rightDrive;
-    protected DcMotor middleDrive;
-
     protected DcMotor backLeftDrive;
     protected DcMotor backRightDrive;
     protected DcMotor frontLeftDrive;
@@ -34,7 +28,6 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-        if (IS_OCTO) {
             backLeftDrive = hardwareMap.get(DcMotor.class, "bld");
             backRightDrive = hardwareMap.get(DcMotor.class, "brd");
             frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
@@ -49,21 +42,6 @@ public abstract class Robot_Parent extends LinearOpMode {
             backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        } else {
-            leftDrive = hardwareMap.get(DcMotor.class, "ld");
-            rightDrive = hardwareMap.get(DcMotor.class, "rd");
-            middleDrive = hardwareMap.get(DcMotor.class, "md");
-
-            leftDrive.setDirection(DcMotor.Direction.REVERSE);
-            rightDrive.setDirection(DcMotor.Direction.FORWARD);
-            middleDrive.setDirection(DcMotor.Direction.FORWARD);
-            //middle drive assumes motor faces backwards. Switch if motor faces forwards
-
-            leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            middleDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
-
 
         setupImu();
 
@@ -88,16 +66,10 @@ public abstract class Robot_Parent extends LinearOpMode {
     // Functions
 
     protected void setDrive(double forwardPower, double turnPower, double strafePower) {
-        if (IS_OCTO) {
-            backLeftDrive.setPower(forwardPower + turnPower - strafePower);
-            backRightDrive.setPower(forwardPower - turnPower + strafePower);
-            frontLeftDrive.setPower(forwardPower + turnPower + strafePower);
-            frontRightDrive.setPower(forwardPower - turnPower - strafePower);
-        } else {
-            leftDrive.setPower(forwardPower + turnPower);
-            rightDrive.setPower(forwardPower - turnPower);
-            middleDrive.setPower(strafePower);
-        }
+        backLeftDrive.setPower(forwardPower + turnPower - strafePower);
+        backRightDrive.setPower(forwardPower - turnPower + strafePower);
+        frontLeftDrive.setPower(forwardPower + turnPower + strafePower);
+        frontRightDrive.setPower(forwardPower - turnPower - strafePower);
     }
 
     private void setupImu() {
