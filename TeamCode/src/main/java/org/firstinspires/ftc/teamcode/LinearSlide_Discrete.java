@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp(name = "LinearSlide_Discrete")
+@TeleOp(name = "LinearSlide_Discrete", group = "Linear Slide")
 public class LinearSlide_Discrete extends OpMode {
 
     private final int INCREMENT = 200;
@@ -17,8 +17,13 @@ public class LinearSlide_Discrete extends OpMode {
     @Override
     public void init() {
         leadScrew = hardwareMap.get(DcMotor.class, "ls");
+
         leadScrew.setDirection(DcMotor.Direction.FORWARD);
+
         leadScrew.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        telemetry.addLine("Initialized.");
+        telemetry.update();
     }
 
     @Override
