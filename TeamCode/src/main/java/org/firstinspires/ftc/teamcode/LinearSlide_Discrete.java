@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp(name = "Zoe")
-public class Zoe extends OpMode {
+@TeleOp(name = "LinearSlide_Discrete")
+public class LinearSlide_Discrete extends OpMode {
 
     private final int INCREMENT = 200;
     private final double P_GAIN = 0.005;
