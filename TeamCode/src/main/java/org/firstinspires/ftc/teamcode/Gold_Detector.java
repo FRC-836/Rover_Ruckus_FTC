@@ -30,7 +30,7 @@ public class Gold_Detector extends Base_Detector {
 
 
     // Detector settings
-    public boolean debugAlignment = true;
+    public boolean debugAlignment = false;
     public double alignPosOffset = 0;
     public double alignSize = 100;
     public YellowColorFilter yellowColorFilter = new YellowColorFilter();
@@ -91,9 +91,7 @@ public class Gold_Detector extends Base_Detector {
             Imgproc.putText(displayMat, "Chosen", bestRect.tl(), 0, 1, new Scalar(255, 255, 255));
 
             xPos = bestRect.x + (bestRect.width / 2);
-            yPos = bestRect.x + (bestRect.height / 2);
             goldXPos = xPos;
-            goldYPos = yPos;
 
             Imgproc.circle(displayMat, new Point( xPos, bestRect.y + (bestRect.height / 2)), 5, new Scalar(0,255,0),2);
 

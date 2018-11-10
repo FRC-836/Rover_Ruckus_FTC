@@ -16,12 +16,14 @@ import java.security.Policy;
 public class Image_Display_Test extends OpMode {
 //PHONES HAVE TO BE VERTICAL FOR ANY OF THIS TO WORK
     private Gold_Detector detector;
+    private final boolean IS_WEBCAM_USED = false;
     WebcamName webcamName;
 
     @Override
     public void init() {
-        webcamName = hardwareMap.get(WebcamName.class, "w");
-
+        if (IS_WEBCAM_USED) {
+            webcamName = hardwareMap.get(WebcamName.class, "w");
+        }
         telemetry.addData("Status", "Gold_Test");
 
         detector = new Gold_Detector();
