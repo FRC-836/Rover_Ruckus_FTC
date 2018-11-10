@@ -17,6 +17,7 @@ public class Image_Display_Test extends OpMode {
 //PHONES HAVE TO BE VERTICAL FOR ANY OF THIS TO WORK
     private Gold_Detector detector;
     private final boolean IS_WEBCAM_USED = false;
+    private boolean isGoldSeen = false;
     WebcamName webcamName;
 
     @Override
@@ -42,11 +43,19 @@ public class Image_Display_Test extends OpMode {
         }
         @Override
         public void loop(){
-            double goldXPos = detector.getXPosition();
-            telemetry.addData("X Position", goldXPos);
-
-
-
+            if(detector.isFound()){
+                isGoldSeen = true;
+                if(isGoldSeen){
+                    double goldXPos = detector.getXPosition();
+                    telemetry.addData("X Position", goldXPos);
+                    telemetry.addLine("Object Seen");
+                    isGoldSeen = false;
+                    detector.disable();
+            }
+            }
+            else{
+                detector.disable();
+            }
         }
 
         @Override

@@ -39,6 +39,7 @@ public class Gold_Detector extends Base_Detector {
     public Perfect_Difference_Triangulator perfect_difference_triangulator = new Perfect_Difference_Triangulator(0.01);
 
 
+
     //HSV values for yellow
 
     public Gold_Detector() {
@@ -119,7 +120,6 @@ public class Gold_Detector extends Base_Detector {
         }
         Imgproc.putText(displayMat,"Result: " + aligned,new Point(10,getAdjustedSize().height - 30),0,1, new Scalar(255,255,0),1);
 
-
         return displayMat;
 
     }
@@ -146,6 +146,7 @@ public class Gold_Detector extends Base_Detector {
     public boolean isFound() {
         return found;
     }
+
 }
 
 
