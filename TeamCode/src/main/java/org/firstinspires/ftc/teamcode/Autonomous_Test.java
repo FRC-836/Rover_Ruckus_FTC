@@ -14,28 +14,28 @@ public class Autonomous_Test extends Autonomous_Parent {
     @Override
     public void begin() {
         // TODO: find why all turns after first turn fail
-        driveDistance(36);
+        driveDistance(18);
         sleep(sleepTime);
 
-        turn (90);
+        turn (85);
         sleep(sleepTime);
 
-        driveDistance(36);
+        driveDistance(18);
         sleep(sleepTime);
 
-        turn(-90);
+        turn(-85);
         sleep(sleepTime);
 
-        driveDistance(-36);
+        driveDistance(-18);
         sleep(sleepTime);
 
-        turn(-90);
+        turn(-85);
         sleep(sleepTime);
 
-        driveDistance(36);
+        driveDistance(18);
         sleep(sleepTime);
 
-        turn(90);
+        turn(85);
         sleep(sleepTime);
     }
 }

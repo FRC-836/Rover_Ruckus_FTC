@@ -4,18 +4,17 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     // TODO: remember to set values to diff number
     private final double ENCODER_COUNTS_PER_INCH = 81.19;
+    private final double EARLY_STOP_DEGREES = 5.0;
 
-    protected PID_Controller forwardPID = new PID_Controller(0.071,0.0,0.0);
+    protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
 
     @Override
-    public void initialize()
-    {
+    public void initialize() {
         setup();
     }
 
     @Override
-    public void play()
-    {
+    public void play() {
         begin();
     }
 
@@ -32,32 +31,32 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected void driveDistance(double inches) {
         double goal = getForwardPosition() + inches;
-
         double multiplier = 1.0;
+
         if (inches < 0.0)
             multiplier = -1.0;
 
         setDrive(multiplier, 0.0);
-        while (multiplier * (getForwardPosition() - goal) < 0.0) {
+        while (multiplier * (getForwardPosition() - goal) < 0.0 && opModeIsActive()) {
             setDrive(multiplier, 0.0);
         }
         setDrive(0.0, 0.0);
     }
 
     protected void turn(double degrees) {
+        if (degrees > EARLY_STOP_DEGREES) {
+            degrees = Math.max(EARLY_STOP_DEGREES, degrees - EARLY_STOP_DEGREES);
+        } else if (degrees < -EARLY_STOP_DEGREES) {
+            degrees = Math.min(-EARLY_STOP_DEGREES, degrees + EARLY_STOP_DEGREES);
+        }
+
         TargetDirection goalHeading = TargetDirection.makeTargetToRobotsRight(degrees);
         double multiplier = 1.0;
         if (degrees < 0.0)
             multiplier = -1.0;
 
-        telemetry.addData("Degrees", degrees);
-        telemetry.addData("Multiplier", multiplier);
-        telemetry.addData("Current Relative Heading", goalHeading.calculateDistanceFromTarget());
-        telemetry.update();
-        sleep(3000);
-
         setDrive(0.0, multiplier);
-        while (multiplier * goalHeading.calculateDistanceFromTarget() < 0.0) {
+        while (multiplier * goalHeading.calculateDistanceFromTarget() < 0.0 && opModeIsActive()) {
             setDrive(0.0, multiplier);
         }
         setDrive(0.0, 0.0);
