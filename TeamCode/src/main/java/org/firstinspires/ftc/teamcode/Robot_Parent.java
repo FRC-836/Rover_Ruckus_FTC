@@ -26,9 +26,9 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-        backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -38,8 +38,7 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         setupImu();
 
-        Heading.setImu(imu);
-        Heading.setFieldOffset(-Heading.getAbsoluteHeading());
+        TargetDirection.setupImu(0.0, imu);
 
         initialize();
         telemetry.addLine("Initialization Complete");
@@ -55,11 +54,11 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     // Functions
 
-    protected void setDrive(double forwardPower, double turnPower, double strafePower) {
-        backLeftDrive.setPower(forwardPower + turnPower - strafePower);
-        backRightDrive.setPower(forwardPower - turnPower + strafePower);
-        frontLeftDrive.setPower(forwardPower + turnPower + strafePower);
-        frontRightDrive.setPower(forwardPower - turnPower - strafePower);
+    protected void setDrive(double forwardPower, double turnPower) {
+        backLeftDrive.setPower(forwardPower + turnPower);
+        backRightDrive.setPower(forwardPower + turnPower);
+        frontLeftDrive.setPower(forwardPower + turnPower);
+        frontRightDrive.setPower(forwardPower + turnPower);
     }
 
     private void setupImu() {
