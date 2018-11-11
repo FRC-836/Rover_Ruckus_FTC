@@ -74,7 +74,7 @@ public class Image_Display_Test extends OpMode {
         public void goldPosDetector(){
         //change inequalities depending on camera placement of robot-change this as the camera mount changes
             double goldXPos = detector.getXPosition();
-            if(0 <= goldXPos && 15 >= goldXPos){
+            if(0 <= goldXPos && 20 >= goldXPos){
                 isLeft = true;
                 telemetry.addLine("Gold Position: Left");
 
@@ -83,7 +83,7 @@ public class Image_Display_Test extends OpMode {
                 isCenter = true;
                 telemetry.addLine("Gold Position: Center");
             }
-            else if(95 <= goldXPos && 120 >= goldXPos){
+            else if(90 <= goldXPos && 120 >= goldXPos){
                 isRight = true;
                 telemetry.addLine("Gold Position: Right");
             }
