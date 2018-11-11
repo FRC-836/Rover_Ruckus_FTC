@@ -28,15 +28,15 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-            backLeftDrive = hardwareMap.get(DcMotor.class, "bld");
-            backRightDrive = hardwareMap.get(DcMotor.class, "brd");
-            frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
-            frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
+        backLeftDrive = hardwareMap.get(DcMotor.class, "bld");
+        backRightDrive = hardwareMap.get(DcMotor.class, "brd");
+        frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
+        frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
 
-            backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-            backRightDrive.setDirection(DcMotor.Direction.FORWARD);
-            frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-            frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        backRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
