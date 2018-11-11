@@ -64,11 +64,18 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     // Functions
 
-    protected void setDrive(double forwardPower, double turnPower) {
+    protected void setArcadeDrive(double forwardPower, double turnPower) {
         backLeftDrive.setPower(forwardPower + turnPower);
         backRightDrive.setPower(forwardPower - turnPower);
         frontLeftDrive.setPower(forwardPower + turnPower);
         frontRightDrive.setPower(forwardPower - turnPower);
+    }
+
+    protected void setTankDrive(double leftPower, double rightPower) {
+        backLeftDrive.setPower(leftPower);
+        backRightDrive.setPower(rightPower);
+        frontLeftDrive.setPower(leftPower);
+        frontRightDrive.setPower(rightPower);
     }
 
     private void setupImu() {
