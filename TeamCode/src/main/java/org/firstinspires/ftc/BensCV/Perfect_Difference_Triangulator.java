@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.BensCV;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -6,7 +6,7 @@ import org.opencv.imgproc.Imgproc;
 
 public class Perfect_Difference_Triangulator extends Base_Image_Triangulator {
     public double weight       = 1.0;
-    public Perfect_Difference_Triangulator( double weight){
+    public Perfect_Difference_Triangulator(double weight){
         this.weight = weight;
 
     }

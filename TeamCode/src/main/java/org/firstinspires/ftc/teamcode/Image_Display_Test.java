@@ -1,16 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay;
+import org.firstinspires.ftc.BensCV.Gold_Detector;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.internal.camera.WebcamExample;
-import org.opencv.core.Mat;
-
-import java.security.Policy;
 
 @TeleOp(name = "Image_Display_Test", group = "main")
 public class Image_Display_Test extends OpMode {

@@ -1,11 +1,6 @@
-package org.firstinspires.ftc.teamcode;
-
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.configuration.WebcamConfiguration;
+package org.firstinspires.ftc.BensCV;
 
 import org.corningrobotics.enderbots.endercv.OpenCVPipeline;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -14,6 +9,7 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
+
 public abstract class Base_Detector extends OpenCVPipeline {
 
     public abstract Mat process(Mat input);

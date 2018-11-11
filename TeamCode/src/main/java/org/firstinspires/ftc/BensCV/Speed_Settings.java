@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.BensCV;
 
 public class Speed_Settings {
     public enum detectionSpeed{
