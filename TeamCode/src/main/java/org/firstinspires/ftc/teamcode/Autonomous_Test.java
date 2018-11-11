@@ -15,47 +15,27 @@ public class Autonomous_Test extends Autonomous_Parent {
     public void begin() {
         // TODO: find why all turns after first turn fail
         driveDistance(36);
-        turn (90);
-        driveDistance(36);
-        turn(-90);
-        driveDistance(-36);
-        turn(-90);
-        driveDistance(36);
-        turn(90);
-    }
-
-    public void driveDistance(double inches) {
-        double goal = getForwardPosition() + inches;
-
-        double multiplier = 1.0;
-        if (inches < 0.0)
-            multiplier = -1.0;
-
-        setDrive(multiplier, 0.0, 0.0);
-        while (multiplier * (getForwardPosition() - goal) < 0.0) {
-            setDrive(multiplier, 0.0, 0.0);
-        }
-        setDrive(0.0, 0.0, 0.0);
         sleep(sleepTime);
-    }
 
-    public void turn(double degrees) {
-        Heading goalHeading = Heading.createRelativeHeading((float) -degrees);
-        double multiplier = 1.0;
-        if (degrees < 0.0)
-            multiplier = -1.0;
+        turn (90);
+        sleep(sleepTime);
 
-        telemetry.addData("Degrees", degrees);
-        telemetry.addData("Multiplier", multiplier);
-        telemetry.addData("Current Relative Heading", goalHeading.getRelativeHeading());
-        telemetry.update();
-        sleep(3000);
+        driveDistance(36);
+        sleep(sleepTime);
 
-        setDrive(0.0, multiplier, 0.0);
-        while (multiplier * goalHeading.getRelativeHeading() < 0.0) {
-            setDrive(0.0, multiplier, 0.0);
-        }
-        setDrive(0.0, 0.0, 0.0);
+        turn(-90);
+        sleep(sleepTime);
+
+        driveDistance(-36);
+        sleep(sleepTime);
+
+        turn(-90);
+        sleep(sleepTime);
+
+        driveDistance(36);
+        sleep(sleepTime);
+
+        turn(90);
         sleep(sleepTime);
     }
 }

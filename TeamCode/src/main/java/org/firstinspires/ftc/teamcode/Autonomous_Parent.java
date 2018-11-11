@@ -29,4 +29,37 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
         return position;
     }
+
+    protected void driveDistance(double inches) {
+        double goal = getForwardPosition() + inches;
+
+        double multiplier = 1.0;
+        if (inches < 0.0)
+            multiplier = -1.0;
+
+        setDrive(multiplier, 0.0);
+        while (multiplier * (getForwardPosition() - goal) < 0.0) {
+            setDrive(multiplier, 0.0);
+        }
+        setDrive(0.0, 0.0);
+    }
+
+    protected void turn(double degrees) {
+        TargetDirection goalHeading = TargetDirection.makeTargetToRobotsRight(degrees);
+        double multiplier = 1.0;
+        if (degrees < 0.0)
+            multiplier = -1.0;
+
+        telemetry.addData("Degrees", degrees);
+        telemetry.addData("Multiplier", multiplier);
+        telemetry.addData("Current Relative Heading", goalHeading.calculateDistanceFromTarget());
+        telemetry.update();
+        sleep(3000);
+
+        setDrive(0.0, multiplier);
+        while (multiplier * goalHeading.calculateDistanceFromTarget() < 0.0) {
+            setDrive(0.0, multiplier);
+        }
+        setDrive(0.0, 0.0);
+    }
 }
