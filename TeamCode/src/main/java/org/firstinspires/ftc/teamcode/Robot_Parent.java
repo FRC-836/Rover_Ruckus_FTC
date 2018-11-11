@@ -12,7 +12,6 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor frontLeftDrive;
     protected DcMotor frontRightDrive;
 
-
     protected PID_Controller goToTurnPID = new PID_Controller(0.025, 0.0, 0.0);
 
     public double pStableHoldTurn = 0.01332;
@@ -65,11 +64,11 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     // Functions
 
-    protected void setDrive(double forwardPower, double turnPower, double strafePower) {
-        backLeftDrive.setPower(forwardPower + turnPower - strafePower);
-        backRightDrive.setPower(forwardPower - turnPower + strafePower);
-        frontLeftDrive.setPower(forwardPower + turnPower + strafePower);
-        frontRightDrive.setPower(forwardPower - turnPower - strafePower);
+    protected void setDrive(double forwardPower, double turnPower) {
+        backLeftDrive.setPower(forwardPower + turnPower);
+        backRightDrive.setPower(forwardPower - turnPower);
+        frontLeftDrive.setPower(forwardPower + turnPower);
+        frontRightDrive.setPower(forwardPower - turnPower);
     }
 
     private void setupImu() {

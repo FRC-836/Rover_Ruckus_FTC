@@ -38,7 +38,7 @@ public class Arcade_Drive_PID extends Teleop_Parent {
 
         if (Math.abs(turnPower) < JOYSTICK_DEAD_ZONE && Math.abs(forwardPower) < JOYSTICK_DEAD_ZONE
                 && Math.abs(strafePower) < JOYSTICK_DEAD_ZONE) {
-            setDrive(0.00, 0.00, 0.00);
+            setDrive(0.00, 0.00);
             /*if (!isStopped) {
 
             }
@@ -49,7 +49,7 @@ public class Arcade_Drive_PID extends Teleop_Parent {
             // If user is trying to turn
             if (Math.abs(turnPower) > JOYSTICK_DEAD_ZONE) {
                 // Do what user says
-                setDrive(forwardPower, turnPower, strafePower);
+                setDrive(forwardPower, turnPower);
 
                 isTurning = true;
             } else // If the user isn't trying to turn
@@ -61,7 +61,7 @@ public class Arcade_Drive_PID extends Teleop_Parent {
 
                 double turnMult = (holdTurnMultiplier - 1.0) * Math.max(Math.abs(forwardPower), Math.abs(strafePower)) + 1.0;
 
-                setDrive(forwardPower, pidTurnPower * turnMult, strafePower);
+                setDrive(forwardPower, pidTurnPower * turnMult);
                 isTurning = false;
             }
         }
