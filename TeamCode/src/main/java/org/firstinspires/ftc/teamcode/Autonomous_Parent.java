@@ -36,6 +36,8 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         return position;
     }
 
+    // Drive functions involving PID Controllers
+
     protected void driveDistancePID(double inches) {
         TargetDirection retain = TargetDirection.makeTargetToRobotsRight(0.0);
         forwardPID.setSetpoint(getForwardPosition() + inches);
@@ -72,6 +74,8 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         }
         setDrive(0.0, 0.0, 0.0);
     }
+
+    // Simple drive functions
 
     protected void driveDistance(double inches) {
         TargetDirection retain = TargetDirection.makeTargetToRobotsRight(0.0);
@@ -112,5 +116,20 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         setDrive(0.0, 0.0, 0.0);
     }
 
-
+    // Task-based Functions
+    protected void deploy() {
+        //Deploy code
+    }
+    protected void detectAndSample() {
+        //Sample and Test code
+    }
+    protected void afterSampleToDepot() {
+        //Sampling field to Depot (depot side)
+    }
+    protected void afterSampleToDepotCraterSide() {
+        //Crater side sampling field to depot
+    }
+    protected void releaseMarker() {
+        //ReleaseCode
+    }
 }
