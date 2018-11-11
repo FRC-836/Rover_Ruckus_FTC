@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
-import org.corningrobotics.enderbots.endercv.ViewDisplay;
-
 /**
  * Created by guinea on 6/23/17.
  * -------------------------------------------------------------------------------------

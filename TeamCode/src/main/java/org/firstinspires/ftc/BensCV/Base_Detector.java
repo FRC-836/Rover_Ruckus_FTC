@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.BensCV;
 
-import org.corningrobotics.enderbots.endercv.OpenCVPipeline;
+import org.firstinspires.ftc.BensCV.EnderCV.OpenCVPipeline;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
