@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.BensCV.EnderCV.CameraViewDisplay;
+import org.corningrobotics.enderbots.endercv.CameraViewDisplay;
 import org.firstinspires.ftc.BensCV.Gold_Detector;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 

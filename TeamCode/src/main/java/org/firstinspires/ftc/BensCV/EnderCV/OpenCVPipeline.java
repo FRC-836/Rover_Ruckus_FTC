@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.Surface;
 
+import org.corningrobotics.enderbots.endercv.CustomCameraView;
+import org.corningrobotics.enderbots.endercv.OpenCVLoader;
+import org.corningrobotics.enderbots.endercv.ViewDisplay;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
 import org.opencv.core.Core;
