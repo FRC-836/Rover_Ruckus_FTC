@@ -19,10 +19,10 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        backLeftDrive = hardwareMap.get(DcMotor.class, "bl");
-        backRightDrive = hardwareMap.get(DcMotor.class, "br");
-        frontLeftDrive = hardwareMap.get(DcMotor.class, "fl");
-        frontRightDrive = hardwareMap.get(DcMotor.class, "fr");
+        backLeftDrive = hardwareMap.get(DcMotor.class, "bld");
+        backRightDrive = hardwareMap.get(DcMotor.class, "brd");
+        frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
+        frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -37,8 +37,7 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         setupImu();
 
-        Heading.setImu(imu);
-        Heading.setFieldOffset(-Heading.getAbsoluteHeading());
+        TargetDirection.setupImu(0.0, imu);
 
         getReady();
 
