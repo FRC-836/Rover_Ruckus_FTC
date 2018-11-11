@@ -70,4 +70,7 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         imu.initialize(imuParameters);
     }
+    protected void waitSeconds(double seconds) {
+        sleep((long) (seconds * 1000.0));
+    }
 }
