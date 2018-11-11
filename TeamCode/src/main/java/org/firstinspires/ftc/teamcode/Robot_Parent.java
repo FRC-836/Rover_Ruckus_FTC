@@ -38,8 +38,7 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         setupImu();
 
-        Heading.setImu(imu);
-        Heading.setFieldOffset(-Heading.getAbsoluteHeading());
+        TargetDirection.setupImu(0.0, imu);
 
         initialize();
         telemetry.addLine("Initialization Complete");
