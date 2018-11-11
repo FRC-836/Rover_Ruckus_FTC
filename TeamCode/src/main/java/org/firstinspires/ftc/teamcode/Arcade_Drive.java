@@ -22,10 +22,7 @@ public class Arcade_Drive extends Teleop_Parent {
         // Get powers
         double forwardPower = -gamepad1.left_stick_y;
         double turnPower = gamepad1.right_stick_x;
-        
-        // If user is trying to turn
-        if (Math.abs(turnPower) > JOYSTICK_DEAD_ZONE) {
-            setDrive(forwardPower, turnPower);
-        }
+
+        setDrive(forwardPower, turnPower);
     }
 }
