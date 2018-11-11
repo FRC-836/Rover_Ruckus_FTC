@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public abstract class Robot_Parent extends LinearOpMode {
 
@@ -37,15 +38,14 @@ public abstract class Robot_Parent extends LinearOpMode {
             frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
             frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
-            backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         setupImu();
 
-        Heading.setImu(imu);
-        Heading.setFieldOffset(-Heading.getAbsoluteHeading());
+        TargetDirection.setupImu(0.0, imu);
 
         initialize();
         telemetry.addLine("Initialization Complete");
