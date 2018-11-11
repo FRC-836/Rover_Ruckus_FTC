@@ -19,6 +19,10 @@ public class Image_Display_Test extends OpMode {
     private final boolean IS_WEBCAM_USED = false;
     private boolean isGoldSeen = false;
     WebcamName webcamName;
+    public boolean isRight = false;
+    public boolean isLeft = false;
+    public boolean isCenter = false;
+    public boolean debug = true;
 
     @Override
     public void init() {
@@ -42,25 +46,47 @@ public class Image_Display_Test extends OpMode {
         detector.enable();
         }
         @Override
-        public void loop(){
-            if(detector.isFound()){
-                isGoldSeen = true;
-                if(isGoldSeen){
+        public void loop() {
+            if (debug != true) {
+                if (detector.isFound()) {
+                    isGoldSeen = true;
                     double goldXPos = detector.getXPosition();
                     telemetry.addData("X Position", goldXPos);
                     telemetry.addLine("Object Seen");
+                    goldPosDetector();
                     isGoldSeen = false;
                     detector.disable();
+                }
+                else{
+                    detector.disable();
+                }
+            } else {
+                double goldXPos = detector.getXPosition();
+                telemetry.addData("X Position", goldXPos);
+                goldPosDetector();
             }
-            }
-            else{
-                detector.disable();
-            }
-        }
 
+        }
         @Override
         public void stop(){
         detector.disable();
+        }
+        public void goldPosDetector(){
+        //change inequalities depending on camera placement of robot-change this as the camera mount changes
+            double goldXPos = detector.getXPosition();
+            if(0 <= goldXPos && 15 >= goldXPos){
+                isLeft = true;
+                telemetry.addLine("Gold Position: Left");
+
+            }
+            else if(40 <= goldXPos && 60 >= goldXPos){
+                isCenter = true;
+                telemetry.addLine("Gold Position: Center");
+            }
+            else if(95 <= goldXPos && 120 >= goldXPos){
+                isRight = true;
+                telemetry.addLine("Gold Position: Right");
+            }
         }
     }
 //57 to 45
