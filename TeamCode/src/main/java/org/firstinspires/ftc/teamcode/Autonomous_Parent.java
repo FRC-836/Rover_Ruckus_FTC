@@ -37,44 +37,44 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void driveDistancePID(double inches) {
-        Heading retain = Heading.createRelativeHeading(0.0f);
+        TargetDirection retain = TargetDirection.makeTargetToRobotsRight(0.0);
         forwardPID.setSetpoint(getForwardPosition() + inches);
         holdTurnPID.setSetpoint(0.0);
         forwardPID.resetPID();
         holdTurnPID.resetPID();
         long endTime = System.currentTimeMillis() + (long) (SECONDS_PER_IN * 1000.0 * Math.abs(inches));
         while (opModeIsActive() && (System.currentTimeMillis() <= endTime)) {
-            setDrive(forwardPID.update(getForwardPosition()), holdTurnPID.update(retain.getRelativeHeading()), 0.0);
+            setDrive(forwardPID.update(getForwardPosition()), holdTurnPID.update(retain.calculateDistanceFromTarget()), 0.0);
         }
         setDrive(0.0, 0.0, 0.0);
     }
 
     protected void driveStrafePID(double inches) {
-        Heading retain = Heading.createRelativeHeading(0.0f);
+        TargetDirection retain = TargetDirection.makeTargetToRobotsRight(0.0);
         strafePID.setSetpoint(getStrafePosition() + inches);
         holdTurnPID.setSetpoint(0.0);
         strafePID.resetPID();
         holdTurnPID.resetPID();
         long endTime = System.currentTimeMillis() + (long) (SECONDS_PER_IN * 1000.0 * Math.abs(inches));
         while (opModeIsActive() && (System.currentTimeMillis() <= endTime)) {
-            setDrive(0.0, holdTurnPID.update(retain.getRelativeHeading()), strafePID.update(getStrafePosition()));
+            setDrive(0.0, holdTurnPID.update(retain.calculateDistanceFromTarget()), strafePID.update(getStrafePosition()));
         }
         setDrive(0.0, 0.0, 0.0);
     }
 
     protected void driveTurnPID(double degrees) {
-        Heading goal = Heading.createRelativeHeading((float) degrees);
+        TargetDirection goal = TargetDirection.makeTargetToRobotsRight(degrees);
         turnPID.setSetpoint(0.0);
         turnPID.resetPID();
         long endTime = System.currentTimeMillis() + (long) (SECONDS_PER_DEGREE * 1000.0 * Math.abs(degrees));
         while (opModeIsActive() && (System.currentTimeMillis() <= endTime)) {
-            setDrive(0.0, turnPID.update(goal.getRelativeOffset()), 0.0);
+            setDrive(0.0, turnPID.update(goal.calculateDistanceFromTarget()), 0.0);
         }
         setDrive(0.0, 0.0, 0.0);
     }
 
     protected void driveDistance(double inches) {
-        Heading retain = Heading.createRelativeHeading(0.0f);
+        TargetDirection retain = TargetDirection.makeTargetToRobotsRight(0.0);
         holdTurnPID.setSetpoint(0.0);
         holdTurnPID.resetPID();
         double finalPosition = getForwardPosition() + inches;
@@ -82,13 +82,13 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         if (inches < 0.0)
             multiplier = -1.0;
         while (getForwardPosition() * multiplier < finalPosition * multiplier && opModeIsActive()) {
-            setDrive(multiplier, holdTurnPID.update(retain.getRelativeOffset()), 0.0);
+            setDrive(multiplier, holdTurnPID.update(retain.calculateDistanceFromTarget()), 0.0);
         }
         setDrive(0.0, 0.0, 0.0);
     }
 
     protected void driveStrafe(double inches) {
-        Heading retain = Heading.createRelativeHeading(0.0f);
+        TargetDirection retain = TargetDirection.makeTargetToRobotsRight(0.0);;
         holdTurnPID.setSetpoint(0.0);
         holdTurnPID.resetPID();
         double finalPosition = getStrafePosition() + inches;
@@ -96,17 +96,17 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         if (inches < 0.0)
             multiplier = -1.0;
         while (getStrafePosition() * multiplier < finalPosition * multiplier && opModeIsActive()) {
-            setDrive(0.0, holdTurnPID.update(retain.getRelativeOffset()), multiplier);
+            setDrive(0.0, holdTurnPID.update(retain.calculateDistanceFromTarget()), multiplier);
         }
         setDrive(0.0, 0.0, 0.0);
     }
 
     protected void driveTurn(double degrees) {
-        Heading goal = Heading.createRelativeHeading((float)-degrees);
+        TargetDirection goal = TargetDirection.makeTargetToRobotsRight(degrees);
         double multiplier = 1.0;
         if (degrees < 0.0)
             multiplier = -1.0;
-        while (goal.getRelativeHeading() * multiplier < 0.0 && opModeIsActive()) {
+        while (goal.calculateDistanceFromTarget() * multiplier < 0.0 && opModeIsActive()) {
             setDrive(0.0, multiplier, 0.0);
         }
         setDrive(0.0, 0.0, 0.0);
