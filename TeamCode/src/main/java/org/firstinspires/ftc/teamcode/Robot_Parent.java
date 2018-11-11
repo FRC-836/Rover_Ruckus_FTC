@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public abstract class Robot_Parent extends LinearOpMode {
 
@@ -31,15 +32,14 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         setupImu();
 
-        Heading.setImu(imu);
-        Heading.setFieldOffset(-Heading.getAbsoluteHeading());
+        TargetDirection.setupImu(0.0, imu);
 
         initialize();
         telemetry.addLine("Initialization Complete");
@@ -55,11 +55,11 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     // Functions
 
-    protected void setDrive(double forwardPower, double turnPower, double strafePower) {
-        backLeftDrive.setPower(forwardPower + turnPower - strafePower);
-        backRightDrive.setPower(forwardPower - turnPower + strafePower);
-        frontLeftDrive.setPower(forwardPower + turnPower + strafePower);
-        frontRightDrive.setPower(forwardPower - turnPower - strafePower);
+    protected void setDrive(double forwardPower, double turnPower) {
+        backLeftDrive.setPower(forwardPower + turnPower);
+        backRightDrive.setPower(forwardPower + turnPower);
+        frontLeftDrive.setPower(forwardPower + turnPower);
+        frontRightDrive.setPower(forwardPower + turnPower);
     }
 
     private void setupImu() {
