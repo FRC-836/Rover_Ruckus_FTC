@@ -118,7 +118,10 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     // Task-based Functions
     protected void deploy() {
-        //Deploy code
+        //Release lock holding wheels
+        //Lower wheels to ground
+        //Detach hook from lander
+        //Bring together arm of robot
     }
     protected void detect() {
         //Detect code (quickly Ben!)
@@ -126,6 +129,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void sample() {
         //Sample and Test code
     }
+    protected void goToDepot()
     protected void releaseMarker() {
         //ReleaseCode
     }
