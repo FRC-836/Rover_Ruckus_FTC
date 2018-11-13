@@ -14,6 +14,8 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor backRightDrive;
     protected DcMotor frontLeftDrive;
     protected DcMotor frontRightDrive;
+    protected DcMotor armRotator;
+    protected DcMotor armExtender;
     protected PID_Controller holdTurnPID = new PID_Controller(0.025, 0.0, 0.0);
     private BNO055IMU imu;
 
@@ -23,17 +25,23 @@ public abstract class Robot_Parent extends LinearOpMode {
         backRightDrive = hardwareMap.get(DcMotor.class, "brd");
         frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
         frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
+        armRotator = hardwareMap.get(DcMotor.class, "ar");
+        armExtender = hardwareMap.get(DcMotor.class, "ae");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armRotator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armExtender.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        armRotator.setDirection(DcMotor.Direction.FORWARD);
+        armExtender.setDirection(DcMotor.Direction.FORWARD);
 
         setupImu();
 
@@ -56,6 +64,14 @@ public abstract class Robot_Parent extends LinearOpMode {
         backRightDrive.setPower(forwardPower - turnPower + strafePower);
         frontLeftDrive.setPower(forwardPower + turnPower + strafePower);
         frontRightDrive.setPower(forwardPower - turnPower - strafePower);
+    }
+
+    protected void setArmRotator(double turnPower) {
+        armRotator.setPower(turnPower);
+    }
+
+    protected void setArmExtender(double extendPower) {
+        armExtender.setPower(extendPower);
     }
 
     private void setupImu() {
