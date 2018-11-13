@@ -120,14 +120,11 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void deploy() {
         //Deploy code
     }
-    protected void detectAndSample() {
+    protected void detect() {
+        //Detect code (quickly Ben!)
+    }
+    protected void sample() {
         //Sample and Test code
-    }
-    protected void afterSampleToDepot() {
-        //Sampling field to Depot (depot side)
-    }
-    protected void afterSampleToDepotCraterSide() {
-        //Crater side sampling field to depot
     }
     protected void releaseMarker() {
         //ReleaseCode
