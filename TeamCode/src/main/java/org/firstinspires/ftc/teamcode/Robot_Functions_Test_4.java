@@ -7,8 +7,8 @@ public class Robot_Functions_Test_4 extends Autonomous_Parent {
     @Override
     public void go() {
         driveDistance(0.5);
+        
         driveDistance(-0.5);
-        driveDistance(0.6);
         driveStrafe(5);
         driveTurn(90);
         driveDistance(0.25);
