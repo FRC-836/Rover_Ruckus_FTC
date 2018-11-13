@@ -42,11 +42,13 @@ public class Image_Display_Test extends OpMode {
         }
         @Override
         public void loop() {
-            if (debug != true) {
+            if (!debug) {
                 if (detector.isFound()) {
                     isGoldSeen = true;
                     double goldXPos = detector.getXPosition();
+                    double goldYPos = detector.getYPosition();
                     telemetry.addData("X Position", goldXPos);
+                    telemetry.addData("Y Position", goldYPos);
                     telemetry.addLine("Object Seen");
                     goldPosDetector();
                     isGoldSeen = false;
@@ -57,7 +59,9 @@ public class Image_Display_Test extends OpMode {
                 }
             } else {
                 double goldXPos = detector.getXPosition();
+                double goldYPos = detector.getYPosition();
                 telemetry.addData("X Position", goldXPos);
+                telemetry.addData("Y Position", goldYPos);
                 goldPosDetector();
             }
 
@@ -69,16 +73,16 @@ public class Image_Display_Test extends OpMode {
         public void goldPosDetector(){
         //change inequalities depending on camera placement of robot-change this as the camera mount changes
             double goldXPos = detector.getXPosition();
-            if(0 <= goldXPos && 20 >= goldXPos){
+            if(0 <= goldXPos && 0.33 >= goldXPos){
                 isLeft = true;
                 telemetry.addLine("Gold Position: Left");
 
             }
-            else if(40 <= goldXPos && 60 >= goldXPos){
+            else if(0.33 < goldXPos && 0.66 >= goldXPos){
                 isCenter = true;
                 telemetry.addLine("Gold Position: Center");
             }
-            else if(90 <= goldXPos && 120 >= goldXPos){
+            else if(0.66 < goldXPos && 1.0 >= goldXPos){
                 isRight = true;
                 telemetry.addLine("Gold Position: Right");
             }

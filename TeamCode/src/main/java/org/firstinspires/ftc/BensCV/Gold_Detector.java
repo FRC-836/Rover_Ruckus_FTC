@@ -18,7 +18,6 @@ public class Gold_Detector extends Base_Detector {
     private Mat countorMat = new Mat();
 
     private boolean found = false;//If we've seen the gold yet
-    private boolean aligned = false;
     private double  goldXPos = 0;
     private double  goldYPos = 0;
 
@@ -75,32 +74,29 @@ public class Gold_Detector extends Base_Detector {
             }
 
         }
-        double alignX    = (getAdjustedSize().width / 2) + alignPosOffset; // Center point in X Pixels
-        double alignXMin = alignX - (alignSize / 2); // Min X Pos in pixels
-        double alignXMax = alignX +(alignSize / 2); // Max X pos in pixels
+        double alignX = (getAdjustedSize().width / 2) + alignPosOffset; // Center point in X Pixels
         double xPos;
         double yPos;
+        double xCenter;
 
         if (bestRect != null) {
             Imgproc.rectangle(displayMat, bestRect.tl(), bestRect.br(), new Scalar(255, 0, 0), 4);
             Imgproc.putText(displayMat, "Chosen", bestRect.tl(), 0, 1, new Scalar(255, 255, 255));
 
-            xPos = bestRect.x + (bestRect.width / 2);
+
+            xCenter = bestRect.x + (bestRect.width / 2);
+            xPos = bestRect.x / CAMERA_WIDTH;
+            yPos = bestRect.y / CAMERA_WIDTH;
             goldXPos = xPos;
+            goldYPos = yPos;
 
-            Imgproc.circle(displayMat, new Point( xPos, bestRect.y + (bestRect.height / 2)), 5, new Scalar(0,255,0),2);
+            Imgproc.circle(displayMat, new Point( xCenter, bestRect.y + (bestRect.height / 2)), 5, new Scalar(0,255,0),2);
 
-            if(xPos < alignXMax && xPos > alignXMin){
-                aligned = true;
-            }else{
-                aligned = false;
-            }
             Imgproc.putText(displayMat,"Current X: " + bestRect.x,new Point(10,getAdjustedSize().height - 10),0,0.5, new Scalar(255,255,255),1);
             found = true;
 
         } else {
             found = false;
-            aligned = false;
         }
         if(debugAlignment){
 
@@ -108,11 +104,9 @@ public class Gold_Detector extends Base_Detector {
             if(isFound()){
                 Imgproc.line(displayMat,new Point(goldXPos, getAdjustedSize().height), new Point(goldXPos, getAdjustedSize().height - 30),new Scalar(255,255,0), 2);
             }
+            Imgproc.putText(displayMat,"Result: " ,new Point(10,getAdjustedSize().height - 30),0,1, new Scalar(255,255,0),1);
 
-            Imgproc.line(displayMat,new Point(alignXMin, getAdjustedSize().height), new Point(alignXMin, getAdjustedSize().height - 40),new Scalar(0,255,0), 2);
-            Imgproc.line(displayMat,new Point(alignXMax, getAdjustedSize().height), new Point(alignXMax,getAdjustedSize().height - 40),new Scalar(0,255,0), 2);
         }
-        Imgproc.putText(displayMat,"Result: " + aligned,new Point(10,getAdjustedSize().height - 30),0,1, new Scalar(255,255,0),1);
 
         return displayMat;
 
@@ -122,9 +116,6 @@ public class Gold_Detector extends Base_Detector {
         addScorer(triangulator);
         addScorer(perfect_difference_triangulator);
 
-    }
-    public boolean getAligned(){
-        return aligned;
     }
 
 
