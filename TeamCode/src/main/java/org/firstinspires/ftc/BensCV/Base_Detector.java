@@ -19,8 +19,11 @@ public abstract class Base_Detector extends OpenCVPipeline {
     private List<Base_Image_Triangulator> scorers = new ArrayList<>();
     private Size firstSize;
     private Size adjustedSize;
-    protected final double CAMERA_WIDTH = 580;
-    public Size reducedImageQuality = new Size(580, 480);//divide by width
+    private double cameraWidth = 580;
+    private double cameraHeight = 480;
+    //protected final double CAMERA_WIDTH = cameraWidth - 1;
+    //protected final double CAMERA_HEIGHT = cameraHeight - 1;
+    public Size reducedImageQuality = new Size(cameraWidth, cameraHeight);//divide by width
     private Mat mainMat = new Mat();
 
     public Speed_Settings.detectionSpeed speed = Speed_Settings.detectionSpeed.MODERATE;
