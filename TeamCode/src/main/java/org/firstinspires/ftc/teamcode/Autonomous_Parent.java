@@ -166,7 +166,12 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void releaseMarker() {
         //Release Code
     }
-    protected void park() {
+    protected void park1() {
+        //Point in correct direction
+        //Drive to crater
+        //Put arm inside crater
+    }
+    protected void park2() {
         //Point in correct direction
         //Drive to crater
         //Put arm inside crater
