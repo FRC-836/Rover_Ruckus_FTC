@@ -101,12 +101,13 @@ public class Sampler {
             } else {
                 return position.NONE;
             }
-        } else {
+        }
+        else {
             double goldYPos = detector.getYPosition();
             if (0.0 <= goldYPos && 80.0 >= goldYPos) {
                 isLeft = true;
-                telemetry.addLine("Gold Position: Left");
-                return position.LEFT;
+                telemetry.addLine("Gold Position: Right");
+                return position.RIGHT;
             } else if (80.0 < goldYPos && 160.0 >= goldYPos) {
                 isCenter = true;
                 telemetry.addLine("Gold Position: Center");
@@ -114,8 +115,8 @@ public class Sampler {
 
             } else if (160.0 < goldYPos && 240.0 >= goldYPos) {
                 isRight = true;
-                telemetry.addLine("Gold Position: Right");
-                return position.RIGHT;
+                telemetry.addLine("Gold Position: Left");
+                return position.LEFT;
             } else {
                 return position.NONE;
             }
