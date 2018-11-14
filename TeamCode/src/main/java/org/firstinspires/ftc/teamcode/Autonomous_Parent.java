@@ -10,14 +10,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     private final double SECONDS_PER_IN = 0.16;
     private final double SECONDS_PER_DEGREE = 0.03;
 
-    enum GoldTarget {
+    enum position {
         LEFT,
         CENTER,
         RIGHT,
-        UNKNOWN
+        NONE
     }
 
-    protected GoldTarget goldTarget = GoldTarget.UNKNOWN;
+    protected position goldTarget = position.NONE;
 
     @Override
     public void getReady() {
@@ -133,7 +133,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         //Bring together arm of robot
     }
     protected void detect() {
-        goldTarget = GoldTarget.UNKNOWN;
+        goldTarget = position.NONE;
         //Detect code (quickly Ben!)
     }
     protected void sample() {
@@ -148,7 +148,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 // Sample right item.
 
                 break;
-            case UNKNOWN:
+            case NONE:
             case CENTER:
             default:
                 // Sample center item
