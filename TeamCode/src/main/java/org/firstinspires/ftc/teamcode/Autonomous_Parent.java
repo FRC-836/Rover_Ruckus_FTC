@@ -157,12 +157,18 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         }
     }
     protected void goToDepotCraterSide() {
-        //Driving Code
+        //Use goldTarget variable to point in correct direction
+        //Drive
     }
     protected void goToDepotDepotSide() {
         //Driving Code
     }
     protected void releaseMarker() {
         //Release Code
+    }
+    protected void park() {
+        //Point in correct direction
+        //Drive to crater
+        //Put arm inside crater
     }
 }
