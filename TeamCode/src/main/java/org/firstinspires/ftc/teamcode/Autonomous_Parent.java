@@ -2,12 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 public abstract class Autonomous_Parent extends Robot_Parent {
 
-    protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
-    protected PID_Controller strafePID = new PID_Controller(0.071, 0.0, 0.0);
-    protected PID_Controller turnPID = new PID_Controller(0.025, 0.0, 0.0);
+    protected PID_Controller forwardPID = new PID_Controller(0.0, 0.0, 0.035); //0.071
+    protected PID_Controller strafePID = new PID_Controller(0.0, 0.0, 0.035); //0.071
+    protected PID_Controller turnPID = new PID_Controller(0.0, 0.0, 0.042); //0.025
 
     private final double EC_PER_IN = 104.7;
-    private final double SECONDS_PER_IN = 0.16;
+    private final double SECONDS_PER_IN = 0.30;
     private final double SECONDS_PER_DEGREE = 0.03;
 
     @Override
