@@ -21,8 +21,8 @@ public abstract class Base_Detector extends OpenCVPipeline {
     private Size adjustedSize;
     private double cameraWidth = 580;
     private double cameraHeight = 480;
-    //protected final double CAMERA_WIDTH = cameraWidth - 1;
-    //protected final double CAMERA_HEIGHT = cameraHeight - 1;
+    protected final double CAMERA_WIDTH = cameraWidth - 1;
+    protected final double CAMERA_HEIGHT = cameraHeight - 1;
     public Size reducedImageQuality = new Size(cameraWidth, cameraHeight);//divide by width
     private Mat mainMat = new Mat();
 

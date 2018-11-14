@@ -5,89 +5,28 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay;
 import org.firstinspires.ftc.BensCV.Gold_Detector;
+import org.firstinspires.ftc.BensCV.Sampler;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 @TeleOp(name = "Image_Display_Test", group = "main")
 public class Image_Display_Test extends OpMode {
-//PHONES HAVE TO BE VERTICAL FOR ANY OF THIS TO WORK
-    private Gold_Detector detector;
-    private final boolean IS_WEBCAM_USED = false;
-    private boolean isGoldSeen = false;
-    WebcamName webcamName;
-    public boolean isRight = false;
-    public boolean isLeft = false;
-    public boolean isCenter = false;
-    public boolean debug = true;
+    private Sampler sampler;
 
     @Override
     public void init() {
-        if (IS_WEBCAM_USED) {
-            webcamName = hardwareMap.get(WebcamName.class, "w");
-        }
-        telemetry.addData("Status", "Gold_Test");
-
-        detector = new Gold_Detector();
-
-        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), 0);
-        detector.useDefaults();
-        detector.alignSize = 100;
-        detector.alignPosOffset = 0;
-        detector.reducedImageRatio = 0.4;
-
-        detector.triangulator.perfectRatio = 1.0;
-        detector.triangulator.saturation = 0.005;
-        detector.perfect_difference_triangulator.weight = 0.005;
-
-        detector.enable();
-        }
-        @Override
-        public void loop() {
-            if (!debug) {
-                if (detector.isFound()) {
-                    isGoldSeen = true;
-                    double goldXPos = detector.getXPosition();
-                    double goldYPos = detector.getYPosition();
-                    telemetry.addData("X Position", goldXPos);
-                    telemetry.addData("Y Position", goldYPos);
-                    telemetry.addLine("Object Seen");
-                    goldPosDetector();
-                    isGoldSeen = false;
-                    detector.disable();
-                }
-                else{
-                    detector.disable();
-                }
-            } else {
-                double goldXPos = detector.getXPosition();
-                double goldYPos = detector.getYPosition();
-                telemetry.addData("X Position", goldXPos);
-                telemetry.addData("Y Position", goldYPos);
-                goldPosDetector();
-            }
-
-        }
-        @Override
-        public void stop(){
-        detector.disable();
-        }
-        public void goldPosDetector(){
-        //change inequalities depending on camera placement of robot-change this as the camera mount changes
-            double goldXPos = detector.getXPosition();
-            if(0 <= goldXPos && 0.33 >= goldXPos){
-                isLeft = true;
-                telemetry.addLine("Gold Position: Left");
-
-            }
-            else if(0.33 < goldXPos && 0.66 >= goldXPos){
-                isCenter = true;
-                telemetry.addLine("Gold Position: Center");
-            }
-            else if(0.66 < goldXPos && 1.0 >= goldXPos){
-                isRight = true;
-                telemetry.addLine("Gold Position: Right");
-            }
-        }
+        sampler = new Sampler(false, hardwareMap, telemetry);
+        sampler.initialize();
     }
+
+    @Override
+    public void loop() {
+        sampler.run();
+    }
+    @Override
+    public void stop(){
+        sampler.halt();
+    }
+}
 //57 to 45
 
 
