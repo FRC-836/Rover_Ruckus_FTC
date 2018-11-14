@@ -12,7 +12,7 @@ public class Autonomous_Crater_Side extends Autonomous_Parent {
 
         goToDepotCraterSide();
 
-        park2();
+        parkCraterSide();
 
     }
 }
