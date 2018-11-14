@@ -45,18 +45,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         return position;
     }
 
-    protected double getArmPosition() {
-        double position = armRotator.getCurrentPosition();
-        position /= EC_PER_DEGREE_ARM;
-        return position;
-    }
-
-    protected double getExtenderPosition() {
-        double position = armExtender.getCurrentPosition();
-        position /= EC_PER_IN_ARM;
-        return position;
-    }
-
     // Drive functions involving PID Controllers
 
     protected void driveDistancePID(double inches) {
@@ -135,10 +123,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
             setDrive(0.0, multiplier, 0.0);
         }
         setDrive(0.0, 0.0, 0.0);
-    }
-
-    protected void armRotate(double degrees) {
-        // TODO
     }
 
     // Task-based Functions

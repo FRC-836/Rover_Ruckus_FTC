@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public abstract class Robot_Parent extends LinearOpMode {
 
-    protected final double EC_PER_DEGREE_ARM = 20.04;
+    protected final double EC_PER_DEGREE_ARM = 10.0;
     protected final double EC_PER_IN_ARM = 104.7;
     protected DcMotor backLeftDrive;
     protected DcMotor backRightDrive;
@@ -17,7 +17,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor armExtender;
     protected PID_Controller holdTurnPID = new PID_Controller(0.025, 0.0, 0.0);
     protected PID_Controller armHoldPID = new PID_Controller(0.0,0.0,0.0);
-    protected PID_Controller armMovePID = new PID_Controller(0.0,0.0,0.0);
+    protected PID_Controller armMovePID = new PID_Controller(0.000165,0.000,0.0000375);
     private BNO055IMU imu;
 
     @Override
@@ -41,7 +41,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        armRotator.setDirection(DcMotor.Direction.FORWARD);
+        armRotator.setDirection(DcMotor.Direction.REVERSE);
         armExtender.setDirection(DcMotor.Direction.FORWARD);
 
         setupImu();
@@ -89,5 +89,45 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
     protected void waitSeconds(double seconds) {
         sleep((long) (seconds * 1000.0));
+    }
+
+    protected double getArmPosition() {
+        double position = armRotator.getCurrentPosition();
+        position /= EC_PER_DEGREE_ARM;
+        return position;
+    }
+
+    protected double getExtenderPosition() {
+        double position = armExtender.getCurrentPosition();
+        position /= EC_PER_IN_ARM;
+        return position;
+    }
+
+    protected void armRotate(double degrees) {
+
+    }
+
+    protected void rotateArmToPosition_Cody(long maxTimeMs) {
+        // Ported from arm_pid branch.
+        // Assumes we're at a starting position, turning 180 degrees,
+        // past the vertical which is assumed to be 110 degrees above the startPoint.
+        long endTime = System.currentTimeMillis() + maxTimeMs;
+        double startPosition = getArmPosition();
+        double resetPoint = startPosition + 110.0;
+        boolean repeated = false;
+
+        armMovePID.setSetpoint(startPosition + 180.0);
+        armMovePID.resetPID();
+
+        while (opModeIsActive() && System.currentTimeMillis() < maxTimeMs)
+        {
+            double armPosition = getArmPosition();
+            setArmRotator(armMovePID.update(armPosition));
+            if (armPosition >= resetPoint && !repeated)
+            {
+                repeated = true;
+                armMovePID.resetPID();
+            }
+        }
     }
 }
