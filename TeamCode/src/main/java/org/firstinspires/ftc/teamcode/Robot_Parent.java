@@ -9,7 +9,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public abstract class Robot_Parent extends LinearOpMode {
 
-    protected final double EC_PER_DEGREE = 20.04;
+    protected final double EC_PER_DEGREE_ARM = 20.04;
+    protected final double EC_PER_IN_ARM = 104.7;
     protected DcMotor backLeftDrive;
     protected DcMotor backRightDrive;
     protected DcMotor frontLeftDrive;
@@ -17,6 +18,8 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor armRotator;
     protected DcMotor armExtender;
     protected PID_Controller holdTurnPID = new PID_Controller(0.025, 0.0, 0.0);
+    protected PID_Controller armHoldPID = new PID_Controller(0.0,0.0,0.0);
+    protected PID_Controller armMovePID = new PID_Controller(0.0,0.0,0.0);
     private BNO055IMU imu;
 
     @Override

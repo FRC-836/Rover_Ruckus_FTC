@@ -5,8 +5,8 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
     protected PID_Controller strafePID = new PID_Controller(0.071,0.0,0.0);
     protected PID_Controller turnPID = new PID_Controller(0.025, 0.0, 0.0);
-    
-    private final double EC_PER_IN = 104.7;
+
+    private final double EC_PER_IN_DRIVE = 104.7;
     private final double SECONDS_PER_IN = 0.16;
     private final double SECONDS_PER_DEGREE = 0.03;
 
@@ -33,7 +33,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         double position = backLeftDrive.getCurrentPosition() + backRightDrive.getCurrentPosition() +
                 frontLeftDrive.getCurrentPosition() + frontRightDrive.getCurrentPosition();
         position /= 4.0;
-        position /= EC_PER_IN;
+        position /= EC_PER_IN_DRIVE;
         return position;
     }
 
@@ -41,7 +41,19 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         double position = -backLeftDrive.getCurrentPosition() + backRightDrive.getCurrentPosition()
                 + frontLeftDrive.getCurrentPosition() - frontRightDrive.getCurrentPosition();
         position /= 4.0;
-        position /= EC_PER_IN;
+        position /= EC_PER_IN_DRIVE;
+        return position;
+    }
+
+    protected double getArmPosition() {
+        double position = armRotator.getCurrentPosition();
+        position /= EC_PER_DEGREE_ARM;
+        return position;
+    }
+
+    protected double getExtenderPosition() {
+        double position = armExtender.getCurrentPosition();
+        position /= EC_PER_IN_ARM;
         return position;
     }
 
@@ -123,6 +135,10 @@ public abstract class Autonomous_Parent extends Robot_Parent {
             setDrive(0.0, multiplier, 0.0);
         }
         setDrive(0.0, 0.0, 0.0);
+    }
+
+    protected void armRotate(double degrees) {
+        // TODO
     }
 
     // Task-based Functions
