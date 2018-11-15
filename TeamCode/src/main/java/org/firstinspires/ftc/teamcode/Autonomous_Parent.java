@@ -1,10 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
+import org.firstinspires.ftc.BensCV.Sampler;
+
 public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
     protected PID_Controller strafePID = new PID_Controller(0.071,0.0,0.0);
     protected PID_Controller turnPID = new PID_Controller(0.025, 0.0, 0.0);
+
+    private Sampler sampler;
+
 
     private final double EC_PER_IN_DRIVE = 104.7;
     private final double SECONDS_PER_IN = 0.16;
@@ -21,12 +26,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     @Override
     public void getReady() {
+        sampler = new Sampler(false,false, hardwareMap, telemetry, true);
+        sampler.initialize();
 
     }
 
     @Override
     public void go() {
-
+        sampler.run();
     }
 
     protected double getForwardPosition() {

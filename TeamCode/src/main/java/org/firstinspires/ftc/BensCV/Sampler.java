@@ -26,11 +26,12 @@ public class Sampler {
         NONE
     }
 
-    public Sampler(boolean isWebcamUsed, boolean isVertical, HardwareMap hardwareMap, Telemetry telemetry){
+    public Sampler(boolean isWebcamUsed, boolean isVertical, HardwareMap hardwareMap, Telemetry telemetry, boolean debug){
         this.isWebcamUsed = isWebcamUsed;
         this.isVertical = isVertical;
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
+        this.debug = debug;
     }
     
     public void initialize(){
