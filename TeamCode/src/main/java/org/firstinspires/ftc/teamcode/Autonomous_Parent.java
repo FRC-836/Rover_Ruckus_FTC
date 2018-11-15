@@ -47,25 +47,28 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         double startPosition = getForwardPosition();
         while(opModeIsActive() && Math.abs(getForwardPosition() - startPosition) < inches) {
             if (inches > 0.0) {
-                setDrive(1.0, 0.0, 0.0);
+                setDrive(1.0, 0.0);
             }
             else {
-                setDrive(-1.0, 0.0, 0.0);
+                setDrive(-1.0, 0.0);
             }
         }
-        setDrive(0.0,0.0,0.0);
+        setDrive(0.0,0.0);
     }
     protected void turnDegrees(double degrees) {
-        double startPosition = getTurnPosition();
-        while (opModeIsActive() && Math.abs(getTurnPosition() - startPosition) < degrees) {
+        TargetDirection targetDirection = TargetDirection.makeTargetToRobotsRight(degrees);
+        double multiplier = 1.0;
+        if (degrees < 0.0)
+            multiplier = -1.0;
+        while (opModeIsActive() && multiplier * targetDirection.calculateDistanceFromTarget() > 0.0) {
             if (degrees > 0.0) {
-                setDrive(0.0,1.0,0.0);
+                setDrive(0.0,1.0);
             }
             else {
-                setDrive(0.0,-1.0,0.0);
+                setDrive(0.0,-1.0);
             }
         }
-        setDrive(0.0,0.0,0.0);
+        setDrive(0.0,0.0);
     }
     protected void sample() {
         /*TODO: Insert Sampling Code:
