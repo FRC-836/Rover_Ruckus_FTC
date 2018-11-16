@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.auto_options;
 
-public class FDepot_Marker_ParkLeft extends Autonomous_Parent{
+import org.firstinspires.ftc.teamcode.Autonomous_Parent;
+
+public class FDepot_Marker_ParkLeft extends Autonomous_Parent {
     @Override
     public void setup() {
 

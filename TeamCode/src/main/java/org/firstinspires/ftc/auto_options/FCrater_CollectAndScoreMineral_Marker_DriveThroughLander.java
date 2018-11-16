@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.auto_options;
 
-public class FCrater_CollectAndScoreMineral_Marker_DriveThroughLander extends Autonomous_Parent{
+import org.firstinspires.ftc.teamcode.Autonomous_Parent;
+
+public class FCrater_CollectAndScoreMineral_Marker_DriveThroughLander extends Autonomous_Parent {
 
     @Override
     public void setup() {
