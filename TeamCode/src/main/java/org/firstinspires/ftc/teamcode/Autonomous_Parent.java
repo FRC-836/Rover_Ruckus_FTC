@@ -41,7 +41,8 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         return position;
     }
     protected void land(){
-        // TODO: Landing Mechanism Needed
+        // TODO: Change values to right number
+        int encoderCounts = 0;
     }
     protected void driveStraight(double inches) {
         double startPosition = getForwardPosition();
