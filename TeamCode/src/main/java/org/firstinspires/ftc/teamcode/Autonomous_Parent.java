@@ -4,138 +4,135 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     // TODO: remember to set values to diff number
     private final double ENCODER_COUNTS_PER_INCH = 81.19;
+    private final double EARLY_STOP_DEGREES = 5.0;
 
-    protected PID_Controller forwardPID = new PID_Controller(0.071,0.0,0.0);
+    protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
 
     @Override
-    public void initialize()
-    {
+    public void initialize() {
         setup();
     }
 
     @Override
-    public void play()
-    {
+    public void play() {
         begin();
     }
 
     protected double getForwardPosition() {
-        double position = backLeftDrive.getCurrentPosition() +
-                frontLeftDrive.getCurrentPosition() + frontRightDrive.getCurrentPosition() +
-                backRightDrive.getCurrentPosition();
-
+        double position;
+        position = backLeftDrive.getCurrentPosition() + backRightDrive.getCurrentPosition() + frontLeftDrive.getCurrentPosition() + frontLeftDrive.getCurrentPosition();
         position /= 4.0;
+
         position /= ENCODER_COUNTS_PER_INCH;
 
         return position;
     }
-    
-    protected double getStrafePosition() {
-        double position = -backLeftDrive.getCurrentPosition() +
-                frontLeftDrive.getCurrentPosition() - frontRightDrive.getCurrentPosition() +
-                backRightDrive.getCurrentPosition();
 
-        position /= 4.0;
-        position /= ENCODER_COUNTS_PER_INCH;
-
-        return position;
-    }
-    protected void land(){
+    protected void land() {
         // TODO: Change values to right number
         int encoderCounts = 0;
     }
-    protected void driveStraight(double inches) {
-        double startPosition = getForwardPosition();
-        while(opModeIsActive() && Math.abs(getForwardPosition() - startPosition) < inches) {
-            if (inches > 0.0) {
-                setDrive(1.0, 0.0);
-            }
-            else {
-                setDrive(-1.0, 0.0);
-            }
-        }
-        setDrive(0.0,0.0);
-    }
-    protected void turnDegrees(double degrees) {
-        TargetDirection targetDirection = TargetDirection.makeTargetToRobotsRight(degrees);
-        double multiplier = 1.0;
-        if (degrees < 0.0)
-            multiplier = -1.0;
-        while (opModeIsActive() && multiplier * targetDirection.calculateDistanceFromTarget() > 0.0) {
-            if (degrees > 0.0) {
-                setDrive(0.0,1.0);
-            }
-            else {
-                setDrive(0.0,-1.0);
-            }
-        }
-        setDrive(0.0,0.0);
-    }
+
     protected void sample() {
         /*TODO: Insert Sampling Code:
         Must return a case weather left, right, or center; must complete a condition for each.
         Also, this is JUST for if facing crater.
          */
     }
+
     protected void collectMineral() {
         //TODO: Insert Intake Code (Also have the robot move forward for after landing/starting)
     }
+
     protected void placeTeamMarker() {
         //TODO: Placing Marker (Mechanism needed)
     }
-    protected void scoreMineralInDepot(){
+
+    protected void scoreMineralInDepot() {
         //TODO: Insert Scoring code in depot (Mechanism needed)
     }
+
     protected void driveToDepot(boolean sample, boolean collect) {
         if (sample) {
-            driveStraight(1.5);
+            driveDistance(1.5);
             sample();
-            driveStraight(1.0);
-        }
-        else if (collect) {
-            driveStraight(1.5);
+            driveDistance(1.0);
+        } else if (collect) {
+            driveDistance(1.5);
             collectMineral();
-            driveStraight(1.0);
-        }
-            else{
-           driveStraight(2.5);
+            driveDistance(1.0);
+        } else {
+            driveDistance(2.5);
         }
     }
+
     protected void driveFromCraterToDepot(boolean driveDirectlyRight) {
         land();
-        driveStraight(1.0);
+        driveDistance(1.0);
         sample();
-        if(driveDirectlyRight) {
+        if (driveDirectlyRight) {
             turnDegrees(-70.0);
-            driveStraight(1.0);
+            driveDistance(1.0);
             turnDegrees(-35.0);
-            driveStraight(2.8);
-        }
-        else {
+            driveDistance(2.8);
+        } else {
             turnDegrees(-175.0);
-            driveStraight(1.3);
+            driveDistance(1.3);
             turnDegrees(40.0);
-            driveStraight(1.6);
+            driveDistance(1.6);
             turnDegrees(-90.0);
-            driveStraight(1.4);
+            driveDistance(1.4);
         }
     }
+
     protected void driveFromDepotToPark(boolean driveDirectlyLeft) {
         land();
         //TODO Change ALL values; These are estimates!
-        if (driveDirectlyLeft){
+        if (driveDirectlyLeft) {
             turnDegrees(35.0);
-            driveStraight(3.0);
-        }
-        else {
+            driveDistance(3.0);
+        } else {
             turnDegrees(180.0);
-            driveStraight(2.5);
+            driveDistance(2.5);
             turnDegrees(-45.0);
-            driveStraight(1.2);
+            driveDistance(1.2);
             turnDegrees(-90.0);
-            driveStraight(1.7);
+            driveDistance(1.7);
             turnDegrees(90.0);
-            driveStraight(0.5);
+            driveDistance(0.5);
         }
+    }
+
+    protected void driveDistance(double inches) {
+        double goal = getForwardPosition() + inches;
+        double multiplier = 1.0;
+
+        if (inches < 0.0)
+            multiplier = -1.0;
+
+        setArcadeDrive(multiplier, 0.0);
+        while (multiplier * (getForwardPosition() - goal) < 0.0 && opModeIsActive()) {
+            setArcadeDrive(multiplier, 0.0);
+        }
+        setArcadeDrive(0.0, 0.0);
+    }
+
+    protected void turnDegrees(double degrees) {
+        if (degrees > EARLY_STOP_DEGREES) {
+            degrees = Math.max(EARLY_STOP_DEGREES, degrees - EARLY_STOP_DEGREES);
+        } else if (degrees < -EARLY_STOP_DEGREES) {
+            degrees = Math.min(-EARLY_STOP_DEGREES, degrees + EARLY_STOP_DEGREES);
+        }
+
+        TargetDirection goalHeading = TargetDirection.makeTargetToRobotsRight(degrees);
+        double multiplier = 1.0;
+        if (degrees < 0.0)
+            multiplier = -1.0;
+
+        setArcadeDrive(0.0, multiplier);
+        while (multiplier * goalHeading.calculateDistanceFromTarget() < 0.0 && opModeIsActive()) {
+            setArcadeDrive(0.0, multiplier);
+        }
+        setArcadeDrive(0.0, 0.0);
     }
 }

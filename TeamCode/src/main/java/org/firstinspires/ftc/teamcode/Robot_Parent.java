@@ -12,25 +12,34 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor backRightDrive;
     protected DcMotor frontLeftDrive;
     protected DcMotor frontRightDrive;
+    protected DcMotor landingMotor;
 
     protected PID_Controller goToTurnPID = new PID_Controller(0.025, 0.0, 0.0);
-    protected PID_Controller holdTurnPID = new PID_Controller(0.0,0.0,0.0);
+
+    public double pStableHoldTurn = 0.01332;
+    public double dStableHoldTurn = 0.00195;
+    public double holdTurnMultiplier = 5.25;
+
+    protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
 
     private BNO055IMU imu;
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+
         backLeftDrive = hardwareMap.get(DcMotor.class, "bld");
         backRightDrive = hardwareMap.get(DcMotor.class, "brd");
         frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
         frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
-
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        landingMotor = hardwareMap.get(DcMotor.class, "lm");
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        landingMotor.setDirection(DcMotor.Direction.REVERSE);
 
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -49,17 +58,27 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     public abstract void initialize();
+
     public abstract void play();
+
     public abstract void setup();
+
     public abstract void begin();
 
     // Functions
 
-    protected void setDrive(double forwardPower, double turnPower) {
+    protected void setArcadeDrive(double forwardPower, double turnPower) {
         backLeftDrive.setPower(forwardPower + turnPower);
         backRightDrive.setPower(forwardPower - turnPower);
         frontLeftDrive.setPower(forwardPower + turnPower);
         frontRightDrive.setPower(forwardPower - turnPower);
+    }
+
+    protected void setTankDrive(double leftPower, double rightPower) {
+        backLeftDrive.setPower(leftPower);
+        backRightDrive.setPower(rightPower);
+        frontLeftDrive.setPower(leftPower);
+        frontRightDrive.setPower(rightPower);
     }
 
     private void setupImu() {

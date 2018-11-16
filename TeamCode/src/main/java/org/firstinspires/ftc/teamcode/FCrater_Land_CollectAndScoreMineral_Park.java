@@ -10,7 +10,7 @@ public class FCrater_Land_CollectAndScoreMineral_Park extends Autonomous_Parent{
     public void begin() {
         land();
         collectMineral();
-        driveStraight(0.0);
+        driveDistance(0.0);
         //TODO:Either change to a park function or change value
     }
 }
