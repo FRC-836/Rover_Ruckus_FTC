@@ -35,11 +35,11 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         if (inches < 0.0)
             multiplier = -1.0;
 
-        setDrive(multiplier, 0.0);
+        setArcadeDrive(multiplier, 0.0);
         while (multiplier * (getForwardPosition() - goal) < 0.0 && opModeIsActive()) {
-            setDrive(multiplier, 0.0);
+            setArcadeDrive(multiplier, 0.0);
         }
-        setDrive(0.0, 0.0);
+        setArcadeDrive(0.0, 0.0);
     }
 
     protected void turn(double degrees) {
@@ -54,10 +54,10 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         if (degrees < 0.0)
             multiplier = -1.0;
 
-        setDrive(0.0, multiplier);
+        setArcadeDrive(0.0, multiplier);
         while (multiplier * goalHeading.calculateDistanceFromTarget() < 0.0 && opModeIsActive()) {
-            setDrive(0.0, multiplier);
+            setArcadeDrive(0.0, multiplier);
         }
-        setDrive(0.0, 0.0);
+        setArcadeDrive(0.0, 0.0);
     }
 }

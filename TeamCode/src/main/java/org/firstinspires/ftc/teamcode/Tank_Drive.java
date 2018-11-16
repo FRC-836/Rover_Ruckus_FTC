@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 public class Tank_Drive extends Teleop_Parent {
 
+    @Override
     public void setup() {
 
     }
