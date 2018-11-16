@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "Teleop Octo")
+@TeleOp(name = "Teleop Arcade")
 public class Arcade_Drive extends Teleop_Parent {
 
     //Team is using Regular/H drive train
@@ -23,6 +23,6 @@ public class Arcade_Drive extends Teleop_Parent {
         double forwardPower = -gamepad1.left_stick_y;
         double turnPower = gamepad1.right_stick_x;
 
-        setDrive(forwardPower, turnPower);
+        setArcadeDrive(forwardPower, turnPower);
     }
 }

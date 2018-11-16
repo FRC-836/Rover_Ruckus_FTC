@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
-public class Tank_Drive extends Teleop_Parent{
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-    //Team is using Regular/H drive train
+@TeleOp(name = "Teleop_Tank")
 
-    @Override
+public class Tank_Drive extends Teleop_Parent {
+
     public void setup() {
 
     }
@@ -16,7 +17,9 @@ public class Tank_Drive extends Teleop_Parent{
 
     @Override
     public void repeat() {
-        // Get powers
-    }
+        double rightDrive = -gamepad1.right_stick_y;
+        double leftDrive = -gamepad1.left_stick_y;
 
+        setTankDrive(leftDrive, rightDrive);
+    }
 }
