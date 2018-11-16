@@ -30,7 +30,9 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected void land() {
         // TODO: Change values to right number
-        int encoderCounts = 0;
+        double encoderCounts = 0.00;
+
+        setLandingMotorPower(encoderCounts);
     }
 
     protected void sample() {
