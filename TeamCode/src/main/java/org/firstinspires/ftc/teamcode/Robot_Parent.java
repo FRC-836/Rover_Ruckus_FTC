@@ -45,6 +45,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        landingMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         setupImu();
 
@@ -79,6 +80,10 @@ public abstract class Robot_Parent extends LinearOpMode {
         backRightDrive.setPower(rightPower);
         frontLeftDrive.setPower(leftPower);
         frontRightDrive.setPower(rightPower);
+    }
+
+    protected void setLandingMotorPower(double power) {
+        landingMotor.setPower(power);
     }
 
     private void setupImu() {

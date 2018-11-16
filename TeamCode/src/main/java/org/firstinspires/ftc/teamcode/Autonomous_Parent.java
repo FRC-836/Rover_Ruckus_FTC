@@ -29,9 +29,20 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         return position;
     }
 
+    protected int getLandingMotorPosition() {return landingMotor.getCurrentPosition();}
+
     protected void land() {
         // TODO: Change values to right number
-        int encoderCounts = 0;
+        int encoderValue = 0;
+
+        // lower robot
+        int goal = getLandingMotorPosition() + encoderValue;
+        setLandingMotorPower(1.0);
+        while ((getLandingMotorPosition() - goal) < 0.0 && opModeIsActive()) {
+        }
+        setLandingMotorPower(0.0);
+
+
     }
 
     protected void sample() {

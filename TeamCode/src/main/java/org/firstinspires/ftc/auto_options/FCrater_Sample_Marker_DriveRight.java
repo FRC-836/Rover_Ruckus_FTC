@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.auto_options;
 
-public class FCrater_Sample_Marker_DriveRight extends Autonomous_Parent{
+import org.firstinspires.ftc.teamcode.Autonomous_Parent;
+
+public class FCrater_Sample_Marker_DriveRight extends Autonomous_Parent {
 
     @Override
     public void setup() {
