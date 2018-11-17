@@ -9,16 +9,20 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     private final double ENCODER_COUNTS_PER_INCH = 81.19;
     private final double EARLY_STOP_DEGREES = 5.0;
 
+    private Sampler sampler = new Sampler();
+    protected Sampler.GoldPosition position;
 
     protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
 
     @Override
     public void initialize() {
         setup();
+        sampler.init(telemetry, hardwareMap);
     }
 
     @Override
     public void play() {
+        position = sampler.sample();
         begin();
     }
 
