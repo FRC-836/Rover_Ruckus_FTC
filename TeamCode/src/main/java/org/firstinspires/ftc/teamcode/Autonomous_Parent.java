@@ -164,8 +164,8 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         switch (goldTarget)
         {
             case LEFT:
-                // Sample left item.
-
+                /*driveStrafePID(16);
+                driveDistancePID();*/
                 break;
             case RIGHT:
                 // Sample right item.
