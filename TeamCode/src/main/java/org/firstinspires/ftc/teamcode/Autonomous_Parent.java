@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.BensCV.Sampler;
 
 public abstract class Autonomous_Parent extends Robot_Parent {
 
+    private ElapsedTime runtime = new ElapsedTime();
     protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
     protected PID_Controller strafePID = new PID_Controller(0.071,0.0,0.0);
     protected PID_Controller turnPID = new PID_Controller(0.025, 0.0, 0.0);
@@ -34,6 +37,10 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     @Override
     public void go() {
         sampler.run();
+        telemetry.clear();
+        telemetry.addData("Total runtime", "%6.3f seconds", runtime.seconds());
+        //This lets us know how long our autonomous lasts for
+        telemetry.update();
     }
 
     protected double getForwardPosition() {
@@ -144,20 +151,34 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         setDrive(0.0, 0.0, 0.0);
     }
 
-    protected void armRotate(double degrees) {
-        // TODO
+    protected void armRotate() {
+        setArmRotator(0.01);
+        long startTime = System.currentTimeMillis();
+        while(opModeIsActive() && startTime + 500 > System.currentTimeMillis());
+        setArmExtender(0.01);
+        setArmRotator(0.0);
+        setArmExtender(0.0);
     }
 
     // Task-based Functions
     protected void deploy() {
-        //Release lock holding wheels
-        //Lower wheels to ground
-        //Detach hook from lander
-        //Bring together arm of robot
+        armRotate();
     }
     protected void detect() {
-        goldTarget = position.NONE;
-        //Detect code (quickly Ben!)
+        switch (sampler.goldPosDetector()){
+            case LEFT:
+                goldTarget = position.LEFT;
+                break;
+            case CENTER:
+                goldTarget = position.CENTER;
+                break;
+            case RIGHT:
+                goldTarget = position.RIGHT;
+                break;
+            case NONE:
+                goldTarget = position.NONE;
+                break;
+        }
     }
     protected void sample() {
         //Push gold off tape
@@ -199,4 +220,5 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         //Drive to crater
         //Put arm inside crater
     }
+
 }

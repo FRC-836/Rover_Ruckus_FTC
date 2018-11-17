@@ -19,7 +19,7 @@ public class Sampler {
     private Telemetry telemetry;
     private HardwareMap hardwareMap;
 
-    enum position{
+    public enum location {
         LEFT,
         CENTER,
         RIGHT,
@@ -82,25 +82,25 @@ public class Sampler {
     public void halt(){
         detector.disable();
     }
-    public position  goldPosDetector() {
+    public location goldPosDetector() {
         //change inequalities depending on camera placement of robot-change this as the camera mount changes
         if (isVertical) {
             double goldXPos = detector.getXPosition();
             if (0.0 <= goldXPos && 60.0 >= goldXPos) {
                 isLeft = true;
                 telemetry.addLine("Gold Position: Left");
-                return position.LEFT;
+                return location.LEFT;
             } else if (60.0 < goldXPos && 120.0 >= goldXPos) {
                 isCenter = true;
                 telemetry.addLine("Gold Position: Center");
-                return position.CENTER;
+                return location.CENTER;
 
             } else if (120.0 < goldXPos && 180.0 >= goldXPos) {
                 isRight = true;
                 telemetry.addLine("Gold Position: Right");
-                return position.RIGHT;
+                return location.RIGHT;
             } else {
-                return position.NONE;
+                return location.NONE;
             }
         }
         else {
@@ -108,18 +108,18 @@ public class Sampler {
             if (0.0 <= goldYPos && 80.0 >= goldYPos) {
                 isLeft = true;
                 telemetry.addLine("Gold Position: Right");
-                return position.RIGHT;
+                return location.RIGHT;
             } else if (80.0 < goldYPos && 160.0 >= goldYPos) {
                 isCenter = true;
                 telemetry.addLine("Gold Position: Center");
-                return position.CENTER;
+                return location.CENTER;
 
             } else if (160.0 < goldYPos && 240.0 >= goldYPos) {
                 isRight = true;
                 telemetry.addLine("Gold Position: Left");
-                return position.LEFT;
+                return location.LEFT;
             } else {
-                return position.NONE;
+                return location.NONE;
             }
         }
     }

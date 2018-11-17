@@ -15,10 +15,15 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor frontRightDrive;
     protected DcMotor armRotator;
     protected DcMotor armExtender;
-    protected PID_Controller holdTurnPID = new PID_Controller(0.025, 0.0, 0.0);
+    private BNO055IMU imu;
+
+    public double pStableHoldTurn = 0.01332;
+    public double dStableHoldTurn = 0.00195;
+    public double holdTurnMultiplier = 5.25;
+
+    protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
     protected PID_Controller armHoldPID = new PID_Controller(0.0,0.0,0.0);
     protected PID_Controller armMovePID = new PID_Controller(0.0,0.0,0.0);
-    private BNO055IMU imu;
 
     @Override
     public void runOpMode() throws InterruptedException {
