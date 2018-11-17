@@ -18,8 +18,9 @@ public class Sampler {
     private boolean isRight = false;
     private Telemetry telemetry;
     private HardwareMap hardwareMap;
+    public position positionIdentifier = position.NONE;
 
-    public enum location {
+    public enum position {
         LEFT,
         CENTER,
         RIGHT,
@@ -82,25 +83,25 @@ public class Sampler {
     public void halt(){
         detector.disable();
     }
-    public location goldPosDetector() {
+    public position goldPosDetector() {
         //change inequalities depending on camera placement of robot-change this as the camera mount changes
         if (isVertical) {
             double goldXPos = detector.getXPosition();
             if (0.0 <= goldXPos && 60.0 >= goldXPos) {
                 isLeft = true;
                 telemetry.addLine("Gold Position: Left");
-                return location.LEFT;
+                positionIdentifier = position.LEFT;
             } else if (60.0 < goldXPos && 120.0 >= goldXPos) {
                 isCenter = true;
                 telemetry.addLine("Gold Position: Center");
-                return location.CENTER;
+                positionIdentifier = position.CENTER;
 
             } else if (120.0 < goldXPos && 180.0 >= goldXPos) {
                 isRight = true;
                 telemetry.addLine("Gold Position: Right");
-                return location.RIGHT;
+                positionIdentifier = position.RIGHT;
             } else {
-                return location.NONE;
+                positionIdentifier = position.NONE;
             }
         }
         else {
@@ -108,20 +109,22 @@ public class Sampler {
             if (0.0 <= goldYPos && 80.0 >= goldYPos) {
                 isLeft = true;
                 telemetry.addLine("Gold Position: Right");
-                return location.RIGHT;
+                positionIdentifier = position.RIGHT;
             } else if (80.0 < goldYPos && 160.0 >= goldYPos) {
                 isCenter = true;
                 telemetry.addLine("Gold Position: Center");
-                return location.CENTER;
+                positionIdentifier = position.CENTER;
 
             } else if (160.0 < goldYPos && 240.0 >= goldYPos) {
                 isRight = true;
                 telemetry.addLine("Gold Position: Left");
-                return location.LEFT;
+                positionIdentifier = position.LEFT;
             } else {
-                return location.NONE;
+                positionIdentifier = position.NONE;
             }
         }
+        return positionIdentifier;
     }
+
 
 }

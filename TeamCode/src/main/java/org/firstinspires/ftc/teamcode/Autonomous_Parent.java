@@ -18,14 +18,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     private final double SECONDS_PER_IN = 0.16;
     private final double SECONDS_PER_DEGREE = 0.03;
 
-    enum position {
-        LEFT,
-        CENTER,
-        RIGHT,
-        NONE
-    }
-
-    protected position goldTarget = position.NONE;
+    protected Sampler.position goldTarget = Sampler.position.NONE;
 
     @Override
     public void getReady() {
@@ -36,6 +29,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     @Override
     public void go() {
+        goldTarget = sampler.goldPosDetector();
         sampler.run();
         telemetry.clear();
         telemetry.addData("Total runtime", "%6.3f seconds", runtime.seconds());
@@ -164,22 +158,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void deploy() {
         armRotate();
     }
-    protected void detect() {
-        switch (sampler.goldPosDetector()){
-            case LEFT:
-                goldTarget = position.LEFT;
-                break;
-            case CENTER:
-                goldTarget = position.CENTER;
-                break;
-            case RIGHT:
-                goldTarget = position.RIGHT;
-                break;
-            case NONE:
-                goldTarget = position.NONE;
-                break;
-        }
-    }
+
     protected void sample() {
         //Push gold off tape
         switch (goldTarget)
