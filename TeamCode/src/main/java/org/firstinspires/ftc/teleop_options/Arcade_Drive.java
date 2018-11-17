@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teleop_options;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Teleop_Parent;
+import org.firstinspires.ftc.parent_classes.Teleop_Parent;
 
 @TeleOp(name = "Teleop Arcade")
 public class Arcade_Drive extends Teleop_Parent {

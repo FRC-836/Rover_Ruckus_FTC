@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.auto_options;
 
-import org.firstinspires.ftc.teamcode.Autonomous_Parent;
+import org.firstinspires.ftc.parent_classes.Autonomous_Parent;
 
 public class FCrater_Land_Sample_Marker_DriveThroughLander extends Autonomous_Parent {
 
