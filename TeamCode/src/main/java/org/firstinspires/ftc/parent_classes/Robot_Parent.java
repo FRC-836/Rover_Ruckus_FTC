@@ -18,12 +18,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor landingMotor;
 
     protected PID_Controller goToTurnPID = new PID_Controller(0.025, 0.0, 0.0);
-
-    public double pStableHoldTurn = 0.01332;
-    public double dStableHoldTurn = 0.00195;
-    public double holdTurnMultiplier = 5.25;
-
-    protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
+    protected PID_Controller holdTurnPID = new PID_Controller(0.01332, 0.0, 0.00195);
 
     private BNO055IMU imu;
 
@@ -70,6 +65,10 @@ public abstract class Robot_Parent extends LinearOpMode {
     public abstract void begin();
 
     // Functions
+
+    protected void setIntake(double intakePower) {
+        //TODO: need intake
+    }
 
     protected void setArcadeDrive(double forwardPower, double turnPower) {
         backLeftDrive.setPower(forwardPower + turnPower);
