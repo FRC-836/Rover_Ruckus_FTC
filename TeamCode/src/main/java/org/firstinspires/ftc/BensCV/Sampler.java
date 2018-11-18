@@ -56,7 +56,7 @@ public class Sampler {
 
         detector.enable();
     }
-    public void run(){
+    public position run(){
         if (!debug) {
             if (detector.isFound()) {
                 isGoldSeen = true;
@@ -79,12 +79,12 @@ public class Sampler {
             telemetry.addData("Y Position", goldYPos);
             goldPosDetector();
         }
+        return positionIdentifier;
     }
     public void halt(){
         detector.disable();
     }
-    public position goldPosDetector() {
-        //change inequalities depending on camera placement of robot-change this as the camera mount changes
+    public void goldPosDetector() {
         if (isVertical) {
             double goldXPos = detector.getXPosition();
             if (0.0 <= goldXPos && 60.0 >= goldXPos) {
@@ -123,7 +123,7 @@ public class Sampler {
                 positionIdentifier = position.NONE;
             }
         }
-        return positionIdentifier;
+
     }
 
 

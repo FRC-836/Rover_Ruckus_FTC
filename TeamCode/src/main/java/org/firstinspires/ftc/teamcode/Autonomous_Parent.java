@@ -30,7 +30,8 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     @Override
     public void go() {
         sampler.run();
-        goldTarget = sampler.goldPosDetector();
+        goldTarget = sampler.positionIdentifier;
+        while(opModeIsActive())
         telemetry.clear();
         telemetry.addData("Total runtime", "%6.3f seconds", runtime.seconds());
         //This lets us know how long our autonomous lasts for
