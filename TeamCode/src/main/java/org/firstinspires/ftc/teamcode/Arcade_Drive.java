@@ -13,7 +13,7 @@ public class Arcade_Drive extends Teleop_Parent {
     public void run() {
         double forwardPower = -gamepad1.left_stick_y;
         double turnPower = gamepad1.right_stick_x;
-        double strafePower = -gamepad1.left_stick_x;
+        double strafePower = gamepad1.left_stick_x;
 
         if (driveSlowFactor)
         {

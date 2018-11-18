@@ -13,7 +13,7 @@ public class Tank_Drive extends Teleop_Parent {
     public void run() {
         double leftDrivePower = -gamepad1.left_stick_y;
         double rightDrivePower = -gamepad1.right_stick_y;
-        double leftStrafePower = -gamepad1.left_stick_x;
+        double leftStrafePower = gamepad1.left_stick_x;
         double rightStrafePower = gamepad1.right_stick_x;
 
         if(driveSlowFactor){
@@ -26,10 +26,10 @@ public class Tank_Drive extends Teleop_Parent {
         setTankDrive(leftDrivePower, rightDrivePower, leftStrafePower, rightStrafePower);
     }
     private void setTankDrive (double leftDrivePower, double rightDrivePower, double leftStrafePower, double rightStrafePower){
-        backLeftDrive.setPower(leftDrivePower - leftStrafePower);
-        backRightDrive.setPower(rightDrivePower + rightStrafePower);
-        frontLeftDrive.setPower(leftDrivePower + leftStrafePower);
-        frontRightDrive.setPower(rightDrivePower - rightStrafePower);
+        backLeftDrive.setPower(leftDrivePower + leftStrafePower);
+        backRightDrive.setPower(rightDrivePower - rightStrafePower);
+        frontLeftDrive.setPower(leftDrivePower - leftStrafePower);
+        frontRightDrive.setPower(rightDrivePower + rightStrafePower);
     }
 }
 
