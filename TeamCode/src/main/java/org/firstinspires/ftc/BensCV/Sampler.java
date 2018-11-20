@@ -18,7 +18,7 @@ public class Sampler {
     private boolean isRight = false;
     private Telemetry telemetry;
     private HardwareMap hardwareMap;
-    public position positionIdentifier = position.NONE;
+    private position positionIdentifier = position.NONE;
 
     public enum position {
         LEFT,
