@@ -22,7 +22,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     @Override
     public void getReady() {
-        sampler = new Sampler(false,false, hardwareMap, telemetry, true);
+        sampler = new Sampler(false,false, hardwareMap, telemetry, false);
         sampler.initialize();
 
     }
@@ -145,18 +145,17 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         setDrive(0.0, 0.0, 0.0);
     }
 
-    protected void armRotate() {
+    protected void armRotateToPosition(double degrees) {
+    }
+
+    // Task-based Functions
+    protected void deploy() {
         setArmRotator(0.01);
         long startTime = System.currentTimeMillis();
         while(opModeIsActive() && startTime + 500 > System.currentTimeMillis());
         setArmExtender(0.01);
         setArmRotator(0.0);
         setArmExtender(0.0);
-    }
-
-    // Task-based Functions
-    protected void deploy() {
-        armRotate();
     }
 
     protected void sample() {

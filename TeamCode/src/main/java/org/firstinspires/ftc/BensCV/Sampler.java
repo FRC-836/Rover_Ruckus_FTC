@@ -26,7 +26,6 @@ public class Sampler {
         RIGHT,
         NONE
     }
-
     public Sampler(boolean isWebcamUsed, boolean isVertical, HardwareMap hardwareMap, Telemetry telemetry, boolean debug){
         this.isWebcamUsed = isWebcamUsed;
         this.isVertical = isVertical;
