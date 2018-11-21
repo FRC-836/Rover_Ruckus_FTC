@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class Autonomous_Crater_Side extends Autonomous_Parent {
 
     @Override
-    public void go() {
+    public void go() { // TODO: Either super.go() or make newly named function
         deploy();
 
         sampleCraterSide();

@@ -13,7 +13,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     private Sampler sampler;
 
-
     private final double EC_PER_IN_DRIVE = 104.7;
     private final double SECONDS_PER_IN = 0.16;
     private final double SECONDS_PER_DEGREE = 0.03;
@@ -25,13 +24,12 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     public void getReady() {
         sampler = new Sampler(false,false, hardwareMap, telemetry, false);
         sampler.initialize();
-
     }
 
     @Override
     public void go() {
         goldTarget = sampler.run();
-        while(opModeIsActive())
+        while(opModeIsActive()) // TODO: Fix "Go" function
         telemetry.clear();
         telemetry.addData("Total runtime", "%6.3f seconds", runtime.seconds());
         //This lets us know how long our autonomous lasts for
@@ -156,9 +154,11 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void armRotateToPosition(double degrees) {
+        // TODO: Write this function
     }
 
     // Task-based Functions
+
     protected void deploy() {
         setArmRotator(0.01);
         long startTime = System.currentTimeMillis();
@@ -220,6 +220,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         }
         turnToFieldPID(176.0);
     }
+
     protected void goToDepotCraterSide() {
         driveDistancePID(42.0);
         turnToFieldPID(0.0);
@@ -227,12 +228,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void releaseMarker() {
-        //Release Code
+        // TODO: Add release code
     }
 
+    // TODO: Both park functions need to use non-PID code at some point due to Crater Wall collision
     protected void parkInCraterCraterSide() {
         driveStrafePID(-84.0);
     }
+
     protected void parkInCraterDepotSide() {
         driveDistancePID(84.0);
     }
