@@ -5,6 +5,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+// TODO: COMMENT EVERYTHING IN ALL FILES!
 public abstract class Robot_Parent extends LinearOpMode {
 
     protected final double EC_PER_DEGREE_ARM = 20.04;
