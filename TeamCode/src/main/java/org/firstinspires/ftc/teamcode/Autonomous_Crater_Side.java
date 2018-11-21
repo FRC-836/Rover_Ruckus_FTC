@@ -9,12 +9,12 @@ public class Autonomous_Crater_Side extends Autonomous_Parent {
     public void go() {
         deploy();
 
-        sample();
+        sampleCraterSide();
 
         goToDepotCraterSide();
 
         releaseMarker();
 
-        parkCraterSide();
+        parkInCraterCraterSide();
     }
 }

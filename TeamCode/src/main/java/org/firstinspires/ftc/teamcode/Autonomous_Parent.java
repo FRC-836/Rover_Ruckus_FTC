@@ -17,6 +17,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     private final double EC_PER_IN_DRIVE = 104.7;
     private final double SECONDS_PER_IN = 0.16;
     private final double SECONDS_PER_DEGREE = 0.03;
+    private final double SAMPLE_TURN_ANGLE = 26.36;
 
     protected Sampler.position goldTarget = Sampler.position.NONE;
 
@@ -92,12 +93,20 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         }
         setDrive(0.0, 0.0, 0.0);
     }
+    protected void turnToFieldPID(double degrees){
+        TargetDirection goal = TargetDirection.makeTargetAtFieldPosition(degrees);
+        turnToTargetPID(goal);
+    }
 
-    protected void driveTurnPID(double degrees) {
+    protected void turnRightPID(double degrees) {
         TargetDirection goal = TargetDirection.makeTargetToRobotsRight(degrees);
+        turnToTargetPID(goal);
+    }
+
+    protected void turnToTargetPID(TargetDirection goal) {
         turnPID.setSetpoint(0.0);
         turnPID.resetPID();
-        long endTime = System.currentTimeMillis() + (long) (SECONDS_PER_DEGREE * 1000.0 * Math.abs(degrees));
+        long endTime = System.currentTimeMillis() + (long) (SECONDS_PER_DEGREE * 1000.0 * Math.abs(goal.calculateDistanceFromTarget()));
         while (opModeIsActive() && (System.currentTimeMillis() <= endTime)) {
             setDrive(0.0, turnPID.update(goal.calculateDistanceFromTarget()), 0.0);
         }
@@ -134,6 +143,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         setDrive(0.0, 0.0, 0.0);
     }
 
+    @Deprecated
     protected void driveTurn(double degrees) {
         TargetDirection goal = TargetDirection.makeTargetToRobotsRight(degrees);
         double multiplier = 1.0;
@@ -158,45 +168,73 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         setArmExtender(0.0);
     }
 
-    protected void sample() {
-        //Push gold off tape
+    protected void sampleDepotSide() {
+        double driveToGoldDrive = 48.0;
+        double setGrid = 0.0;
+        double driveToDepot = 31.0;
         switch (goldTarget)
         {
             case LEFT:
-                /*driveStrafePID(16);
-                driveDistancePID();*/
+                turnRightPID(-SAMPLE_TURN_ANGLE);
+                driveDistancePID(driveToGoldDrive);
+                turnToFieldPID(setGrid);
+                driveDistancePID(-driveToDepot);
                 break;
             case RIGHT:
-                // Sample right item.
-
+                turnRightPID(SAMPLE_TURN_ANGLE);
+                driveDistancePID(driveToGoldDrive);
+                turnToFieldPID(setGrid);
+                driveStrafePID(driveToDepot);
                 break;
             case NONE:
             case CENTER:
             default:
-                // Sample center item
-
+                driveDistancePID(65.0);
+                turnToFieldPID(setGrid);
                 break;
         }
     }
+
+    protected void sampleCraterSide() {
+        double longDrive = 29.0;
+        double shortDrive = 25.25;
+
+        switch (goldTarget)
+        {
+            case LEFT:
+                turnRightPID(-SAMPLE_TURN_ANGLE);
+                driveDistancePID(longDrive);
+                driveDistancePID(-longDrive);
+                break;
+            case RIGHT:
+                turnRightPID(SAMPLE_TURN_ANGLE);
+                driveDistancePID(longDrive);
+                driveDistancePID(-longDrive);
+                break;
+            case NONE:
+            case CENTER:
+            default:
+                driveDistancePID(shortDrive);
+                driveDistancePID(-shortDrive);
+                break;
+        }
+        turnToFieldPID(176.0);
+    }
     protected void goToDepotCraterSide() {
-        //Use goldTarget variable to point in correct direction
-        //Drive
+        driveDistancePID(42.0);
+        turnToFieldPID(0.0);
+        driveStrafePID(68.5);
     }
-    protected void goToDepotDepotSide() {
-        //Driving Code
-    }
+
     protected void releaseMarker() {
         //Release Code
     }
-    protected void parkDepotSide() {
-        //Point in correct direction
-        //Drive to crater
-        //Put arm inside crater
+
+    protected void parkInCraterCraterSide() {
+        driveStrafePID(-84.0);
     }
-    protected void parkCraterSide() {
-        //Point in correct direction
-        //Drive to crater
-        //Put arm inside crater
+    protected void parkInCraterDepotSide() {
+        driveDistancePID(84.0);
     }
 
 }

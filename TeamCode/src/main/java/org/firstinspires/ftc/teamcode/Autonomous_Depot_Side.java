@@ -9,12 +9,10 @@ public class Autonomous_Depot_Side extends Autonomous_Parent {
     public void go() {
         deploy();
 
-        sample();
-
-        goToDepotDepotSide();
+        sampleDepotSide();
 
         releaseMarker();
 
-        parkDepotSide();
+        parkInCraterDepotSide();
     }
 }
