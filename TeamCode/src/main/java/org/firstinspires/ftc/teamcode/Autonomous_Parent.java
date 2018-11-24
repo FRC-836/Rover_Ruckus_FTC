@@ -97,13 +97,15 @@ public abstract class Autonomous_Parent extends Robot_Parent {
      */
     protected void driveStrafePID(double inches) {
         TargetDirection retain = TargetDirection.makeTargetToRobotsRight(0.0);
+        forwardPID.setSetpoint(getForwardPosition());
         strafePID.setSetpoint(getStrafePosition() + inches);
         holdTurnPID.setSetpoint(0.0);
+        forwardPID.resetPID();
         strafePID.resetPID();
         holdTurnPID.resetPID();
         long endTime = System.currentTimeMillis() + (long) (SECONDS_PER_IN * 1000.0 * Math.abs(inches));
         while (opModeIsActive() && (System.currentTimeMillis() <= endTime)) {
-            setDrive(0.0, holdTurnPID.update(retain.calculateDistanceFromTarget()), strafePID.update(getStrafePosition()));
+            setDrive(forwardPID.update(getForwardPosition()), holdTurnPID.update(retain.calculateDistanceFromTarget()), strafePID.update(getStrafePosition()));
         }
         setDrive(0.0, 0.0, 0.0);
     }
