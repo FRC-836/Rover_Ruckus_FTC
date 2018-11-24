@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-// TODO: COMMENT EVERYTHING IN ALL FILES!
 public abstract class Robot_Parent extends LinearOpMode {
     //Set up robot parts/controllers
     protected final double EC_PER_DEGREE_ARM = 20.04;
