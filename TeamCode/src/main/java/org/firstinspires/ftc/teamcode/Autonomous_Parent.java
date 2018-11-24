@@ -8,8 +8,8 @@ import org.firstinspires.ftc.BensCV.Sampler;
 public abstract class Autonomous_Parent extends Robot_Parent {
     //Set up variables/controllers
     private ElapsedTime runtime = new ElapsedTime();
-    protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
-    protected PID_Controller strafePID = new PID_Controller(0.071,0.0,0.0);
+    protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.02);
+    protected PID_Controller strafePID = new PID_Controller(0.071,0.0,0.02);
     protected PID_Controller turnPID = new PID_Controller(0.025, 0.0, 0.0);
     private final boolean IS_WEBCAM_USED = true;
 
@@ -79,12 +79,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void driveDistancePID(double inches) {
         TargetDirection retain = TargetDirection.makeTargetToRobotsRight(0.0);
         forwardPID.setSetpoint(getForwardPosition() + inches);
+        strafePID.setSetpoint(getStrafePosition());
         holdTurnPID.setSetpoint(0.0);
         forwardPID.resetPID();
+        strafePID.resetPID();
         holdTurnPID.resetPID();
         long endTime = System.currentTimeMillis() + (long) (SECONDS_PER_IN * 1000.0 * Math.abs(inches));
         while (opModeIsActive() && (System.currentTimeMillis() <= endTime)) {
-            setDrive(forwardPID.update(getForwardPosition()), holdTurnPID.update(retain.calculateDistanceFromTarget()), 0.0);
+            setDrive(forwardPID.update(getForwardPosition()), holdTurnPID.update(retain.calculateDistanceFromTarget()), strafePID.update(getStrafePosition()));
         }
         setDrive(0.0, 0.0, 0.0);
     }

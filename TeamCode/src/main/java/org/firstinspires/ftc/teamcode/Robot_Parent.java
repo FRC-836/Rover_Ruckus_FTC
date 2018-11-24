@@ -21,7 +21,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected Servo markerReleaser;
     private BNO055IMU imu;
 
-    public double pStableHoldTurn = 0.01332;
+    public double pStableHoldTurn = 0.019;
     public double dStableHoldTurn = 0.00195;
     public double holdTurnMultiplier = 5.25;
 
@@ -76,6 +76,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     abstract public void go();
     //Sets each individual drive's power based on forward, turn, and strafe  inputs
     protected void setDrive(double forwardPower, double turnPower, double strafePower) {
+        if (forwardPower > 1.0) forwardPower = 1.0;
         backLeftDrive.setPower(forwardPower + turnPower - strafePower);
         backRightDrive.setPower(forwardPower - turnPower + strafePower);
         frontLeftDrive.setPower(forwardPower + turnPower + strafePower);
