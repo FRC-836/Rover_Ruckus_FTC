@@ -245,6 +245,8 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected void releaseMarker() {
         setMarkerReleaser(1.0);
+        sleep(1000);
+        setMarkerReleaser(0.0);
     }
 
     protected void parkInCraterCraterSide() {

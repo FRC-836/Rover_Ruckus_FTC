@@ -114,8 +114,8 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     //Sets power of markerReleaser
-    protected void setMarkerReleaser(double releasePower){
-        markerReleaser.setPosition(releasePower);
+    protected void setMarkerReleaser(double releasePosition){
+        markerReleaser.setPosition(releasePosition);
     }
 
     //Moves a robot forward or backwards based on time and power inputs
