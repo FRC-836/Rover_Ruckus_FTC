@@ -11,6 +11,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
     protected PID_Controller strafePID = new PID_Controller(0.071,0.0,0.0);
     protected PID_Controller turnPID = new PID_Controller(0.025, 0.0, 0.0);
+    private final boolean IS_WEBCAM_USED = false;
 
     private Sampler sampler;
 
@@ -24,7 +25,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     //Sets up CV on init
     @Override
     public void getReady() {
-        sampler = new Sampler(false,false, hardwareMap, telemetry, false);
+        sampler = new Sampler(IS_WEBCAM_USED,false, hardwareMap, telemetry, false);
         sampler.initialize();
     }
 
@@ -244,9 +245,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void releaseMarker() {
-        setMarkerReleaser(1.0);
-        sleep(1000);
-        setMarkerReleaser(0.0);
+        for(int i=0; i<7; i++){
+            setMarkerReleaser(1.0);
+            sleep(150);
+            setMarkerReleaser(0.5);
+            sleep(150);
+        }
+        setMarkerReleaser(-1.0);
+        sleep(300);
     }
 
     protected void parkInCraterCraterSide() {
