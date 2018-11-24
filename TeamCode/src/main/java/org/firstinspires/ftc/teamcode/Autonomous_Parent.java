@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.BensCV.Sampler;
@@ -154,13 +155,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void armRotateToPosition(double degrees) {
-        // TODO: Write this function
+        double startPosition = armRotator.getCurrentPosition();
+        armRotator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armRotator.setTargetPosition((int) Math.round(startPosition + degrees));
     }
 
     // Task-based Functions
 
     protected void deploy() {
-        //TODO: Rewrite this once mechanical has finished building system
        setArmLander(0.5);
        sleep(500);
        setArmLander(0.0);
