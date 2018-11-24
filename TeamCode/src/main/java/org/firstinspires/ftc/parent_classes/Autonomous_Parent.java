@@ -10,8 +10,8 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     private final double EARLY_STOP_DEGREES = 5.0;
     private final double MILLIS_PER_INCH = 27.7;
 
-    private Sampler sampler = new Sampler();
-    protected Sampler.GoldPosition position;
+    protected Sampler sampler = new Sampler();
+    protected Sampler.GoldPosition position = Sampler.GoldPosition.UNKNOWN;
 
     protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
 

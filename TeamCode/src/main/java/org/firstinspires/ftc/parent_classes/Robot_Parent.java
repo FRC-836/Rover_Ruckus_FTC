@@ -31,7 +31,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         backRightDrive = hardwareMap.get(DcMotor.class, "brd");
         frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
         frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
-        landingMotor = hardwareMap.get(DcMotor.class, "lm");
+        landingMotor = hardwareMap.get(DcMotor.class, "frd"); // lm
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
