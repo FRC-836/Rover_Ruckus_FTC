@@ -30,13 +30,13 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     @Override
     public void go() {
         goldTarget = sampler.run();
-        while(opModeIsActive()) // TODO: Fix "Go" function
         telemetry.clear();
         telemetry.addData("Total runtime", "%6.3f seconds", runtime.seconds());
         //This lets us know how long our autonomous lasts for
         telemetry.update();
     }
 
+    // Calculates forward position by averaging the estimates from all four motors.
     protected double getForwardPosition() {
         double position = backLeftDrive.getCurrentPosition() + backRightDrive.getCurrentPosition() +
                 frontLeftDrive.getCurrentPosition() + frontRightDrive.getCurrentPosition();
@@ -45,6 +45,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         return position;
     }
 
+    // Calculates strafe position by averaging the estimates from all four motors.
     protected double getStrafePosition(){
         double position = -backLeftDrive.getCurrentPosition() + backRightDrive.getCurrentPosition()
                 + frontLeftDrive.getCurrentPosition() - frontRightDrive.getCurrentPosition();
@@ -67,6 +68,11 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     // Drive functions involving PID Controllers
 
+    /*
+    Drives forward in inches using forwardPID
+    Uses holdTurnPID to attempt to drive straight.
+    Drives for a predicted amount of time based on SECONDS_PER_IN
+     */
     protected void driveDistancePID(double inches) {
         TargetDirection retain = TargetDirection.makeTargetToRobotsRight(0.0);
         forwardPID.setSetpoint(getForwardPosition() + inches);
@@ -240,28 +246,4 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         driveDistancePID(81.0);
         moveTime(0.3, 300, true);
     }
-
-    public void runAutonomous(boolean isCraterSide){
-        if(isCraterSide){
-            deploy();
-
-            sampleCraterSide();
-
-            goToDepotCraterSide();
-
-            releaseMarker();
-
-            parkInCraterCraterSide();
-        }
-        else{
-            deploy();
-
-            sampleDepotSide();
-
-            releaseMarker();
-
-            parkInCraterDepotSide();
-        }
-    }
-
 }
