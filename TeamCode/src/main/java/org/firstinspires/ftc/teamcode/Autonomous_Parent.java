@@ -11,11 +11,11 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
     protected PID_Controller strafePID = new PID_Controller(0.071,0.0,0.0);
     protected PID_Controller turnPID = new PID_Controller(0.025, 0.0, 0.0);
-    private final boolean IS_WEBCAM_USED = false;
+    private final boolean IS_WEBCAM_USED = true;
 
     private Sampler sampler;
 
-    private final double EC_PER_IN_DRIVE = 104.7;
+    private final double EC_PER_IN_DRIVE = 91.37;
     private final double SECONDS_PER_IN = 0.16;
     private final double SECONDS_PER_DEGREE = 0.03;
     private final double SAMPLE_TURN_ANGLE = 26.36;
