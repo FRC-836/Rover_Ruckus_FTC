@@ -9,7 +9,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class TargetDirection {
     // Private Variables
-
     private static double absoluteHeadingAtFieldZero;
     private static BNO055IMU imu;
 

@@ -9,12 +9,14 @@ public class Arcade_Drive extends Teleop_Parent {
 
     }
 
+    //Begins teleop
     @Override
     public void run() {
         double forwardPower = -gamepad1.left_stick_y;
         double turnPower = gamepad1.right_stick_x;
         double strafePower = gamepad1.left_stick_x;
 
+        //Slows the drive by a certain factor if true
         if (driveSlowFactor)
         {
             forwardPower *= SLOW_DRIVE_SCALE_FACTOR;
@@ -22,6 +24,7 @@ public class Arcade_Drive extends Teleop_Parent {
         }
         setDrive(forwardPower, strafePower, turnPower);
 
+        //Lifts the arm to certain positions and maps them to certain joystick positions
         if(gamepad1.left_bumper){
             setArmRotator(LIFT_POWER_UP);
         }
@@ -31,6 +34,8 @@ public class Arcade_Drive extends Teleop_Parent {
         else{
             setArmRotator(LIFT_POWER_IDLE);
         }
+
+        //Extends the arm to certain positions, and maps them to certain joystick positions
         if(gamepad1.left_trigger > 0.1f){
             setArmExtender(LIFT_POWER_UP);
         }
@@ -41,6 +46,7 @@ public class Arcade_Drive extends Teleop_Parent {
             setArmExtender(0.0);
         }
 
+        //Set lander to certain positions, and maps them to certain joystick positions
         if(gamepad1.y){
             setArmLander(LIFT_POWER_UP);
         }
@@ -51,6 +57,7 @@ public class Arcade_Drive extends Teleop_Parent {
             setArmLander(LIFT_POWER_IDLE);
         }
 
+        //Enables or disables a slower drive
         if(gamepad1.dpad_up) {
             driveSlowFactor = true;
         }

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.BensCV.Sampler;
 
 public abstract class Autonomous_Parent extends Robot_Parent {
-
+    //Set up variables/controllers
     private ElapsedTime runtime = new ElapsedTime();
     protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
     protected PID_Controller strafePID = new PID_Controller(0.071,0.0,0.0);
@@ -21,12 +21,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected Sampler.position goldTarget = Sampler.position.NONE;
 
+    //Sets up CV on init
     @Override
     public void getReady() {
         sampler = new Sampler(false,false, hardwareMap, telemetry, false);
         sampler.initialize();
     }
 
+    //Sets up CV and time measurement, activates on start
     @Override
     public void go() {
         goldTarget = sampler.run();
@@ -53,14 +55,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         position /= EC_PER_IN_DRIVE;
         return position;
     }
-
-    protected double getArmPosition() {
+    //Calculates arm position
+    protected double getArmRotatorPosition() {
         double position = armRotator.getCurrentPosition();
         position /= EC_PER_DEGREE_ARM;
         return position;
     }
-
-    protected double getExtenderPosition() {
+    //Calculates extender position
+    protected double getArmExtenderPosition() {
         double position = armExtender.getCurrentPosition();
         position /= EC_PER_IN_ARM;
         return position;
@@ -86,6 +88,10 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         setDrive(0.0, 0.0, 0.0);
     }
 
+    /*Drives forward in inches using Strafe PID
+     Uses holdTurnPID to attempt to drive straight
+     Drives for a predicted amount of time based on SECONDS_PER_IN
+     */
     protected void driveStrafePID(double inches) {
         TargetDirection retain = TargetDirection.makeTargetToRobotsRight(0.0);
         strafePID.setSetpoint(getStrafePosition() + inches);
@@ -102,12 +108,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         TargetDirection goal = TargetDirection.makeTargetAtFieldPosition(degrees);
         turnToTargetPID(goal);
     }
-
+    //Uses TargetDirections to turn to the right using turnPID
     protected void turnRightPID(double degrees) {
         TargetDirection goal = TargetDirection.makeTargetToRobotsRight(degrees);
         turnToTargetPID(goal);
     }
-
+     /*Uses turn PID to turn to a specified point and turns for a predicted amount of time with
+       SECONDS_PER_DEGREE
+     */
     protected void turnToTargetPID(TargetDirection goal) {
         turnPID.setSetpoint(0.0);
         turnPID.resetPID();
@@ -148,6 +156,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         setDrive(0.0, 0.0, 0.0);
     }
 
+    //Incorrect version of driveTurn which does not use PID
     @Deprecated
     protected void driveTurn(double degrees) {
         TargetDirection goal = TargetDirection.makeTargetToRobotsRight(degrees);
@@ -160,6 +169,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         setDrive(0.0, 0.0, 0.0);
     }
 
+    //Moves armRotator to a specified degree with .setTargetPosition
     protected void armRotateToPosition(double degrees) {
         double startPosition = armRotator.getCurrentPosition();
         armRotator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -169,7 +179,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     // Task-based Functions
 
     protected void deploy() {
-       setArmLander(0.5);
+       setArmLander(1.0);
        sleep(500);
        setArmLander(0.0);
     }
