@@ -112,4 +112,17 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected void setMarkerReleaser(double releasePower){
         markerReleaser.setPosition(releasePower);
     }
+
+    protected void moveTime(double drivePower, long milliseconds, boolean isForward) {
+        if (isForward) {
+            setDrive(drivePower, 0.0, 0.0);
+            sleep(milliseconds);
+            setDrive(0.0, 0.0, 0.0);
+        }
+        else{
+            setDrive(-drivePower, 0.0, 0.0);
+            sleep(milliseconds);
+            setDrive(0.0, 0.0, 0.0);
+        }
+    }
 }

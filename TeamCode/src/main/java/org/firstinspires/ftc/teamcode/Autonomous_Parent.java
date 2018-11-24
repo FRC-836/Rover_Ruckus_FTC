@@ -161,12 +161,9 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected void deploy() {
         //TODO: Rewrite this once mechanical has finished building system
-        setArmRotator(0.01);
-        long startTime = System.currentTimeMillis();
-        while(opModeIsActive() && startTime + 500 > System.currentTimeMillis());
-        setArmExtender(0.01);
-        setArmRotator(0.0);
-        setArmExtender(0.0);
+       setArmLander(0.5);
+       sleep(500);
+       setArmLander(0.0);
     }
 
     protected void sampleDepotSide() {
@@ -233,35 +230,13 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void parkInCraterCraterSide() {
-        //driveStrafePID(-84.0);
-        moveEncoder(84.0, 1.0, false);
+        driveStrafePID(-81.0);
+        moveTime(0.3, 300, false);
     }
 
     protected void parkInCraterDepotSide() {
-        //driveDistancePID(84.0);
-        moveEncoder(84.0, 1.0, false);
-    }
-
-    private void moveEncoder(double distanceInInches, double drivePower, boolean isForward) {
-        if (isForward) {
-            int targetPos = backRightDrive.getCurrentPosition() + (int) (distanceInInches * EC_PER_IN_DRIVE);
-            setDrive(drivePower, 0.0, 0.0);
-            //while (/*again, which one?*/.getCurrentPosition() < targetPos && opModeIsActive())
-            {
-                telemetry.addData("Going to:", "%d", targetPos);
-                telemetry.update();
-            }
-            setDrive(0.0, 0.0, 0.0);
-        } else {
-            int targetPos = backRightDrive.getCurrentPosition() - (int) (distanceInInches * EC_PER_IN_DRIVE);
-            setDrive(-drivePower, 0.0, 0.0);
-            //while (/*which one?*/.getCurrentPosition() > targetPos && opModeIsActive())
-            {
-                telemetry.addData("Going to:", "%d", targetPos);
-                telemetry.update();
-            }
-            setDrive(0.0, 0.0, 0.0);
-        }
+        driveDistancePID(81.0);
+        moveTime(0.3, 300, true);
     }
 
     public void runAutonomous(boolean isCraterSide){
