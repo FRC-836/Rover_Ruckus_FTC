@@ -160,6 +160,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     // Task-based Functions
 
     protected void deploy() {
+        //TODO: Rewrite this once mechanical has finished building system
         setArmRotator(0.01);
         long startTime = System.currentTimeMillis();
         while(opModeIsActive() && startTime + 500 > System.currentTimeMillis());
@@ -228,16 +229,62 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void releaseMarker() {
-        // TODO: Add release code
+        setMarkerReleaser(1.0);
     }
 
-    // TODO: Both park functions need to use non-PID code at some point due to Crater Wall collision
     protected void parkInCraterCraterSide() {
-        driveStrafePID(-84.0);
+        //driveStrafePID(-84.0);
+        moveEncoder(84.0, 1.0, false);
     }
 
     protected void parkInCraterDepotSide() {
-        driveDistancePID(84.0);
+        //driveDistancePID(84.0);
+        moveEncoder(84.0, 1.0, false);
+    }
+
+    private void moveEncoder(double distanceInInches, double drivePower, boolean isForward) {
+        if (isForward) {
+            int targetPos = backRightDrive.getCurrentPosition() + (int) (distanceInInches * EC_PER_IN_DRIVE);
+            setDrive(drivePower, 0.0, 0.0);
+            //while (/*again, which one?*/.getCurrentPosition() < targetPos && opModeIsActive())
+            {
+                telemetry.addData("Going to:", "%d", targetPos);
+                telemetry.update();
+            }
+            setDrive(0.0, 0.0, 0.0);
+        } else {
+            int targetPos = backRightDrive.getCurrentPosition() - (int) (distanceInInches * EC_PER_IN_DRIVE);
+            setDrive(-drivePower, 0.0, 0.0);
+            //while (/*which one?*/.getCurrentPosition() > targetPos && opModeIsActive())
+            {
+                telemetry.addData("Going to:", "%d", targetPos);
+                telemetry.update();
+            }
+            setDrive(0.0, 0.0, 0.0);
+        }
+    }
+
+    public void runAutonomous(boolean isCraterSide){
+        if(isCraterSide){
+            deploy();
+
+            sampleCraterSide();
+
+            goToDepotCraterSide();
+
+            releaseMarker();
+
+            parkInCraterCraterSide();
+        }
+        else{
+            deploy();
+
+            sampleDepotSide();
+
+            releaseMarker();
+
+            parkInCraterDepotSide();
+        }
     }
 
 }

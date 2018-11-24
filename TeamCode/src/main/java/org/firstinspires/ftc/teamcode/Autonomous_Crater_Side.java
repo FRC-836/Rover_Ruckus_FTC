@@ -4,17 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(name = "Autonomous_Crater_Side", group = "main")
 public class Autonomous_Crater_Side extends Autonomous_Parent {
-
     @Override
-    public void go() { // TODO: Either super.go() or make newly named function
-        deploy();
-
-        sampleCraterSide();
-
-        goToDepotCraterSide();
-
-        releaseMarker();
-
-        parkInCraterCraterSide();
+    public void runAutonomous(boolean isCraterSide) {
+        super.runAutonomous(true);
     }
 }

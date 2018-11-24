@@ -20,22 +20,42 @@ public class Arcade_Drive extends Teleop_Parent {
             forwardPower *= SLOW_DRIVE_SCALE_FACTOR;
             strafePower *= SLOW_DRIVE_SCALE_FACTOR;
         }
+        setDrive(forwardPower, strafePower, turnPower);
 
+        if(gamepad1.left_bumper){
+            setArmRotator(LIFT_POWER_UP);
+        }
+        else if(gamepad1.right_bumper){
+            setArmRotator(LIFT_POWER_DOWN);
+        }
+        else{
+            setArmRotator(LIFT_POWER_IDLE);
+        }
+        if(gamepad1.left_trigger > 0.1f){
+            setArmExtender(LIFT_POWER_UP);
+        }
+        else if(gamepad1.right_trigger > 0.1f){
+            setArmExtender(LIFT_POWER_DOWN);
+        }
+        else{
+            setArmExtender(0.0);
+        }
 
-        double extensionPower = 0.0;
-        if (gamepad1.dpad_up)
-            extensionPower = 1.0;
-        else if(gamepad1.dpad_down)
-            extensionPower = -1.0;
+        if(gamepad1.y){
+            setArmLander(LIFT_POWER_UP);
+        }
+        else if(gamepad1.b){
+            setArmLander(LIFT_POWER_DOWN);
+        }
+        else{
+            setArmLander(LIFT_POWER_IDLE);
+        }
 
-        double rotationPower = 0.0;
-        if (gamepad1.x)
-            rotationPower = 1.0;
-        else if(gamepad1.a)
-            rotationPower= -1.0;
-
-        setDrive(forwardPower, turnPower, strafePower);
-        setArmExtender(extensionPower);
-        setArmRotator(rotationPower);
+        if(gamepad1.dpad_up) {
+            driveSlowFactor = true;
+        }
+        else if(gamepad1.dpad_down) {
+            driveSlowFactor = false;
+        }
     }
 }

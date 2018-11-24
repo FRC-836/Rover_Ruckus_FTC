@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 // TODO: COMMENT EVERYTHING IN ALL FILES!
 public abstract class Robot_Parent extends LinearOpMode {
@@ -16,6 +17,8 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor frontRightDrive;
     protected DcMotor armRotator;
     protected DcMotor armExtender;
+    protected DcMotor armLander;
+    protected Servo markerReleaser;
     private BNO055IMU imu;
 
     public double pStableHoldTurn = 0.01332;
@@ -34,6 +37,8 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
         armRotator = hardwareMap.get(DcMotor.class, "ar");
         armExtender = hardwareMap.get(DcMotor.class, "ae");
+        armLander = hardwareMap.get(DcMotor.class, "al");
+        markerReleaser = hardwareMap.get(Servo.class, "mr");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -42,6 +47,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armRotator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armExtender.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armLander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -49,6 +55,8 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         armRotator.setDirection(DcMotor.Direction.FORWARD);
         armExtender.setDirection(DcMotor.Direction.FORWARD);
+        armLander.setDirection(DcMotor.Direction.FORWARD);
+        markerReleaser.setDirection(Servo.Direction.FORWARD);
 
         setupImu();
 
@@ -95,5 +103,13 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
     protected void waitSeconds(double seconds) {
         sleep((long) (seconds * 1000.0));
+    }
+
+    protected void setArmLander(double liftPower){
+        armLander.setPower(liftPower);
+    }
+
+    protected void setMarkerReleaser(double releasePower){
+        markerReleaser.setPosition(releasePower);
     }
 }

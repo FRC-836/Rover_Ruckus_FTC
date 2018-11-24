@@ -24,6 +24,43 @@ public class Tank_Drive extends Teleop_Parent {
         }
 
         setTankDrive(leftDrivePower, rightDrivePower, leftStrafePower, rightStrafePower);
+
+        if(gamepad1.left_bumper){
+            setArmRotator(LIFT_POWER_UP);
+        }
+        else if(gamepad1.right_bumper){
+            setArmRotator(LIFT_POWER_DOWN);
+        }
+        else{
+            setArmRotator(LIFT_POWER_IDLE);
+        }
+
+        if(gamepad1.left_bumper){
+            setArmExtender(LIFT_POWER_UP);
+        }
+        else if(gamepad1.right_bumper){
+            setArmExtender(LIFT_POWER_DOWN);
+        }
+        else{
+            setArmExtender(LIFT_POWER_IDLE);
+        }
+
+        if(gamepad1.left_bumper){
+            setArmLander(LIFT_POWER_UP);
+        }
+        else if(gamepad1.right_bumper){
+            setArmLander(LIFT_POWER_DOWN);
+        }
+        else{
+            setArmLander(LIFT_POWER_IDLE);
+        }
+
+        if(gamepad1.dpad_up) {
+            driveSlowFactor = true;
+        }
+        else if(gamepad1.dpad_down) {
+            driveSlowFactor = false;
+        }
     }
     private void setTankDrive (double leftDrivePower, double rightDrivePower, double leftStrafePower, double rightStrafePower){
         backLeftDrive.setPower(leftDrivePower + leftStrafePower);
