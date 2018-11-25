@@ -61,7 +61,7 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         setupImu();
 
-        TargetDirection.setupImu(0.0, imu);
+        TargetDirection.setImu(imu);
 
         getReady();
 

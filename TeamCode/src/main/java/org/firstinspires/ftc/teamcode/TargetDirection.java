@@ -20,8 +20,11 @@ public class TargetDirection {
     }
 
     // Function to be called before using a TargetDirection object
-    public static void setupImu(double robotsCurrentHeading, BNO055IMU imu) {
+    public static void setImu(BNO055IMU imu) {
         TargetDirection.imu = imu;
+    }
+
+    public static void setCurrentHeading(double robotsCurrentHeading){
         TargetDirection.absoluteHeadingAtFieldZero = getAbsoluteHeading() - robotsCurrentHeading;
     }
 
