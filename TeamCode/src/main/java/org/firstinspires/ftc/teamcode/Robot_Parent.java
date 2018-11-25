@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 public abstract class Robot_Parent extends LinearOpMode {
     //Set up robot parts/controllers
     protected final double EC_PER_DEGREE_ARM = 20.04;
@@ -19,6 +21,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor armExtender;
     protected DcMotor armLander;
     protected Servo markerReleaser;
+    protected WebcamName webcam;
     private BNO055IMU imu;
 
     public double pStableHoldTurn = 0.019;
@@ -41,6 +44,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         armLander = hardwareMap.get(DcMotor.class, "al");
         markerReleaser = hardwareMap.get(Servo.class, "mr");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
+        webcam = hardwareMap.get(WebcamName.class, "w");
 
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
