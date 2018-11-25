@@ -120,19 +120,24 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     //Moves a robot forward or backwards based on time and power inputs
-    protected void moveTime(double drivePower, long milliseconds, boolean isForward) {
-        if (isForward) {
-            setDrive(drivePower, 0.0, 0.0);
-            sleep(milliseconds);
-            setDrive(0.0, 0.0, 0.0);
+    protected void moveTime(double drivePower, long milliseconds, boolean isForward, boolean isStrafing) {
+        if (!isStrafing) {
+            if (isForward) {
+                setDrive(drivePower, 0.0, 0.0);
+                sleep(milliseconds);
+                setDrive(0.0, 0.0, 0.0);
+            } else {
+                setDrive(-drivePower, 0.0, 0.0);
+                sleep(milliseconds);
+                setDrive(0.0, 0.0, 0.0);
+            }
         }
         else{
-            setDrive(-drivePower, 0.0, 0.0);
+            setDrive(0.0, drivePower, 0.0);
             sleep(milliseconds);
             setDrive(0.0, 0.0, 0.0);
         }
     }
-
     //Calculates lander position
     protected double getArmLanderPosition() {
         return armLander.getCurrentPosition();
