@@ -25,6 +25,11 @@ public class TargetDirection {
         TargetDirection.absoluteHeadingAtFieldZero = getAbsoluteHeading() - robotsCurrentHeading;
     }
 
+    // Function to be called before using a TargetDirection object
+    public static void setCurrentHeading(double robotsCurrentHeading) {
+        TargetDirection.absoluteHeadingAtFieldZero = getAbsoluteHeading() - robotsCurrentHeading;
+    }
+
     // Public functions to change directions
     public void moveTargetToRight(double degrees) { fieldHeadingAtTargetZero += degrees; }
     public void moveTargetToLeft(double degrees) { fieldHeadingAtTargetZero -= degrees; }
