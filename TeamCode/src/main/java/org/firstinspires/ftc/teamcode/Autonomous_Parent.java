@@ -185,8 +185,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected void deploy(double finalHeading) {
         int dist = 12650;
-        int start = armLander.getCurrentPosition();
-        int end = start + dist;
+        int end = armLander.getCurrentPosition() + dist;
         long timeout = System.currentTimeMillis() + 10000;
         while (dist > 0 && System.currentTimeMillis() < timeout && opModeIsActive())
         {
@@ -199,18 +198,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         driveStrafePID(6.0);
         turnToFieldPID(finalHeading);
         driveDistancePID(-6.0);
-        /*
-        dist = -12500;
-        timeout = System.currentTimeMillis() + 10000;
-        start += 1000;
-        while (dist < 0 && System.currentTimeMillis() < timeout && opModeIsActive())
-        {
-            armLander.setPower(((double)dist)/500.0 - 0.2);
-            dist = start - armLander.getCurrentPosition();
-            telemetry.addData("Dist",dist);
-            telemetry.update();
-        }
-        armLander.setPower(0.0);*/
     }
 
     protected void sampleDepotSide() {
