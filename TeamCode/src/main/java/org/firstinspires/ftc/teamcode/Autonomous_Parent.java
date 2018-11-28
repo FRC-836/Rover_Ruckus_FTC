@@ -17,7 +17,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     private final double EC_PER_IN_DRIVE = 91.37;
     private final double SECONDS_PER_IN = 0.16;
     private final double SECONDS_PER_DEGREE = 0.03;
-    private final double SAMPLE_TURN_ANGLE = 26.36;
+    private final double SAMPLE_TURN_ANGLE = 30.0;
 
     protected Sampler.position goldTarget = Sampler.position.NONE;
 
@@ -183,7 +183,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     // Task-based Functions
 
     protected void deploy() {
-       int distance = 12650;
+       int distance = 13150;
        int endpoint = getArmLanderPosition() + distance;
        long timeout = System.currentTimeMillis() + 10000;
 
@@ -194,14 +194,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
            telemetry.update();
        }
        armLander.setPower(0.0);
-       driveStrafePID(3.0, 1600);
+       driveStrafePID(5.0, 1600);
        turnRightPID(90.0, 1600);
     }
 
     protected void sampleDepotSide() {
-        double driveToGoldDrive = 42.0;
+        double driveToGoldDrive = 38.0;
         double setGrid = 180.0;
-        double driveToDepot = 31.0;
+        double driveToDepot = 26.0;
         switch (goldTarget)
         {
             case LEFT:
@@ -226,7 +226,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void sampleCraterSide() {
-        double longDrive = 29.0;
+        double longDrive = 27.0;
         double shortDrive = 25.25;
 
         switch (goldTarget)
@@ -276,8 +276,11 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void parkInCraterDepotSide() {
-        driveDistancePID(-58.0, 4000);
-        driveStrafePID(-12.0, 1000);
-        moveTime(0.3, 1000, false, false);
+        driveDistancePID(-15.0, 2000);
+        moveTime(0.5, 1000, false, true);
+        driveStrafePID(3.0, 1000);
+        driveDistancePID(-43.0, 4000);
+        driveStrafePID(-4.0, 1000);
+        moveTime(0.3, 1500, false, false);
     }
 }

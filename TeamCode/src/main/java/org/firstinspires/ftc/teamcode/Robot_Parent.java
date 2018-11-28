@@ -145,12 +145,12 @@ public abstract class Robot_Parent extends LinearOpMode {
         }
         else {
             if (isPositive) {
-                setDrive(0.0, drivePower, 0.0);
+                setDrive(0.0, 0.0, drivePower);
                 sleep(milliseconds);
                 setDrive(0.0, 0.0, 0.0);
             }
             else{
-                setDrive(0.0, -drivePower, 0.0);
+                setDrive(0.0, 0.0, -drivePower);
                 sleep(milliseconds);
                 setDrive(0.0, 0.0, 0.0);
             }
