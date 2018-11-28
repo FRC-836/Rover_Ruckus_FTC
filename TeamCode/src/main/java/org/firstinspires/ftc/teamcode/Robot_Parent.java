@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -22,7 +23,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected Servo markerReleaser;
     private BNO055IMU imu;
     protected DcMotor intakeMotor;
-    protected Servo intakeShifter;
+    protected CRServo intakeShifter;
 
     public double pStableHoldTurn = 0.019;
     public double dStableHoldTurn = 0.00195;
@@ -45,7 +46,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         markerReleaser = hardwareMap.get(Servo.class, "mr");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         intakeMotor = hardwareMap.get(DcMotor.class, "im");
-        intakeShifter = hardwareMap.get(Servo.class, "is");
+        intakeShifter = hardwareMap.get(CRServo.class, "is");
 
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -65,7 +66,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         armLander.setDirection(DcMotor.Direction.FORWARD);
         markerReleaser.setDirection(Servo.Direction.REVERSE);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
-        intakeShifter.setDirection(Servo.Direction.FORWARD);
+        intakeShifter.setDirection(CRServo.Direction.FORWARD);
 
         setupImu();
 
@@ -165,6 +166,6 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     protected void setIntakeShifter(double intakeRaisePower){
-        intakeShifter.setPosition(intakeRaisePower);
+        intakeShifter.setPower(intakeRaisePower);
     }
 }

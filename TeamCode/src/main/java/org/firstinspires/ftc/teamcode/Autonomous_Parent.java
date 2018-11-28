@@ -199,7 +199,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void sampleDepotSide() {
-        double driveToGoldDrive = 48.0;
+        double driveToGoldDrive = 42.0;
         double setGrid = 180.0;
         double driveToDepot = 31.0;
         switch (goldTarget)
@@ -208,18 +208,18 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 turnRightPID(-SAMPLE_TURN_ANGLE, 2000);
                 driveDistancePID(driveToGoldDrive, 2900);
                 turnToFieldPID(setGrid,2900);
-                driveDistancePID(-driveToDepot, 2900);
+                driveDistancePID(driveToDepot, 2900);
                 break;
             case RIGHT:
                 turnRightPID(SAMPLE_TURN_ANGLE, 2000);
                 driveDistancePID(driveToGoldDrive, 2900);
                 turnToFieldPID(setGrid, 2900);
-                driveStrafePID(driveToDepot, 2900);
+                driveStrafePID(-driveToDepot, 2900);
                 break;
             case NONE:
             case CENTER:
             default:
-                driveDistancePID(48.0, 2500);
+                driveDistancePID(52.0, 2500);
                 turnToFieldPID(setGrid, 1250);
                 break;
         }
@@ -258,7 +258,9 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void releaseMarker() {
-        for(int i=0; i<7; i++){
+        setMarkerReleaser(1.0);
+        sleep(600);
+        for(int i=0; i<2; i++){
             setMarkerReleaser(1.0);
             sleep(150);
             setMarkerReleaser(0.5);
@@ -275,7 +277,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected void parkInCraterDepotSide() {
         driveDistancePID(-58.0, 4000);
-        driveStrafePID(3, 1000);
+        driveStrafePID(-12.0, 1000);
         moveTime(0.3, 1000, false, false);
     }
 }
