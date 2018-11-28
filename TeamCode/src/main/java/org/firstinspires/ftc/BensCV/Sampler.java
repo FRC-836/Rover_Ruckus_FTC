@@ -8,9 +8,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 public class Sampler {
     private Gold_Detector detector;
-    private boolean isWebcamUsed;
     private boolean isVertical;
-    private WebcamName webcamName;
     private boolean debug = true;//this is the only part of this program that should be changed
     private boolean isGoldSeen = false;
     private boolean isLeft = false;
@@ -26,8 +24,7 @@ public class Sampler {
         RIGHT,
         NONE
     }
-    public Sampler(boolean isWebcamUsed, boolean isVertical, HardwareMap hardwareMap, Telemetry telemetry, boolean debug){
-        this.isWebcamUsed = isWebcamUsed;
+    public Sampler( boolean isVertical, HardwareMap hardwareMap, Telemetry telemetry, boolean debug){
         this.isVertical = isVertical;
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
@@ -35,15 +32,12 @@ public class Sampler {
     }
     
     public void initialize(){
-        if (isWebcamUsed) {
-            webcamName = hardwareMap.get(WebcamName.class, "w");
-        }
 
         telemetry.addData("Status", "Gold_Test");
 
         detector = new Gold_Detector();
 
-        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), -1);//was 0
+        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), 0);//was 0
         detector.useDefaults();
         detector.alignSize = 100;
         detector.alignPosOffset = 0;

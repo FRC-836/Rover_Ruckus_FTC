@@ -11,7 +11,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.02);
     protected PID_Controller strafePID = new PID_Controller(0.071,0.0,0.02);
     protected PID_Controller turnPID = new PID_Controller(0.025, 0.0, 0.0);
-    private final boolean IS_WEBCAM_USED = true;
 
     private Sampler sampler;
 
@@ -25,7 +24,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     //Sets up CV on init
     @Override
     public void getReady() {
-        sampler = new Sampler(IS_WEBCAM_USED,false, hardwareMap, telemetry, false);
+        sampler = new Sampler(false, hardwareMap, telemetry, false);
         sampler.initialize();
     }
 
@@ -76,7 +75,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     Uses holdTurnPID to attempt to drive straight.
     Drives for a predicted amount of time based on SECONDS_PER_IN
      */
-    protected void driveDistancePID(double inches) {
+    protected void driveDistancePID(double inches, long endTimeMillis) {
         TargetDirection retain = TargetDirection.makeTargetToRobotsRight(0.0);
         forwardPID.setSetpoint(getForwardPosition() + inches);
         strafePID.setSetpoint(getStrafePosition());
@@ -84,8 +83,8 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         forwardPID.resetPID();
         strafePID.resetPID();
         holdTurnPID.resetPID();
-        long endTime = System.currentTimeMillis() + (long) (SECONDS_PER_IN * 1000.0 * Math.abs(inches));
-        while (opModeIsActive() && (System.currentTimeMillis() <= endTime)) {
+        endTimeMillis += System.currentTimeMillis();
+        while (opModeIsActive() && (System.currentTimeMillis() <= endTimeMillis)) {
             setDrive(forwardPID.update(getForwardPosition()), holdTurnPID.update(retain.calculateDistanceFromTarget()), strafePID.update(getStrafePosition()));
         }
         setDrive(0.0, 0.0, 0.0);
@@ -95,7 +94,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
      Uses holdTurnPID to attempt to drive straight
      Drives for a predicted amount of time based on SECONDS_PER_IN
      */
-    protected void driveStrafePID(double inches) {
+    protected void driveStrafePID(double inches, long endTimeMillis) {
         TargetDirection retain = TargetDirection.makeTargetToRobotsRight(0.0);
         forwardPID.setSetpoint(getForwardPosition());
         strafePID.setSetpoint(getStrafePosition() + inches);
@@ -103,29 +102,29 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         forwardPID.resetPID();
         strafePID.resetPID();
         holdTurnPID.resetPID();
-        long endTime = System.currentTimeMillis() + (long) (SECONDS_PER_IN * 1000.0 * Math.abs(inches));
-        while (opModeIsActive() && (System.currentTimeMillis() <= endTime)) {
+        endTimeMillis += System.currentTimeMillis();
+        while (opModeIsActive() && (System.currentTimeMillis() <= endTimeMillis)) {
             setDrive(forwardPID.update(getForwardPosition()), holdTurnPID.update(retain.calculateDistanceFromTarget()), strafePID.update(getStrafePosition()));
         }
         setDrive(0.0, 0.0, 0.0);
     }
-    protected void turnToFieldPID(double degrees){
+    protected void turnToFieldPID(double degrees, long timeInMillis){
         TargetDirection goal = TargetDirection.makeTargetAtFieldPosition(degrees);
-        turnToTargetPID(goal);
+        turnToTargetPID(goal, timeInMillis);
     }
     //Uses TargetDirections to turn to the right using turnPID
-    protected void turnRightPID(double degrees) {
+    protected void turnRightPID(double degrees, long timeInMillis) {
         TargetDirection goal = TargetDirection.makeTargetToRobotsRight(degrees);
-        turnToTargetPID(goal);
+        turnToTargetPID(goal, timeInMillis);
     }
      /*Uses turn PID to turn to a specified point and turns for a predicted amount of time with
        SECONDS_PER_DEGREE
      */
-    protected void turnToTargetPID(TargetDirection goal) {
+    protected void turnToTargetPID(TargetDirection goal, long timeInMillis) {
         turnPID.setSetpoint(0.0);
         turnPID.resetPID();
-        long endTime = System.currentTimeMillis() + (long) (SECONDS_PER_DEGREE * 1000.0 * Math.abs(goal.calculateDistanceFromTarget()));
-        while (opModeIsActive() && (System.currentTimeMillis() <= endTime)) {
+        timeInMillis += System.currentTimeMillis();
+        while (opModeIsActive() && (System.currentTimeMillis() <= timeInMillis)) {
             setDrive(0.0, turnPID.update(goal.calculateDistanceFromTarget()), 0.0);
         }
         setDrive(0.0, 0.0, 0.0);
@@ -184,34 +183,44 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     // Task-based Functions
 
     protected void deploy() {
-       setArmLander(1.0);
-       sleep(500);
-       setArmLander(0.0);
+       int distance = 12650;
+       int endpoint = getArmLanderPosition() + distance;
+       long timeout = System.currentTimeMillis() + 10000;
+
+       while(distance > 0  && System.currentTimeMillis() < timeout && opModeIsActive()){
+           armLander.setPower(((double)distance/500.0) + 0.2);
+           distance = endpoint - getArmLanderPosition();
+           telemetry.addData("Distance to Ground", distance);
+           telemetry.update();
+       }
+       armLander.setPower(0.0);
+       driveStrafePID(3.0, 1600);
+       turnRightPID(90.0, 1600);
     }
 
     protected void sampleDepotSide() {
         double driveToGoldDrive = 48.0;
-        double setGrid = 0.0;
+        double setGrid = 180.0;
         double driveToDepot = 31.0;
         switch (goldTarget)
         {
             case LEFT:
-                turnRightPID(-SAMPLE_TURN_ANGLE);
-                driveDistancePID(driveToGoldDrive);
-                turnToFieldPID(setGrid);
-                driveDistancePID(-driveToDepot);
+                turnRightPID(-SAMPLE_TURN_ANGLE, 2000);
+                driveDistancePID(driveToGoldDrive, 2900);
+                turnToFieldPID(setGrid,2900);
+                driveDistancePID(-driveToDepot, 2900);
                 break;
             case RIGHT:
-                turnRightPID(SAMPLE_TURN_ANGLE);
-                driveDistancePID(driveToGoldDrive);
-                turnToFieldPID(setGrid);
-                driveStrafePID(driveToDepot);
+                turnRightPID(SAMPLE_TURN_ANGLE, 2000);
+                driveDistancePID(driveToGoldDrive, 2900);
+                turnToFieldPID(setGrid, 2900);
+                driveStrafePID(driveToDepot, 2900);
                 break;
             case NONE:
             case CENTER:
             default:
-                driveDistancePID(65.0);
-                turnToFieldPID(setGrid);
+                driveDistancePID(48.0, 2500);
+                turnToFieldPID(setGrid, 1250);
                 break;
         }
     }
@@ -223,29 +232,29 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         switch (goldTarget)
         {
             case LEFT:
-                turnRightPID(-SAMPLE_TURN_ANGLE);
-                driveDistancePID(longDrive);
-                driveDistancePID(-longDrive);
+                turnRightPID(-SAMPLE_TURN_ANGLE, 2000);
+                driveDistancePID(longDrive, 2000);
+                driveDistancePID(-longDrive, 2000);
                 break;
             case RIGHT:
-                turnRightPID(SAMPLE_TURN_ANGLE);
-                driveDistancePID(longDrive);
-                driveDistancePID(-longDrive);
+                turnRightPID(SAMPLE_TURN_ANGLE, 2000);
+                driveDistancePID(longDrive, 2000);
+                driveDistancePID(-longDrive, 2000);
                 break;
             case NONE:
             case CENTER:
             default:
-                driveDistancePID(shortDrive);
-                driveDistancePID(-shortDrive);
+                driveDistancePID(shortDrive, 2000);
+                driveDistancePID(-shortDrive, 2000);
                 break;
         }
-        turnToFieldPID(176.0);
+        turnToFieldPID(176.0, 2000);
     }
 
     protected void goToDepotCraterSide() {
-        driveDistancePID(42.0);
-        turnToFieldPID(0.0);
-        driveStrafePID(68.5);
+        driveDistancePID(42.0, 2000);
+        turnToFieldPID(180.0, 500);
+        driveStrafePID(-68.5, 2000);
     }
 
     protected void releaseMarker() {
@@ -260,12 +269,13 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void parkInCraterCraterSide() {
-        driveStrafePID(-81.0);
-        moveTime(0.3, 300, false, true);
+        driveStrafePID(65.0, 4000);
+        moveTime(0.3, 1000, true, true);
     }
 
     protected void parkInCraterDepotSide() {
-        driveDistancePID(81.0);
-        moveTime(0.3, 300, true, false);
+        driveDistancePID(-58.0, 4000);
+        driveStrafePID(3, 1000);
+        moveTime(0.3, 1000, false, false);
     }
 }

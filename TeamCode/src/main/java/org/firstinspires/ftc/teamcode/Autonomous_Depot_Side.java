@@ -6,7 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class Autonomous_Depot_Side extends Autonomous_Parent {
     @Override
     public void getReady(){
-        TargetDirection.setCurrentHeading(-140.0);
+        super.getReady();
+        TargetDirection.setCurrentHeading(45.0);
     }
     //Runs autonomous
     @Override

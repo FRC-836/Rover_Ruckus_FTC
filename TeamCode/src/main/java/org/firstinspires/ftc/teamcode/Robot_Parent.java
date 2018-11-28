@@ -6,8 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import com.qualcomm.robotcore.util.Range;
 
 public abstract class Robot_Parent extends LinearOpMode {
     //Set up robot parts/controllers
@@ -21,8 +20,9 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor armExtender;
     protected DcMotor armLander;
     protected Servo markerReleaser;
-    protected WebcamName webcam;
     private BNO055IMU imu;
+    protected DcMotor intakeMotor;
+    protected Servo intakeShifter;
 
     public double pStableHoldTurn = 0.019;
     public double dStableHoldTurn = 0.00195;
@@ -44,7 +44,8 @@ public abstract class Robot_Parent extends LinearOpMode {
         armLander = hardwareMap.get(DcMotor.class, "al");
         markerReleaser = hardwareMap.get(Servo.class, "mr");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-        webcam = hardwareMap.get(WebcamName.class, "w");
+        intakeMotor = hardwareMap.get(DcMotor.class, "im");
+        intakeShifter = hardwareMap.get(Servo.class, "is");
 
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -53,6 +54,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         armRotator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armExtender.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armLander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -62,6 +64,8 @@ public abstract class Robot_Parent extends LinearOpMode {
         armExtender.setDirection(DcMotor.Direction.FORWARD);
         armLander.setDirection(DcMotor.Direction.FORWARD);
         markerReleaser.setDirection(Servo.Direction.REVERSE);
+        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
+        intakeShifter.setDirection(Servo.Direction.FORWARD);
 
         setupImu();
 
@@ -80,7 +84,9 @@ public abstract class Robot_Parent extends LinearOpMode {
     abstract public void go();
     //Sets each individual drive's power based on forward, turn, and strafe  inputs
     protected void setDrive(double forwardPower, double turnPower, double strafePower) {
-        if (forwardPower > 1.0) forwardPower = 1.0;
+        forwardPower = Range.clip(forwardPower,-1.0, 1.0);
+        turnPower = Range.clip(turnPower,-1.0, 1.0);
+        strafePower = Range.clip(strafePower,-1.0, 1.0);
         backLeftDrive.setPower(forwardPower + turnPower - strafePower);
         backRightDrive.setPower(forwardPower - turnPower + strafePower);
         frontLeftDrive.setPower(forwardPower + turnPower + strafePower);
@@ -124,9 +130,9 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     //Moves a robot forward or backwards based on time and power inputs
-    protected void moveTime(double drivePower, long milliseconds, boolean isForward, boolean isStrafing) {
+    protected void moveTime(double drivePower, long milliseconds, boolean isPositive, boolean isStrafing) {
         if (!isStrafing) {
-            if (isForward) {
+            if (isPositive) {
                 setDrive(drivePower, 0.0, 0.0);
                 sleep(milliseconds);
                 setDrive(0.0, 0.0, 0.0);
@@ -136,14 +142,29 @@ public abstract class Robot_Parent extends LinearOpMode {
                 setDrive(0.0, 0.0, 0.0);
             }
         }
-        else{
-            setDrive(0.0, drivePower, 0.0);
-            sleep(milliseconds);
-            setDrive(0.0, 0.0, 0.0);
+        else {
+            if (isPositive) {
+                setDrive(0.0, drivePower, 0.0);
+                sleep(milliseconds);
+                setDrive(0.0, 0.0, 0.0);
+            }
+            else{
+                setDrive(0.0, -drivePower, 0.0);
+                sleep(milliseconds);
+                setDrive(0.0, 0.0, 0.0);
+            }
         }
     }
     //Calculates lander position
-    protected double getArmLanderPosition() {
+    protected int getArmLanderPosition() {
         return armLander.getCurrentPosition();
+    }
+
+    protected void setIntakeMotor(double intakePower){
+        intakeMotor.setPower(intakePower);
+    }
+
+    protected void setIntakeShifter(double intakeRaisePower){
+        intakeShifter.setPosition(intakeRaisePower);
     }
 }

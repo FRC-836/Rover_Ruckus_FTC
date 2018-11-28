@@ -7,6 +7,8 @@ public abstract class Teleop_Parent extends Robot_Parent {
     final double LIFT_POWER_UP = 0.5;
     final double LIFT_POWER_DOWN = -0.5;
     final double LIFT_POWER_IDLE = 0.0;
+    final double INTAKE_POWER_END = 1.0;
+    final double INTAKE_SHIFERR_POWER = 0.6;
 
     //Called on init
     @Override

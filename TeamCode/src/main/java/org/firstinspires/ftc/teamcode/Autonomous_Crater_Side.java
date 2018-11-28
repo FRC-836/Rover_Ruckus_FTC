@@ -6,7 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class Autonomous_Crater_Side extends Autonomous_Parent {
     @Override
     public void getReady(){
-        TargetDirection.setCurrentHeading(140.0);
+        super.getReady();
+        TargetDirection.setCurrentHeading(135.0);
     }
     //Runs autonomous
     @Override
