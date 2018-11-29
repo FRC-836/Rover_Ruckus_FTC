@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.TargetDirection;
 public class Depot_Side extends Autonomous_Parent {
     @Override
     public void setup() {
-
+        TargetDirection.setCurrentHeading(135.0);
     }
 
     @Override
