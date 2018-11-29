@@ -120,16 +120,16 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected void parkDepot() {
         driveDistanceTime(80.0);
-
     }
 
     protected void parkCrater() {
-
+        driveDistanceEncoder(-78.0);
     }
 
     protected void placeTeamMarker() {
-        //TODO: Placing Marker (Mechanism needed)
-
+        dropTeamMarker();
+        sleep(1000);
+        retractTeamMarkerServo();
     }
 
     protected void driveDistanceTime(double inches) {
