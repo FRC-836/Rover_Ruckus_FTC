@@ -70,7 +70,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 setIntake(0.0);
                 turnDegreesPID(72.5, 4000);
                 driveDistanceTime(30.0);
-                turnPID(TargetDirection.makeTargetAtFieldPosition(0.0), 7000);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(180.0), 3000);
                 break;
             case RIGHT:
                 turnDegreesPID(27.5, 2000);
@@ -79,13 +79,13 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 setIntake(0.0);
                 turnDegreesPID(-72.5, 4000);
                 driveDistanceTime(30.0);
-                turnPID(TargetDirection.makeTargetAtFieldPosition(0.0), 6000);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(180.0), 5000);
                 break;
             default:
                 setIntake(1.0);
                 driveDistanceTime(60.0);
                 setIntake(0.0);
-                turnPID(TargetDirection.makeTargetAtFieldPosition(0.0), 5000);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(180.0), 4000);
                 break;
         }
     }
@@ -96,22 +96,22 @@ public abstract class Autonomous_Parent extends Robot_Parent {
             case LEFT:
                 turnDegreesPID(-27.5, 2000);
                 setIntake(1.0);
-                driveDistanceTime(34.0);
+                driveDistanceTime(33.5);
                 setIntake(0.0);
-                turnDegreesPID(27.5, 2000);
                 driveDistanceTime(-34.0);
+                turnDegreesPID(27.5, 2000);
                 break;
             case RIGHT:
                 turnDegreesPID(27.5, 2000);
                 setIntake(1.0);
-                driveDistanceTime(34.0);
+                driveDistanceTime(33.5);
                 setIntake(0.0);
-                turnDegreesPID(-27.5, 2000);
                 driveDistanceTime(34.0);
+                turnDegreesPID(-27.5, 2000);
                 break;
             default:
                 setIntake(1.0);
-                driveDistanceTime(34.0);
+                driveDistanceTime(33.5);
                 setIntake(0.0);
                 driveDistanceTime(-34.0);
                 break;
@@ -119,7 +119,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void parkDepot() {
-        driveDistanceTime(80.0);
+        driveDistanceTime(-80.0);
 
     }
 
@@ -130,6 +130,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void placeTeamMarker() {
         //TODO: Placing Marker (Mechanism needed)
 
+    }
+
+    protected void driveToDepot() {
+        // 170, 44, 90, 55, -78
+        turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 2000);
+        driveDistanceTime(44.0);
+        turnPID(TargetDirection.makeTargetAtFieldPosition(90.0), 5000);
+        driveDistanceTime(55.0);
     }
 
     protected void driveDistanceTime(double inches) {
