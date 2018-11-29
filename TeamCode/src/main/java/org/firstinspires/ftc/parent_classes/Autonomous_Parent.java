@@ -73,11 +73,11 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 turnPID(TargetDirection.makeTargetAtFieldPosition(0.0), 7000);
                 break;
             case RIGHT:
-                turnDegreesPID(27.5,2000);
+                turnDegreesPID(27.5, 2000);
                 setIntake(1.0);
                 driveDistanceTime(44.0);
                 setIntake(0.0);
-                turnDegreesPID(-72.5,4000);
+                turnDegreesPID(-72.5, 4000);
                 driveDistanceTime(30.0);
                 turnPID(TargetDirection.makeTargetAtFieldPosition(0.0), 6000);
                 break;
@@ -88,6 +88,43 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 turnPID(TargetDirection.makeTargetAtFieldPosition(0.0), 5000);
                 break;
         }
+    }
+
+    protected void sampleCrater() {
+        // TODO: Change values
+        switch (position) {
+            case LEFT:
+                turnDegreesPID(-27.5, 2000);
+                setIntake(1.0);
+                driveDistanceTime(34.0);
+                setIntake(0.0);
+                turnDegreesPID(27.5, 2000);
+                driveDistanceTime(-34.0);
+                break;
+            case RIGHT:
+                turnDegreesPID(27.5, 2000);
+                setIntake(1.0);
+                driveDistanceTime(34.0);
+                setIntake(0.0);
+                turnDegreesPID(-27.5, 2000);
+                driveDistanceTime(34.0);
+                break;
+            default:
+                setIntake(1.0);
+                driveDistanceTime(34.0);
+                setIntake(0.0);
+                driveDistanceTime(-34.0);
+                break;
+        }
+    }
+
+    protected void parkDepot() {
+        driveDistanceTime(80.0);
+
+    }
+
+    protected void parkCrater() {
+
     }
 
     protected void placeTeamMarker() {
@@ -139,6 +176,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         }
         setArcadeDrive(0.0, 0.0);
     }
+
     protected void turnPID(TargetDirection target, long millis) {
         long endTime = System.currentTimeMillis() + millis;
         goToTurnPID.setSetpoint(0.0);
@@ -148,6 +186,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
             setArcadeDrive(0.0, turnPower);
         }
     }
+
     protected void turnDegreesPID(double degrees, long millis) {
         TargetDirection target = TargetDirection.makeTargetToRobotsRight(degrees);
         turnPID(target, millis);
