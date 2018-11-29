@@ -91,7 +91,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void sampleCrater() {
-        // TODO: Change values
         switch (position) {
             case LEFT:
                 turnDegreesPID(-27.5, 2000);
@@ -100,6 +99,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 setIntake(0.0);
                 driveDistanceTime(-34.0);
                 turnDegreesPID(27.5, 2000);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 1500);
                 break;
             case RIGHT:
                 turnDegreesPID(27.5, 2000);
@@ -108,12 +108,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 setIntake(0.0);
                 driveDistanceTime(34.0);
                 turnDegreesPID(-27.5, 2000);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 2500);
                 break;
             default:
                 setIntake(1.0);
                 driveDistanceTime(33.5);
                 setIntake(0.0);
                 driveDistanceTime(-34.0);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 2000);
                 break;
         }
     }
@@ -133,8 +135,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void driveToDepot() {
-        // 170, 44, 90, 55, -78
-        turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 2000);
         driveDistanceTime(44.0);
         turnPID(TargetDirection.makeTargetAtFieldPosition(90.0), 5000);
         driveDistanceTime(55.0);

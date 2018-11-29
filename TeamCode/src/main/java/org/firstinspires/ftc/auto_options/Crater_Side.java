@@ -14,7 +14,7 @@ public class Crater_Side extends Autonomous_Parent {
     public void begin() {
         land();
         sampleCrater();
-        parkCrater();
         driveToDepot();
+        parkCrater();
     }
 }
