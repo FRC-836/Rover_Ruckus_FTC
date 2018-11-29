@@ -205,14 +205,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         switch (goldTarget)
         {
             case LEFT:
-                turnRightPID(-SAMPLE_TURN_ANGLE, 2000);
-                driveDistancePID(driveToGoldDrive, 2900);
-                turnToFieldPID(setGrid,2900);
-                driveDistancePID(driveToDepot, 2900);
+                turnRightPID(-SAMPLE_TURN_ANGLE, 1600);
+                driveDistancePID(driveToGoldDrive, 2000);
+                turnToFieldPID(setGrid,2000);
+                driveDistancePID(driveToDepot, 2000);
                 break;
             case RIGHT:
-                turnRightPID(SAMPLE_TURN_ANGLE, 2000);
-                driveDistancePID(driveToGoldDrive, 2900);
+                turnRightPID(SAMPLE_TURN_ANGLE, 1600);
+                driveDistancePID(driveToGoldDrive, 2000);
                 turnToFieldPID(setGrid, 2900);
                 driveStrafePID(-driveToDepot, 2900);
                 break;

@@ -37,7 +37,7 @@ public class Sampler {
 
         detector = new Gold_Detector();
 
-        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), 0);//was 0
+        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance(), -1);//was 0
         detector.useDefaults();
         detector.alignSize = 100;
         detector.alignPosOffset = 0;
