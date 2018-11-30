@@ -3,7 +3,9 @@ package org.firstinspires.ftc.parent_classes;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.PID_Controller;
@@ -13,10 +15,10 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected DcMotor backLeftDrive;
     protected DcMotor backRightDrive;
-    protected DcMotor frontLeftDrive;
-    protected DcMotor frontRightDrive;
+    protected DcMotorSimple frontLeftDrive;
+    protected DcMotorSimple frontRightDrive;
     protected DcMotor landingMotor;
-    protected Servo latchLockServo;
+    protected CRServo latchLockServo;
     protected Servo teamMarkerServo;
 
     protected PID_Controller goToTurnPID = new PID_Controller(0.025, 0.0, 0.0);
@@ -33,27 +35,23 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         backLeftDrive = hardwareMap.get(DcMotor.class, "bld");
         backRightDrive = hardwareMap.get(DcMotor.class, "brd");
-        frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
-        frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
+        frontLeftDrive = hardwareMap.get(DcMotorSimple.class, "fld");
+        frontRightDrive = hardwareMap.get(DcMotorSimple.class, "frd");
         landingMotor = hardwareMap.get(DcMotor.class, "lm");
         teamMarkerServo = hardwareMap.get(Servo.class, "tms");
-        latchLockServo = hardwareMap.get(Servo.class, "ll");
+        latchLockServo = hardwareMap.get(CRServo.class, "ll");
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
+        frontLeftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRightDrive.setDirection(DcMotorSimple.Direction.FORWARD);
         landingMotor.setDirection(DcMotor.Direction.REVERSE);
         teamMarkerServo.setDirection(Servo.Direction.FORWARD);
-        latchLockServo.setDirection(Servo.Direction.FORWARD);
+        latchLockServo.setDirection(CRServo.Direction.FORWARD);
 
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         landingMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        
-
 
         setupImu();
 

@@ -21,8 +21,8 @@ public class Sampler {
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
-    private final float LEFT_OF_SCREEN = 640.0f;
-    private final float RIGHT_OF_SCREEN = 1280.0f;
+    private final float LEFT_OF_SCREEN = 427.0f;
+    private final float RIGHT_OF_SCREEN = 853.0f;
 
     public enum GoldPosition {
         LEFT,
@@ -52,6 +52,10 @@ public class Sampler {
             tfod.activate();
     }
 
+    private float getRecPos(Recognition recognition) {
+        return (recognition.getBottom() + recognition.getTop()) / 2.0f;
+    }
+
     public GoldPosition sample() {
         if (tfod != null) {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
@@ -72,14 +76,13 @@ public class Sampler {
                 if (silverList.size() > 2)
                     silverList = findBestTwoSilver(silverList);
 
-                //mineral left half of screen (810 pixels)
-                //mineral right far right of screen
+               
                 if (bestGold == null)
                 {
                     if (silverList.size() == 2)
                     {
-                        float silverPos1 = silverList.elementAt(0).getBottom();
-                        float silverPos2 = silverList.elementAt(1).getBottom();
+                        float silverPos1 = getRecPos(silverList.elementAt(0));
+                        float silverPos2 = getRecPos(silverList.elementAt(1));
                         if ((silverPos1 < LEFT_OF_SCREEN && silverPos2 < LEFT_OF_SCREEN) ||
                                 (silverPos1 > RIGHT_OF_SCREEN && silverPos2 > RIGHT_OF_SCREEN) ||
                                 (silverPos1 >= LEFT_OF_SCREEN && silverPos2 >= LEFT_OF_SCREEN &&
@@ -100,7 +103,7 @@ public class Sampler {
                     }
                     if (silverList.size() == 1)
                     {
-                        float silverPos = silverList.elementAt(0).getBottom();
+                        float silverPos = getRecPos(silverList.elementAt(0));
                         if (silverPos <= LEFT_OF_SCREEN)
                             return GoldPosition.CENTER;
                         else if (silverPos < RIGHT_OF_SCREEN)
@@ -121,19 +124,19 @@ public class Sampler {
                         case 1:
                         case 2:
                             // Use the gold position alone to determine location
-                            if (bestGold.getBottom() > RIGHT_OF_SCREEN)
+                            if (getRecPos(bestGold) > RIGHT_OF_SCREEN)
                                 return GoldPosition.RIGHT;
-                            else if (bestGold.getBottom() < LEFT_OF_SCREEN)
+                            else if (getRecPos(bestGold) < LEFT_OF_SCREEN)
                                 return GoldPosition.LEFT;
                             else
                                 return GoldPosition.CENTER;
                             /*
                             // Determine location of gold based on location relative to 2 silvers
-                            if (bestGold.getBottom() > silverList.elementAt(0).getBottom() &&
-                                    bestGold.getBottom() > silverList.elementAt(1).getBottom())
+                            if (getRecPos(bestGold) > getRecPos(silverList.elementAt(0)) &&
+                                    getRecPos(bestGold) > getRecPos(silverList.elementAt(1)))
                                 return GoldPosition.LEFT;
-                            else if (bestGold.getBottom() < silverList.elementAt(0).getBottom() &&
-                                    bestGold.getBottom() < silverList.elementAt(1).getBottom())
+                            else if (getRecPos(bestGold) < getRecPos(silverList.elementAt(0)) &&
+                                    getRecPos(bestGold) < getRecPos(silverList.elementAt(1)))
                                 return GoldPosition.RIGHT;
                             else
                                 return GoldPosition.CENTER;
