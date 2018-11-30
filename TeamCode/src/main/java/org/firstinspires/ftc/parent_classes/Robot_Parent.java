@@ -22,7 +22,6 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected Servo teamMarkerServo;
 
     protected PID_Controller goToTurnPID = new PID_Controller(0.025, 0.0, 0.0);
-    protected PID_Controller holdTurnPID = new PID_Controller(0.01332, 0.0, 0.00195);
 
     private BNO055IMU imu;
 
