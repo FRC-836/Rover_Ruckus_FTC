@@ -16,6 +16,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor frontLeftDrive;
     protected DcMotor frontRightDrive;
     protected DcMotor landingMotor;
+    protected Servo latchLockServo;
     protected Servo teamMarkerServo;
 
     protected PID_Controller goToTurnPID = new PID_Controller(0.025, 0.0, 0.0);
@@ -36,6 +37,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
         landingMotor = hardwareMap.get(DcMotor.class, "lm");
         teamMarkerServo = hardwareMap.get(Servo.class, "tms");
+        latchLockServo = hardwareMap.get(Servo.class, "ll");
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -43,13 +45,14 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         landingMotor.setDirection(DcMotor.Direction.REVERSE);
         teamMarkerServo.setDirection(Servo.Direction.FORWARD);
+        latchLockServo.setDirection(Servo.Direction.FORWARD);
 
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         landingMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        
 
 
         setupImu();
