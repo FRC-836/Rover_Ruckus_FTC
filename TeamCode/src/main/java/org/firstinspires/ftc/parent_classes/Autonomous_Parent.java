@@ -118,6 +118,28 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         }
     }
 
+    protected void sampleParkCrater() {
+        switch (position) {
+            case LEFT:
+                turnDegreesPID(-27.5, 2000);
+                setIntake(1.0);
+                driveDistanceTime(40.0);
+                setIntake(0.0);
+                break;
+            case RIGHT:
+                turnDegreesPID(27.5, 2000);
+                setIntake(1.0);
+                driveDistanceTime(40.0);
+                setIntake(0.0);
+                break;
+            default:
+                setIntake(1.0);
+                driveDistanceTime(40.0);
+                setIntake(0.0);
+                break;
+        }
+    }
+
     protected void parkDepot() {
         driveDistanceTime(-80.0);
     }
