@@ -52,14 +52,16 @@ public abstract class Base_Detector extends OpenCVPipeline {
 
     public Mat processFrame(Mat rgba, Mat gray) {
         firstSize = rgba.size();
-        adjustedSize = new Size(firstSize.width * reducedImageRatio, firstSize.height
-                * reducedImageRatio);
+        //adjustedSize = new Size(firstSize.width * reducedImageRatio, firstSize.height
+                //* reducedImageRatio);
+        adjustedSize = reducedImageQuality;
 
         rgba.copyTo(mainMat);
 
         if (rgba.empty()){return rgba; }
 
         Imgproc.resize(mainMat, mainMat, adjustedSize);//thou shalt be shrunken
+        mainMat = mainMat.submat(0,480,0,120);
         Imgproc.resize(process(mainMat), mainMat, getFirstSize());//thou shalt be made big again
         Imgproc.putText(mainMat,"389 Computer Vision" + detectorName + ": " +
                 getAdjustedSize().toString() + " - " + speed.toString(), new Point(5,30),0,0.5,

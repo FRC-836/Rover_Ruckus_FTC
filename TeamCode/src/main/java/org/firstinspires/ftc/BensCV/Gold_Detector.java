@@ -76,7 +76,6 @@ public class Gold_Detector extends Base_Detector {
         }
         double alignX = (getAdjustedSize().width / 2) + alignPosOffset; // Center point in X Pixels
         double xPos;
-        double yPos;
 
         if (bestRect != null) {
             Imgproc.rectangle(displayMat, bestRect.tl(), bestRect.br(), new Scalar(255, 0, 0), 4);
@@ -84,9 +83,7 @@ public class Gold_Detector extends Base_Detector {
 
 
             xPos = bestRect.y + (bestRect.height / 2);//was xCenter
-            yPos = bestRect.x;
             goldXPos = xPos;
-            goldYPos = yPos;
 
             Imgproc.circle(displayMat, new Point( xPos, bestRect.y + (bestRect.height / 2)), 5, new Scalar(0,255,0),2);
 
@@ -120,11 +117,6 @@ public class Gold_Detector extends Base_Detector {
     public double getXPosition(){
         return goldXPos;
     }
-
-    public double getYPosition(){
-        return goldYPos;
-    }
-
 
     public boolean isFound() {
         return found;

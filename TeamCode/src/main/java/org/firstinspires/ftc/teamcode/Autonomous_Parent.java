@@ -279,7 +279,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void parkInCraterDepotSide() {
         driveDistancePID(-15.0, 1450);
         moveTime(0.5, 800, false, true);
-        driveStrafePID(3.0, 800);
+        driveStrafePID(2.8, 800);
         driveDistancePID(-43.0, 3300);
         driveStrafePID(-4.0, 500);
         moveTime(0.35, 1400, false, false);
