@@ -24,7 +24,16 @@ public class Arcade_Drive extends Teleop_Parent {
         // Get powers
         double forwardPower = -gamepad1.left_stick_y;
         double turnPower = gamepad1.right_stick_x;
+        double latchingPower;
+
+        if (gamepad1.right_trigger > 0.5f)
+            latchingPower = 1.0;
+        else if (gamepad1.left_trigger > 0.5f)
+            latchingPower = -1.0;
+        else
+            latchingPower = 0.0;
 
         setArcadeDrive(forwardPower, turnPower);
+        setLandingMotorPower(latchingPower);
     }
 }
