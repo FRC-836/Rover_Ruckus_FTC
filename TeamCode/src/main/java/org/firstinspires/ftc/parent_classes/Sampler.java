@@ -76,7 +76,7 @@ public class Sampler {
                 if (silverList.size() > 2)
                     silverList = findBestTwoSilver(silverList);
 
-               
+
                 if (bestGold == null)
                 {
                     if (silverList.size() == 2)

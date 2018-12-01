@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.PID_Controller;
 import org.firstinspires.ftc.teamcode.TargetDirection;
@@ -25,9 +26,12 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected PID_Controller holdTurnPID = new PID_Controller(0.01332, 0.0, 0.00195);
 
     private BNO055IMU imu;
+    protected boolean isAuto;
 
     protected final double TEAM_MARKER_SERVO_UP = 1.0;
     protected final double TEAM_MARKER_SERVO_DOWN = -1.0;
+    private final double AUTO_DRIVE_CAP = 0.5;
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -43,8 +47,8 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        frontLeftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRightDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontLeftDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         landingMotor.setDirection(DcMotor.Direction.REVERSE);
         teamMarkerServo.setDirection(Servo.Direction.FORWARD);
         latchLockServo.setDirection(CRServo.Direction.FORWARD);
@@ -79,10 +83,21 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     protected void setArcadeDrive(double forwardPower, double turnPower) {
+        telemetry.addData("Forwards",forwardPower);
+        telemetry.addData("Turn",turnPower);
+        telemetry.update();
+
+        if (isAuto)
+        {
+            forwardPower = Range.clip(forwardPower, -AUTO_DRIVE_CAP, AUTO_DRIVE_CAP);
+            turnPower = Range.clip(turnPower, -AUTO_DRIVE_CAP, AUTO_DRIVE_CAP);
+        }
+
         backLeftDrive.setPower(forwardPower + turnPower);
         backRightDrive.setPower(forwardPower - turnPower);
         frontLeftDrive.setPower(forwardPower + turnPower);
         frontRightDrive.setPower(forwardPower - turnPower);
+
     }
 
     protected void setTankDrive(double leftPower, double rightPower) {
@@ -101,7 +116,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     protected void setLandingMotorPower(double power) {
-        landingMotor.setPower(power);
+        //landingMotor.setPower(power);
     }
 
     private void setupImu() {

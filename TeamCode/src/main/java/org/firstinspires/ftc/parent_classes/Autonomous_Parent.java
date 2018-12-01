@@ -17,6 +17,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     @Override
     public void initialize() {
+        isAuto = true;
         setup();
         sampler.init(telemetry, hardwareMap);
     }
@@ -42,6 +43,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void land() {
+        /*
         // TODO: Change values to right number
         int encoderCountsToLand = 0;
         double driveDistanceAfterLanding = 0.0;
@@ -58,7 +60,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         goal = startLiftPosition;
         setLandingMotorPower(-1.0);
         while (getLandingMotorPosition() > goal && opModeIsActive()) ;
-        setLandingMotorPower(0.0);
+        setLandingMotorPower(0.0);*/
     }
 
     protected void sampleDepot() {
