@@ -22,7 +22,16 @@ public class Tank_Drive extends Teleop_Parent {
     public void repeat() {
         double rightDrive = -gamepad1.right_stick_y;
         double leftDrive = -gamepad1.left_stick_y;
+        double latchingPower;
+
+        if (gamepad1.right_trigger > 0.5f)
+            latchingPower = 1.0;
+        else if (gamepad1.left_trigger > 0.5f)
+            latchingPower = -1.0;
+        else
+            latchingPower = 0.0;
 
         setTankDrive(leftDrive, rightDrive);
+        setLandingMotorPower(latchingPower);
     }
 }
