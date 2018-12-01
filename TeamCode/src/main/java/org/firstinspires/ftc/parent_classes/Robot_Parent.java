@@ -28,7 +28,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected boolean isAuto;
 
     protected final double TEAM_MARKER_SERVO_UP = 1.0;
-    protected final double TEAM_MARKER_SERVO_DOWN = -1.0;
+    protected final double TEAM_MARKER_SERVO_DOWN = 0.0;
     private final double AUTO_DRIVE_CAP = 0.5;
 
     @Override
@@ -115,7 +115,12 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     protected void setLandingMotorPower(double power) {
-        //landingMotor.setPower(power);
+        landingMotor.setPower(power);
+
+        if (power > 0.0001)
+            latchLockServo.setPower(1.0);
+        else
+            latchLockServo.setPower(0.0);
     }
 
     private void setupImu() {

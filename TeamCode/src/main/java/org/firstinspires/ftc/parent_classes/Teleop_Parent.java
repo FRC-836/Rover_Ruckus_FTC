@@ -9,11 +9,13 @@ public abstract class Teleop_Parent extends Robot_Parent {
         isAuto = false;
         gamepad1.setJoystickDeadzone(JOYSTICK_DEAD_ZONE);
         setup();
+        retractTeamMarkerServo();
     }
 
     @Override
     public void play() {
         begin();
+        retractTeamMarkerServo();
 
         while (opModeIsActive()) {
             repeat();
