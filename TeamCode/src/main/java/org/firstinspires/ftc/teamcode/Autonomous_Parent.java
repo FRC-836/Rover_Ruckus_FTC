@@ -111,6 +111,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void turnToFieldPID(double degrees, long timeInMillis){
         TargetDirection goal = TargetDirection.makeTargetAtFieldPosition(degrees);
         turnToTargetPID(goal, timeInMillis);
+
     }
     //Uses TargetDirections to turn to the right using turnPID
     protected void turnRightPID(double degrees, long timeInMillis) {
@@ -185,7 +186,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void deploy() {
        int distance = 13150;
        int endpoint = getArmLanderPosition() + distance;
-       long timeout = System.currentTimeMillis() + 10000;
+       long timeout = System.currentTimeMillis() + 5000;
 
        while(distance > 0  && System.currentTimeMillis() < timeout && opModeIsActive()){
            armLander.setPower(((double)distance/500.0) + 0.2);
