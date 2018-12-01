@@ -16,7 +16,6 @@ public class Depot_Side_Park_Away extends Autonomous_Parent {
     public void begin() {
         land();
         sampleDepot();
-        placeTeamMarker();
         parkDepot();
     }
 }

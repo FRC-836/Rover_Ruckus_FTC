@@ -17,6 +17,7 @@ public class Crater_Side extends Autonomous_Parent {
         land();
         sampleCrater();
         driveToDepot();
+        placeTeamMarker();
         parkCrater();
     }
 }
