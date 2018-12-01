@@ -56,6 +56,10 @@ public class Sampler {
         return (recognition.getBottom() + recognition.getTop()) / 2.0f;
     }
 
+    private float getRecSidePos(Recognition recognition) {
+        return (recognition.getLeft() + recognition.getRight()) / 2.0f;
+    }
+
     public GoldPosition sample() {
         if (tfod != null) {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
@@ -150,14 +154,41 @@ public class Sampler {
     }
 
     private Vector<Recognition> findBestTwoSilver(Vector<Recognition> silverList) {
-        // TODO: Write actual comparison
-        while (silverList.size() > 2)
-            silverList.remove(2);
-        return silverList;
+        // TODO: Make more efficient
+        Vector<Recognition> finalList = new Vector<>();
+        int bestI = 0;
+        float bestPos = getRecSidePos(silverList.elementAt(bestI));
+        for (int i = 1; i < silverList.size(); i++)
+        {
+            float pos = getRecSidePos(silverList.elementAt(i));
+            if (pos < bestPos)
+            {
+                bestI = i;
+                bestPos = pos;
+            }
+        }
+        finalList.add(silverList.elementAt(bestI));
+
+        int secondBestI = 0;
+        if (bestI == 0) secondBestI = 1;
+        float secondBestPos = getRecSidePos(silverList.elementAt(secondBestI));
+        for (int i = secondBestI + 1; i < silverList.size(); i++)
+        {
+            float pos = getRecSidePos(silverList.elementAt(i));
+            if (pos < secondBestPos && i != bestI)
+            {
+                secondBestI = i;
+                secondBestPos = pos;
+            }
+        }
+        finalList.add(silverList.elementAt(secondBestI));
+
+        return finalList;
     }
 
     private Recognition findBestGold(Recognition rec1, Recognition rec2) {
-        if (rec1.getConfidence() > rec2.getConfidence())
+        //if (rec1.getConfidence() > rec2.getConfidence())
+        if (getRecSidePos(rec1) < getRecSidePos(rec2))
             return rec1;
         else
             return rec2;
