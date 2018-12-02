@@ -34,6 +34,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         goldTarget = sampler.run();
         telemetry.clear();
         telemetry.addData("Total runtime", "%6.3f seconds", runtime.seconds());
+        telemetry.addData("It sees", goldTarget);
         //This lets us know how long our autonomous lasts for
         telemetry.update();
     }
@@ -238,6 +239,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 driveDistancePID(-longDrive, 1600);
                 break;
             case RIGHT:
+                sleep(1000);
                 turnRightPID(90.0 + SAMPLE_TURN_ANGLE, 1600);
                 driveDistancePID(longDrive, 2000);
                 driveDistancePID(-longDrive, 1600);
@@ -250,7 +252,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 driveDistancePID(-shortDrive, 1600);
                 break;
         }
-        turnToFieldPID(176.0, 2000);
+        turnToFieldPID(168.0, 2000);
     }
 
     protected void goToDepotCraterSide() {
@@ -273,7 +275,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void parkInCraterCraterSide() {
-        driveStrafePID(65.0, 4000);
+        driveStrafePID(56.0, 3850);
         moveTime(0.3, 1000, true, true);
     }
 

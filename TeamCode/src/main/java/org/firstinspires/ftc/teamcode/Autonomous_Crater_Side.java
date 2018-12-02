@@ -20,8 +20,6 @@ public class Autonomous_Crater_Side extends Autonomous_Parent {
 
         goToDepotCraterSide();
 
-        while(opModeIsActive());
-
         releaseMarker();
 
         parkInCraterCraterSide();
