@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "Tank drive", group = "")
+//@TeleOp(name = "Tank drive", group = "")
 public class Tank_Drive extends Teleop_Parent {
 
     @Override
@@ -34,7 +34,7 @@ public class Tank_Drive extends Teleop_Parent {
             setArmRotator(LIFT_POWER_DOWN);
         }
         else{
-            setArmRotator(LIFT_POWER_IDLE);
+            holdArmPosition();
         }
 
         //Sets power of armExtender and maps it to joystick controls
@@ -75,7 +75,7 @@ public class Tank_Drive extends Teleop_Parent {
         }
 
         if(gamepad1.dpad_left){
-            setIntakeShifter(INTAKE_SHIFERR_POWER);
+            setIntakeShifter(INTAKE_SHIFTER_POWER);
         }
         else{
             setIntakeShifter(0.0);

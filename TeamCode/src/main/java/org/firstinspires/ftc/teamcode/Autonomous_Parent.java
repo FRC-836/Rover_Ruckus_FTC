@@ -34,6 +34,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         goldTarget = sampler.run();
         telemetry.clear();
         telemetry.addData("Total runtime", "%6.3f seconds", runtime.seconds());
+        telemetry.addData("It sees", goldTarget);
         //This lets us know how long our autonomous lasts for
         telemetry.update();
     }
@@ -55,19 +56,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         position /= EC_PER_IN_DRIVE;
         return position;
     }
-    //Calculates arm position
-    protected double getArmRotatorPosition() {
-        double position = armRotator.getCurrentPosition();
-        position /= EC_PER_DEGREE_ARM;
-        return position;
-    }
+    /*
     //Calculates extender position
     protected double getArmExtenderPosition() {
         double position = armExtender.getCurrentPosition();
         position /= EC_PER_IN_ARM;
         return position;
     }
-
+*/
     // Drive functions involving PID Controllers
 
     /*
@@ -238,6 +234,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 driveDistancePID(-longDrive, 1600);
                 break;
             case RIGHT:
+                sleep(1000);
                 turnRightPID(90.0 + SAMPLE_TURN_ANGLE, 1600);
                 driveDistancePID(longDrive, 2000);
                 driveDistancePID(-longDrive, 1600);
@@ -250,13 +247,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 driveDistancePID(-shortDrive, 1600);
                 break;
         }
-        turnToFieldPID(176.0, 2000);
+        turnToFieldPID(168.0, 2000);
     }
 
     protected void goToDepotCraterSide() {
-        driveDistancePID(40.0, 2000);
+        driveDistancePID(42.0, 2000);
         turnToFieldPID(180.0, 500);
-        driveStrafePID(-68.5, 2000);
+        driveStrafePID(-60.0, 2000);
+        driveDistancePID(-7.0, 800 );
     }
 
     protected void releaseMarker() {
@@ -273,8 +271,11 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void parkInCraterCraterSide() {
-        driveStrafePID(65.0, 4000);
-        moveTime(0.3, 1000, true, true);
+        driveDistancePID(7.25, 800);
+        driveStrafePID(54.0, 3850);
+        driveDistancePID(12.0, 500);
+        driveStrafePID(7.0, 480);
+        moveTime(0.3, 800, true, true);
     }
 
     protected void parkInCraterDepotSide() {

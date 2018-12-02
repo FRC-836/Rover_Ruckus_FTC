@@ -25,21 +25,21 @@ public class Arcade_Drive extends Teleop_Parent {
         setDrive(forwardPower, strafePower, turnPower);
 
         //Lifts the arm to certain positions and maps them to certain joystick positions
-        if(gamepad1.left_bumper){
+        if(gamepad1.right_bumper){
             setArmRotator(LIFT_POWER_UP);
         }
-        else if(gamepad1.right_bumper){
+        else if(gamepad1.right_trigger > 0.1f){
             setArmRotator(LIFT_POWER_DOWN);
         }
         else{
-            setArmRotator(LIFT_POWER_IDLE);
+            holdArmPosition();
         }
 
         //Extends the arm to certain positions, and maps them to certain joystick positions
-        if(gamepad1.left_trigger > 0.1f){
+        if(gamepad1.left_bumper){
             setArmExtender(LIFT_POWER_UP);
         }
-        else if(gamepad1.right_trigger > 0.1f){
+        else if(gamepad1.left_trigger > 0.1f){
             setArmExtender(LIFT_POWER_DOWN);
         }
         else{
@@ -50,7 +50,7 @@ public class Arcade_Drive extends Teleop_Parent {
         if(gamepad1.y){
             setArmLander(LIFT_POWER_UP);
         }
-        else if(gamepad1.b){
+        else if(gamepad1.a){
             setArmLander(LIFT_POWER_DOWN);
         }
         else{
@@ -67,13 +67,14 @@ public class Arcade_Drive extends Teleop_Parent {
 
         if(gamepad1.x){
             setIntakeMotor(INTAKE_POWER_END);
-        }
-        else{
+        } else if(gamepad1.b) {
+            setIntakeMotor(-INTAKE_POWER_END);
+        }else{
             setIntakeMotor(0.0);
         }
 
         if(gamepad1.dpad_left){
-            setIntakeShifter(INTAKE_SHIFERR_POWER);
+            setIntakeShifter(INTAKE_SHIFTER_POWER);
         }
         else{
             setIntakeShifter(0.0);

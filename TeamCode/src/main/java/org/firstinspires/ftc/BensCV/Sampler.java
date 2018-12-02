@@ -76,15 +76,15 @@ public class Sampler {
     public void goldPosDetector() {
         if (isVertical) {
             double goldXPos = detector.getXPosition();
-            if (0.0 <= goldXPos && 20.0 >= goldXPos) {
+            if (0.0 <= goldXPos && 233.0 >= goldXPos) {
                 isLeft = true;
                 telemetry.addLine("Gold Position: Right");
                 positionIdentifier = position.LEFT;
-            } else if (20.0 < goldXPos && 360.0 >= goldXPos) {
+            } else if (233.0 < goldXPos && 466.0 >= goldXPos) {
                 isCenter = true;
                 telemetry.addLine("Gold Position: Center");
                 positionIdentifier = position.CENTER;
-            } else if (360.0 < goldXPos && 500.0 >= goldXPos) {
+            } else if (446.0 < goldXPos && 700.0 >= goldXPos) {
                 isRight = true;
                 telemetry.addLine("Gold Position: Left");
                 positionIdentifier = position.RIGHT;
@@ -94,16 +94,16 @@ public class Sampler {
         }
         else {
             double goldYPos = detector.getXPosition();
-            if (0.0 <= goldYPos && 20.0 >= goldYPos) {
+            if (0.0 <= goldYPos && 233.0 >= goldYPos) {
                 isLeft = true;
                 telemetry.addLine("Gold Position: Left");
                 positionIdentifier = position.LEFT;
-            } else if (20.0 < goldYPos && 360.0 >= goldYPos) {
+            } else if (233.0 < goldYPos && 466.0 >= goldYPos) {
                 isCenter = true;
                 telemetry.addLine("Gold Position: Center");
                 positionIdentifier = position.CENTER;
 
-            } else if (360.0 < goldYPos && 500.0 >= goldYPos) {
+            } else if (466.0 < goldYPos && 700.0 >= goldYPos) {
                 isRight = true;
                 telemetry.addLine("Gold Position: Right");
                 positionIdentifier = position.RIGHT;
