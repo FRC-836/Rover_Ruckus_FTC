@@ -2,7 +2,7 @@ package org.firstinspires.ftc.parent_classes;
 
 public abstract class Teleop_Parent extends Robot_Parent {
 
-    protected static final float JOYSTICK_DEAD_ZONE = 0.1f;
+    protected static final float JOYSTICK_DEAD_ZONE = 0.2f;
 
     @Override
     public void initialize() {
