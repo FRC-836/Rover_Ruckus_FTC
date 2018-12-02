@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * Created by user on 7/10/2018.
  */
 public class PID_Controller{
+    //Sets up empty PID controller values and other variables
 
     ElapsedTime runtime;
 
@@ -23,6 +24,7 @@ public class PID_Controller{
     private double dValue = 0.0;
     private double DGAIN;
 
+    //Class constructor which sets inputs as their respective gains
     public PID_Controller(double PGAIN, double IGAIN, double DGAIN){
         this.runtime = new ElapsedTime();
         resetPID();
@@ -30,11 +32,13 @@ public class PID_Controller{
         this.IGAIN = IGAIN;
         this.DGAIN = DGAIN;
     }
-
+    //Creates input as setpoint to be used in PID
     public void setSetpoint(double newSetpoint) {
         this.setpoint = newSetpoint;
     }
 
+    //Sets up p, i, and d values based on their respective formulas, and sets up errors, setpoints,
+    // and times, and processes them, returns the sum of p, i, and d values
     public double update(double input){
         lastError = error;
         lastTime = time;
@@ -45,23 +49,25 @@ public class PID_Controller{
         dValue = DGAIN * (error - lastError) / (time - lastTime);
         return getPID();
     }
-
+    //Clears integral value
     public void resetPID() {
         resetPID(0.0);
     }
 
+    //Clears time values and Integral values
     public void resetPID(double startingIValue) {
         runtime.reset();
         iValue = startingIValue;
     }
 
+    //Shows current PID values to the console
     public void displayCurrentPID(Telemetry telemetry) {
         telemetry.addData("P: ",pValue);
         telemetry.addData("I: ",iValue);
         telemetry.addData("D: ",dValue);
         telemetry.addData("PID: ",getPID());
     }
-
+    //Gets the sum of all PID values
     private double getPID() {
         return pValue + iValue + dValue;
     }

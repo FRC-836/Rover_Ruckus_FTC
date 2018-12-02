@@ -1,18 +1,29 @@
 package org.firstinspires.ftc.teamcode;
 
-public class Autonomous_Crater_Side extends Autonomous_Parent {
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+@Autonomous(name = "Autonomous_Crater_Side", group = "main")
+public class Autonomous_Crater_Side extends Autonomous_Parent {
     @Override
-    public void go() {
+    public void getReady(){
+        super.getReady();
+        TargetDirection.setCurrentHeading(135.0);
+    }
+    //Runs autonomous
+    @Override
+    public void go(){
+        super.go();
+
         deploy();
 
-        detect();
-
-        sample();
+        sampleCraterSide();
 
         goToDepotCraterSide();
 
-        parkCraterSide();
+        while(opModeIsActive());
 
+        releaseMarker();
+
+        parkInCraterCraterSide();
     }
 }
