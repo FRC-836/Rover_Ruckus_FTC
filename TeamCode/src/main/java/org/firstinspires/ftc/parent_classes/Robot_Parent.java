@@ -19,7 +19,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotorSimple frontLeftDrive;
     protected DcMotorSimple frontRightDrive;
     protected DcMotor landingMotor;
-    protected Servo latchLockServo;
+    protected CRServo latchLockServo;
     protected Servo teamMarkerServo;
 
     protected PID_Controller goToTurnPID = new PID_Controller(0.025, 0.0, 0.0);
@@ -29,8 +29,6 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected final double TEAM_MARKER_SERVO_UP = 1.0;
     protected final double TEAM_MARKER_SERVO_DOWN = 0.0;
-    protected final double LATCH_LOCKED = 1.0;
-    protected final double LATCH_UNLOCKED = 0.0;
     private final double AUTO_DRIVE_CAP = 0.5;
 
     @Override
@@ -44,7 +42,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontRightDrive = hardwareMap.get(DcMotorSimple.class, "frd");
         landingMotor = hardwareMap.get(DcMotor.class, "lm");
         teamMarkerServo = hardwareMap.get(Servo.class, "tms");
-        latchLockServo = hardwareMap.get(Servo.class, "ll");
+        latchLockServo = hardwareMap.get(CRServo.class, "ll");
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -52,7 +50,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontRightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         landingMotor.setDirection(DcMotor.Direction.REVERSE);
         teamMarkerServo.setDirection(Servo.Direction.FORWARD);
-        latchLockServo.setDirection(Servo.Direction.REVERSE);
+        latchLockServo.setDirection(CRServo.Direction.REVERSE);
 
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -119,10 +117,15 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected void setLandingMotorPower(double power) {
         landingMotor.setPower(power);
 
-        if (power > 0.0001)
-            latchLockServo.setPosition(LATCH_UNLOCKED);
-        else
-            latchLockServo.setPosition(LATCH_LOCKED);
+        if (power > 0.0001) {
+            // Unlock Lander
+            latchLockServo.setPower(0.5);
+        } else {
+            // Lock Lander
+            latchLockServo.setPower(-1.0);
+            sleep(250);
+            latchLockServo.setPower(0.0);
+        }
     }
 
     private void setupImu() {
