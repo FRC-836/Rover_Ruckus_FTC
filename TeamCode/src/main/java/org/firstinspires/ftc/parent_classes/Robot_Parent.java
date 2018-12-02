@@ -21,6 +21,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor landingMotor;
     protected CRServo latchLockServo;
     protected Servo teamMarkerServo;
+    private boolean isLocked = true;
 
     protected PID_Controller goToTurnPID = new PID_Controller(0.025, 0.0, 0.0);
 
@@ -120,11 +121,13 @@ public abstract class Robot_Parent extends LinearOpMode {
         if (power > 0.0001) {
             // Unlock Lander
             latchLockServo.setPower(0.5);
-        } else {
+            isLocked = false;
+        } else if (!isLocked) {
             // Lock Lander
             latchLockServo.setPower(-1.0);
             sleep(250);
             latchLockServo.setPower(0.0);
+            isLocked = true;
         }
     }
 
