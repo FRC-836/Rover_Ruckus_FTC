@@ -256,9 +256,10 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void goToDepotCraterSide() {
-        driveDistancePID(40.0, 2000);
+        driveDistancePID(42.0, 2000);
         turnToFieldPID(180.0, 500);
-        driveStrafePID(-68.5, 2000);
+        driveStrafePID(-60.0, 2000);
+        driveDistancePID(-6.0, 800 );
     }
 
     protected void releaseMarker() {
@@ -276,6 +277,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected void parkInCraterCraterSide() {
         driveStrafePID(56.0, 3850);
+        driveDistancePID(8.0, 500);
         moveTime(0.3, 1000, true, true);
     }
 
