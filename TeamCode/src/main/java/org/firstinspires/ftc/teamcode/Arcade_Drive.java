@@ -32,7 +32,7 @@ public class Arcade_Drive extends Teleop_Parent {
             setArmRotator(LIFT_POWER_DOWN);
         }
         else{
-            setArmRotator(LIFT_POWER_IDLE);
+            holdArmPosition();
         }
 
         //Extends the arm to certain positions, and maps them to certain joystick positions

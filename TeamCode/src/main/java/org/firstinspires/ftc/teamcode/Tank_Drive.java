@@ -34,7 +34,7 @@ public class Tank_Drive extends Teleop_Parent {
             setArmRotator(LIFT_POWER_DOWN);
         }
         else{
-            setArmRotator(LIFT_POWER_IDLE);
+            holdArmPosition();
         }
 
         //Sets power of armExtender and maps it to joystick controls

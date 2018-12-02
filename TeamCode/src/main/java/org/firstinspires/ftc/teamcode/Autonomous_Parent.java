@@ -56,12 +56,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         position /= EC_PER_IN_DRIVE;
         return position;
     }
-    //Calculates arm position
-    protected double getArmRotatorPosition() {
-        double position = armRotator.getCurrentPosition();
-        position /= EC_PER_DEGREE_ARM;
-        return position;
-    }
     /*
     //Calculates extender position
     protected double getArmExtenderPosition() {

@@ -25,13 +25,15 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor intakeMotor;
     protected CRServo intakeShifter;
 
+    private boolean isArmHolding = false;
+
     public double pStableHoldTurn = 0.019;
     public double dStableHoldTurn = 0.00195;
     public double holdTurnMultiplier = 5.25;
 
     protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
     protected PID_Controller armHoldPID = new PID_Controller(0.0,0.0,0.0);
-    protected PID_Controller armMovePID = new PID_Controller(0.0,0.0,0.0);
+    protected PID_Controller armMovePID = new PID_Controller(0.000165,0.0,0.000375);
 
     //Maps robot parts to data values in config file, sets up opMode
     @Override
@@ -95,6 +97,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
     //Sets power of armRotator
     protected void setArmRotator(double turnPower) {
+        isArmHolding = false;
         armRotator.setPower(turnPower);
     }
 
@@ -161,11 +164,24 @@ public abstract class Robot_Parent extends LinearOpMode {
         return armLander.getCurrentPosition();
     }
 
+    protected int getArmRotatorPosition(){
+        return  armRotator.getCurrentPosition();
+    }
+
     protected void setIntakeMotor(double intakePower){
         intakeMotor.setPower(intakePower);
     }
 
     protected void setIntakeShifter(double intakeRaisePower){
         intakeShifter.setPower(intakeRaisePower);
+    }
+
+    protected void holdArmPosition() {
+        if (!isArmHolding){
+            armHoldPID.setSetpoint(getArmRotatorPosition());
+            armHoldPID.resetPID();
+        }
+        setArmRotator(armHoldPID.update(getArmRotatorPosition()));
+        isArmHolding = true;
     }
 }
