@@ -73,7 +73,7 @@ public class Arcade_Drive extends Teleop_Parent {
         }
 
         if(gamepad1.dpad_left){
-            setIntakeShifter(INTAKE_SHIFERR_POWER);
+            setIntakeShifter(INTAKE_SHIFTER_POWER);
         }
         else{
             setIntakeShifter(0.0);
