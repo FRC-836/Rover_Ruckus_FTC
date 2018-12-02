@@ -25,7 +25,7 @@ public class Tank_Drive extends Teleop_Parent {
         double latchingPower;
 
         if (gamepad1.right_trigger > 0.5f)
-            latchingPower = 1.0;
+            latchingPower = DEPLOY_POWER;
         else if (gamepad1.left_trigger > 0.5f)
             latchingPower = -1.0;
         else

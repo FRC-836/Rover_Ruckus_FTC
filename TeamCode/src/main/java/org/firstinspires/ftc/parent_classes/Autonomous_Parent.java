@@ -61,6 +61,17 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         setLandingMotorPower(-1.0);
         while (getLandingMotorPosition() > goal && opModeIsActive()) ;
         setLandingMotorPower(0.0);*/
+        setLandingMotorPower(DEPLOY_POWER);
+        sleep(1800);
+        setLandingMotorPower(0.1);
+        for (int i = 0; i < 3; i++)
+        {
+            setLandingMotorPower(1.0);
+            sleep(150);
+            setLandingMotorPower(0.1);
+            sleep(150);
+        }
+        setLandingMotorPower(0.0);
     }
 
     protected void sampleDepot() {
@@ -162,9 +173,9 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void driveToDepot() {
-        driveDistanceTime(44.0);
-        turnPID(TargetDirection.makeTargetAtFieldPosition(90.0), 5000);
-        driveDistanceTime(55.0);
+        driveDistanceTime(48.0);
+        turnPID(TargetDirection.makeTargetAtFieldPosition(90.0), 2500);
+        driveDistanceTime(65.0);
     }
 
     protected void driveDistanceTime(double inches) {
