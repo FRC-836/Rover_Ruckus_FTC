@@ -62,13 +62,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         position /= EC_PER_DEGREE_ARM;
         return position;
     }
+    /*
     //Calculates extender position
     protected double getArmExtenderPosition() {
         double position = armExtender.getCurrentPosition();
         position /= EC_PER_IN_ARM;
         return position;
     }
-
+*/
     // Drive functions involving PID Controllers
 
     /*
