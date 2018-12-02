@@ -20,6 +20,7 @@ public class Sampler {
     private static final String VUFORIA_KEY = "AVOMBtn/////AAAAGWoe5Xr26kwMi197rJ9ukz9CynZI0gtPtGmyzJJF/DX5fVRX6KZpGATlLq8PX8m1UBpwePrOZAkZmI/XhtlNcZ3fbgvlGuYfDwkaUgbaJgrzPut88uA5KdcubkI0uTw/J+S2y/jGLeKM3pnXMxywmGjbNNGRLgt57I9pThzUjuwC8jNi42C3Qo17qpTiHOFRWbRybxGDKk2PAUEVdCFtjW4zuzB+b5xBABGCytzwdPk+riWGBSITihc1tPIWtOP1CDQiMp4B3V1ysJTPxOTXkWmFuSqqFhgePWKoXxVqbcWVcpUDQ1yVPdpK9BxrZfeoVrpWGRfBa9mrSYsB6VBKkKIxMClow9gxYv5SyN440Btn";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
+    private Telemetry myTelemetry;
 
     private final float LEFT_OF_SCREEN = 427.0f;
     private final float RIGHT_OF_SCREEN = 853.0f;
@@ -32,6 +33,7 @@ public class Sampler {
     }
 
     public void init(Telemetry telemetry, HardwareMap hardwareMap) {
+        this.myTelemetry = telemetry;
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
@@ -57,7 +59,9 @@ public class Sampler {
     }
 
     private float getRecSidePos(Recognition recognition) {
-        return (recognition.getLeft() + recognition.getRight()) / 2.0f;
+        float sidePos = (recognition.getLeft() + recognition.getRight()) / 2.0f;
+        myTelemetry.addData("Side Pos",sidePos);
+        return sidePos;
     }
 
     public GoldPosition sample() {
@@ -150,6 +154,7 @@ public class Sampler {
                 // Code to react to updated recognitions goes above this line!
             }
         }
+        myTelemetry.update();
         return GoldPosition.UNKNOWN;
     }
 
