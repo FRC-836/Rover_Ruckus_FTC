@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "Tank drive", group = "")
+//@TeleOp(name = "Tank drive", group = "")
 public class Tank_Drive extends Teleop_Parent {
 
     @Override

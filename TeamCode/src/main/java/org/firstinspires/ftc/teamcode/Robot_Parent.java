@@ -32,8 +32,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     public double holdTurnMultiplier = 5.25;
 
     protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
-    protected PID_Controller armHoldPID = new PID_Controller(0.0,0.0,0.0);
-    protected PID_Controller armMovePID = new PID_Controller(0.000165,0.0,0.000375);
+    protected PID_Controller armHoldPID = new PID_Controller(0.000165,0.0,0.000375);
 
     //Maps robot parts to data values in config file, sets up opMode
     @Override
