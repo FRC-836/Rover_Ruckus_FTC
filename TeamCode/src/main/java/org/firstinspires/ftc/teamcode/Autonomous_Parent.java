@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 public abstract class Autonomous_Parent extends Robot_Parent {
+    
+    protected PID_Controller forwardPID = new PID_Controller(0.0, 0.0, 0.035); //0.071
+    protected PID_Controller strafePID = new PID_Controller(0.0, 0.0, 0.035); //0.071
+    protected PID_Controller turnPID = new PID_Controller(0.0, 0.0, 0.042); //0.025
 
-    protected PID_Controller forwardPID = new PID_Controller(0.071, 0.0, 0.0);
-    protected PID_Controller strafePID = new PID_Controller(0.071,0.0,0.0);
-    protected PID_Controller turnPID = new PID_Controller(0.025, 0.0, 0.0);
 
     private final double EC_PER_IN_DRIVE = 104.7;
     private final double SECONDS_PER_IN = 0.16;
@@ -37,7 +38,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         return position;
     }
 
-    protected double getStrafePosition(){
+    protected double getStrafePosition() {
         double position = -backLeftDrive.getCurrentPosition() + backRightDrive.getCurrentPosition()
                 + frontLeftDrive.getCurrentPosition() - frontRightDrive.getCurrentPosition();
         position /= 4.0;
@@ -96,8 +97,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         setDrive(0.0, 0.0, 0.0);
     }
 
-    // Simple drive functions
-
     protected void driveDistance(double inches) {
         TargetDirection retain = TargetDirection.makeTargetToRobotsRight(0.0);
         holdTurnPID.setSetpoint(0.0);
@@ -136,7 +135,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         }
         setDrive(0.0, 0.0, 0.0);
     }
-
     protected void armRotate(double degrees) {
         // TODO
     }
