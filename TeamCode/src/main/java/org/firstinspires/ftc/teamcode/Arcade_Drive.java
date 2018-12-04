@@ -6,12 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class Arcade_Drive extends Teleop_Parent {
     private final double P2_MULT = 0.5;
     private boolean holdingTurn = false;
-    private PID_Controller tHoldTurnPID = new PID_Controller(0.012, 0.0, 0.0013);
-    TargetDirection currentTarget;
 
     @Override
     public void begin() {
-        tHoldTurnPID.setSetpoint(0.0);
     }
 
     //Begins teleop
@@ -32,15 +29,18 @@ public class Arcade_Drive extends Teleop_Parent {
             strafePower *= SLOW_DRIVE_SCALE_FACTOR;
         }
 
-        if(Math.abs(turnPower) < 0.005f) {
+        if(Math.abs(turnPower) < 0.00005f) {
             if (!holdingTurn) {
-                currentTarget = TargetDirection.makeTargetToRobotsRight(0.0);
-                tHoldTurnPID.resetPID();
-                tHoldTurnPID.update(currentTarget.calculateDistanceFromTarget());
+                setDrive(forwardPower, 0.0, strafePower);
+                teleopTurnPID.resetPID();
+                teleopTurnPID.update(0.0);
+                sleep(100);
+                teleopTurnPID.update(0.0);
+                currentFacingDirection = TargetDirection.makeTargetToRobotsRight(0.0);
                 holdingTurn = true;
-                sleep(10);
+            } else {
+                turnPower = teleopTurnPID.update(currentFacingDirection.calculateDistanceFromTarget());
             }
-            turnPower = tHoldTurnPID.update(currentTarget.calculateDistanceFromTarget());
         }
         else
         {
