@@ -26,9 +26,17 @@ public class Arcade_Drive extends Teleop_Parent {
 
         //Lifts the arm to certain positions and maps them to certain joystick positions
         if(gamepad1.right_bumper){
-            setArmRotator(LIFT_POWER_UP);
+            long startTime = System.currentTimeMillis();
+            while(System.currentTimeMillis() < startTime + 750){
+                setArmRotator(LIFT_POWER_UP * (0.0013 * (System.currentTimeMillis() - startTime)));
+            }
+           setArmRotator(LIFT_POWER_UP);
         }
         else if(gamepad1.right_trigger > 0.1f){
+            long startTime = System.currentTimeMillis();
+            while(System.currentTimeMillis() < startTime + 750){
+                setArmRotator(LIFT_POWER_DOWN * (0.0013 * (System.currentTimeMillis() - startTime)));
+            }
             setArmRotator(LIFT_POWER_DOWN);
         }
         else{
