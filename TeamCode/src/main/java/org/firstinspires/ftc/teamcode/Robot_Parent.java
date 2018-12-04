@@ -24,6 +24,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     private BNO055IMU imu;
     protected DcMotor intakeMotor;
     protected CRServo intakeShifter;
+    protected boolean isMovingToGoal = false;
 
     private boolean isArmHolding = false;
 
@@ -100,6 +101,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     //Sets power of armRotator
     protected void setArmRotator(double turnPower) {
         isArmHolding = false;
+        isMovingToGoal = false;
         armRotator.setPower(turnPower);
     }
 
