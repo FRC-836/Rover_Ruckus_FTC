@@ -32,7 +32,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     public double holdTurnMultiplier = 5.25;
 
     protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
-    protected PID_Controller armHoldPID = new PID_Controller(0.000165,0.0,0.000375);
+    protected PID_Controller armHoldPID = new PID_Controller(0.000165, 0.0, 0.000375);
 
     //Maps robot parts to data values in config file, sets up opMode
     @Override
@@ -53,7 +53,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        armRotator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armRotator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         armExtender.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armLander.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -80,20 +80,23 @@ public abstract class Robot_Parent extends LinearOpMode {
         go();
 
     }
+
     //Sets up empty versions of methods to be called on init and start, respectively
     abstract public void getReady();
 
     abstract public void go();
+
     //Sets each individual drive's power based on forward, turn, and strafe  inputs
     protected void setDrive(double forwardPower, double turnPower, double strafePower) {
-        forwardPower = Range.clip(forwardPower,-1.0, 1.0);
-        turnPower = Range.clip(turnPower,-1.0, 1.0);
-        strafePower = Range.clip(strafePower,-1.0, 1.0);
+        forwardPower = Range.clip(forwardPower, -1.0, 1.0);
+        turnPower = Range.clip(turnPower, -1.0, 1.0);
+        strafePower = Range.clip(strafePower, -1.0, 1.0);
         backLeftDrive.setPower(forwardPower + turnPower - strafePower);
         backRightDrive.setPower(forwardPower - turnPower + strafePower);
         frontLeftDrive.setPower(forwardPower + turnPower + strafePower);
         frontRightDrive.setPower(forwardPower - turnPower - strafePower);
     }
+
     //Sets power of armRotator
     protected void setArmRotator(double turnPower) {
         isArmHolding = false;
@@ -118,17 +121,18 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         imu.initialize(imuParameters);
     }
+
     protected void waitSeconds(double seconds) {
         sleep((long) (seconds * 1000.0));
     }
 
     //Sets power of armLander
-    protected void setArmLander(double liftPower){
+    protected void setArmLander(double liftPower) {
         armLander.setPower(liftPower);
     }
 
     //Sets power of markerReleaser
-    protected void setMarkerReleaser(double releasePosition){
+    protected void setMarkerReleaser(double releasePosition) {
         markerReleaser.setPosition(releasePosition);
     }
 
@@ -144,39 +148,38 @@ public abstract class Robot_Parent extends LinearOpMode {
                 sleep(milliseconds);
                 setDrive(0.0, 0.0, 0.0);
             }
-        }
-        else {
+        } else {
             if (isPositive) {
                 setDrive(0.0, 0.0, drivePower);
                 sleep(milliseconds);
                 setDrive(0.0, 0.0, 0.0);
-            }
-            else{
+            } else {
                 setDrive(0.0, 0.0, -drivePower);
                 sleep(milliseconds);
                 setDrive(0.0, 0.0, 0.0);
             }
         }
     }
+
     //Calculates lander position
     protected int getArmLanderPosition() {
         return armLander.getCurrentPosition();
     }
 
-    protected int getArmRotatorPosition(){
-        return  armRotator.getCurrentPosition();
+    protected int getArmRotatorPosition() {
+        return armRotator.getCurrentPosition();
     }
 
-    protected void setIntakeMotor(double intakePower){
+    protected void setIntakeMotor(double intakePower) {
         intakeMotor.setPower(intakePower);
     }
 
-    protected void setIntakeShifter(double intakeRaisePower){
+    protected void setIntakeShifter(double intakeRaisePower) {
         intakeShifter.setPower(intakeRaisePower);
     }
 
     protected void holdArmPosition() {
-        if (!isArmHolding){
+        if (!isArmHolding) {
             armHoldPID.setSetpoint(getArmRotatorPosition());
             armHoldPID.resetPID();
         }

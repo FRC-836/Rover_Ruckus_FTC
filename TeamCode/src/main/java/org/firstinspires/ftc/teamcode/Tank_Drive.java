@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-//@TeleOp(name = "Tank drive", group = "")
+@TeleOp(name = "Tank Drive", group = "")
 public class Tank_Drive extends Teleop_Parent {
 
     @Override
@@ -27,10 +27,10 @@ public class Tank_Drive extends Teleop_Parent {
 
         setTankDrive(leftDrivePower, rightDrivePower, leftStrafePower, rightStrafePower);
         //Sets power of armRotator and maps it to joystick controls
-        if(gamepad1.left_bumper){
+        if(gamepad1.right_bumper){
             setArmRotator(LIFT_POWER_UP);
         }
-        else if(gamepad1.right_bumper){
+        else if(gamepad1.right_trigger > 0.1f){
             setArmRotator(LIFT_POWER_DOWN);
         }
         else{
@@ -41,7 +41,7 @@ public class Tank_Drive extends Teleop_Parent {
         if(gamepad1.left_bumper){
             setArmExtender(LIFT_POWER_UP);
         }
-        else if(gamepad1.right_bumper){
+        else if(gamepad1.left_trigger > 0.1f){
             setArmExtender(LIFT_POWER_DOWN);
         }
         else{
@@ -49,10 +49,10 @@ public class Tank_Drive extends Teleop_Parent {
         }
 
         //Sets power of armLander and maps it to joystick controls
-        if(gamepad1.left_bumper){
+        if(gamepad1.y){
             setArmLander(LIFT_POWER_UP);
         }
-        else if(gamepad1.right_bumper){
+        else if(gamepad1.a){
             setArmLander(LIFT_POWER_DOWN);
         }
         else{
