@@ -12,9 +12,14 @@ public class Arcade_Drive extends Teleop_Parent {
     //Begins teleop
     @Override
     public void run() {
-        double forwardPower = -gamepad1.left_stick_y;
-        double turnPower = gamepad1.right_stick_x;
-        double strafePower = gamepad1.left_stick_x;
+        double forwardPower = gamepad1.left_stick_y;
+        double turnPower = gamepad1.left_stick_x;
+        double strafePower = -gamepad1.right_stick_x;
+
+        if (Math.abs(strafePower) > Math.abs(forwardPower))
+            forwardPower = 0.0;
+        else
+            strafePower = 0.0;
 
         //Slows the drive by a certain factor if true
         if (driveSlowFactor)
