@@ -71,10 +71,10 @@ public class Arcade_Drive extends Teleop_Parent {
         }
 
         //Set lander to certain positions, and maps them to certain joystick positions
-        if(gamepad1.y){
+        if(gamepad1.y || gamepad2.y){
             setArmLander(LIFT_POWER_UP);
         }
-        else if(gamepad1.a){
+        else if((gamepad1.a || gamepad2.a) && (!gamepad1.start && !gamepad2.start)){
             setArmLander(LIFT_POWER_DOWN);
         }
         else{
