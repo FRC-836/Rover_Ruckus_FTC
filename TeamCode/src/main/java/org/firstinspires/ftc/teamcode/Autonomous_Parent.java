@@ -25,13 +25,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     @Override
     public void getReady() {
         sampler = new Sampler(false, hardwareMap, telemetry, false);
-        sampler.initialize();
     }
 
     //Sets up CV and time measurement, activates on start
     @Override
     public void go() {
-        goldTarget = sampler.run();
+        sampler.initialize();
+        while (goldTarget == Sampler.position.NONE)
+            goldTarget = sampler.run();
         telemetry.clear();
         telemetry.addData("Total runtime", "%6.3f seconds", runtime.seconds());
         telemetry.addData("It sees", goldTarget);
