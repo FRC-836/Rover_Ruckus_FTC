@@ -14,6 +14,7 @@ public class Arcade_Drive extends Teleop_Parent {
     //Begins teleop
     @Override
     public void run() {
+        setMarkerReleaser(-1.0);
         double forwardPower = -gamepad1.left_stick_y + gamepad2.left_stick_x*P2_MULT;
         double turnPower = gamepad1.right_stick_x + gamepad2.right_stick_x*P2_MULT;
         double strafePower = gamepad1.left_stick_x + gamepad2.left_stick_y*P2_MULT;

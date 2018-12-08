@@ -14,6 +14,7 @@ public class Field_Centric extends Teleop_Parent {
     //Begins teleop
     @Override
     public void run() {
+        setMarkerReleaser(-1.0);
         double awayPower = -gamepad1.left_stick_y + gamepad2.left_stick_x*P2_MULT;
         double turnPower = gamepad1.right_stick_x + gamepad2.right_stick_x*P2_MULT;
         double sidePower = gamepad1.left_stick_x + gamepad2.left_stick_y*P2_MULT;

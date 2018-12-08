@@ -13,6 +13,7 @@ public class Tank_Drive extends Teleop_Parent {
     //Called when teleop begins
     @Override
     public void run() {
+        setMarkerReleaser(-1.0);
         double leftDrivePower = -gamepad1.left_stick_y;
         double rightDrivePower = -gamepad1.right_stick_y;
         double leftStrafePower = gamepad1.left_stick_x;
