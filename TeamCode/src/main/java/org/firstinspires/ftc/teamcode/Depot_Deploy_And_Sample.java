@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name = "Autonomous_Depot_Side", group = "main")
+@Autonomous(name = "Depot Deploy And Sample", group = "main")
 public class Depot_Deploy_And_Sample extends Autonomous_Parent {
     @Override
     public void getReady(){
