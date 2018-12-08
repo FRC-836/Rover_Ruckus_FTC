@@ -49,10 +49,10 @@ public class Arcade_Drive extends Teleop_Parent {
         setDrive(forwardPower, turnPower, strafePower);
 
         //Lifts the arm to certain positions and maps them to certain joystick positions
-        if(gamepad1.right_bumper){
+        if(gamepad1.dpad_up){
             setArmRotatorGoal(LIFT_POWER_UP);
         }
-        else if(gamepad1.right_trigger > 0.1f){
+        else if(gamepad1.dpad_down){
             setArmRotatorGoal(LIFT_POWER_DOWN);
         }
         else{
@@ -60,10 +60,10 @@ public class Arcade_Drive extends Teleop_Parent {
         }
 
         //Extends the arm to certain positions, and maps them to certain joystick positions
-        if(gamepad1.left_bumper){
+        if(gamepad1.right_bumper){
             setArmExtender(LIFT_POWER_UP);
         }
-        else if(gamepad1.left_trigger > 0.1f){
+        else if(gamepad1.right_trigger > 0.1f){
             setArmExtender(LIFT_POWER_DOWN);
         }
         else{
@@ -82,22 +82,22 @@ public class Arcade_Drive extends Teleop_Parent {
         }
 
         //Enables or disables a slower drive
-        if(gamepad1.dpad_down) {
+        if(gamepad1.dpad_left) {
             driveSlowFactor = true;
         }
-        else if(gamepad1.dpad_up) {
+        else if(gamepad1.dpad_right) {
             driveSlowFactor = false;
         }
 
-        if(gamepad1.x){
+        if(gamepad1.left_trigger > 0.1f){
             setIntakeMotor(INTAKE_POWER_END);
-        } else if(gamepad1.b) {
+        } else if(gamepad1.left_bumper) {
             setIntakeMotor(-INTAKE_POWER_END);
         }else{
             setIntakeMotor(0.0);
         }
 
-        if(gamepad1.dpad_left){
+        if(gamepad1.x){
             setIntakeShifter(INTAKE_SHIFTER_POWER);
         }
         else{

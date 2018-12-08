@@ -28,10 +28,10 @@ public class Tank_Drive extends Teleop_Parent {
 
         setTankDrive(leftDrivePower, rightDrivePower, leftStrafePower, rightStrafePower);
         //Sets power of armRotator and maps it to joystick controls
-        if(gamepad1.right_bumper){
+        if(gamepad1.dpad_up){
             setArmRotator(LIFT_POWER_UP);
         }
-        else if(gamepad1.right_trigger > 0.1f){
+        else if(gamepad1.dpad_down){
             setArmRotator(LIFT_POWER_DOWN);
         }
         else{
@@ -39,10 +39,10 @@ public class Tank_Drive extends Teleop_Parent {
         }
 
         //Sets power of armExtender and maps it to joystick controls
-        if(gamepad1.left_bumper){
+        if(gamepad1.right_bumper){
             setArmExtender(LIFT_POWER_UP);
         }
-        else if(gamepad1.left_trigger > 0.1f){
+        else if(gamepad1.right_trigger > 0.1f){
             setArmExtender(LIFT_POWER_DOWN);
         }
         else{
@@ -61,21 +61,23 @@ public class Tank_Drive extends Teleop_Parent {
         }
 
         //Enables or disables slower driving
-        if(gamepad1.dpad_up) {
+        if(gamepad1.dpad_left) {
             driveSlowFactor = true;
         }
-        else if(gamepad1.dpad_down) {
+        else if(gamepad1.dpad_right) {
             driveSlowFactor = false;
         }
 
-        if(gamepad1.x){
-            setIntakeMotor(INTAKE_POWER_END);
-        }
-        else{
-            setIntakeMotor(0.0);
-        }
 
-        if(gamepad1.dpad_left){
+        if(gamepad1.left_trigger > 0.1f){
+            setIntakeMotor(INTAKE_POWER_END);
+        } else if(gamepad1.left_bumper) {
+            setIntakeMotor(-INTAKE_POWER_END);
+        }else{
+            setIntakeMotor(0.0);
+            }
+
+        if(gamepad1.x){
             setIntakeShifter(INTAKE_SHIFTER_POWER);
         }
         else{
