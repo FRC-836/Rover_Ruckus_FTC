@@ -9,6 +9,8 @@ public class Arcade_Drive extends Teleop_Parent {
 
     @Override
     public void begin() {
+        teleopTurnPID.resetPID();
+        currentFacingDirection = TargetDirection.makeTargetToRobotsRight(0.0);
     }
 
     //Begins teleop
