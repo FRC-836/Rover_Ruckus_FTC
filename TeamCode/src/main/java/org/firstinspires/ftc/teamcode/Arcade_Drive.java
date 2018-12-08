@@ -6,6 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class Arcade_Drive extends Teleop_Parent {
     private final double P2_MULT = 0.5;
     private boolean holdingTurn = false;
+    private double forwardPower = 0.0;
+    private double turnPower = 0.0;
+    private double strafePower = 0.0;
 
     @Override
     public void begin() {
@@ -17,9 +20,9 @@ public class Arcade_Drive extends Teleop_Parent {
     @Override
     public void run() {
         setMarkerReleaser(-1.0);
-        double forwardPower = -gamepad1.left_stick_y + gamepad2.left_stick_x*P2_MULT;
-        double turnPower = gamepad1.right_stick_x + gamepad2.right_stick_x*P2_MULT;
-        double strafePower = gamepad1.left_stick_x + gamepad2.left_stick_y*P2_MULT;
+        forwardPower = -gamepad1.left_stick_y + gamepad2.left_stick_x*P2_MULT;
+        turnPower = gamepad1.right_stick_x + gamepad2.right_stick_x*P2_MULT;
+        strafePower = gamepad1.left_stick_x + gamepad2.left_stick_y*P2_MULT;
 
         if (Math.abs(strafePower) > Math.abs(forwardPower))
             forwardPower = 0.0;
