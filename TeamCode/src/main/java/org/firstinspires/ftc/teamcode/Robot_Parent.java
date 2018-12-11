@@ -75,8 +75,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         TargetDirection.setImu(imu);
 
         getReady();
-
-        waitForStart();
+        
         while (!opModeIsActive() && !isStopRequested()) {
             telemetry.addData("status", "waiting for start command...");
             telemetry.update();
