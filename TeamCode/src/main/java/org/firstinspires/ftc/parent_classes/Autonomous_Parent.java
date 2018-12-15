@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.parent_classes;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.PID_Controller;
 import org.firstinspires.ftc.teamcode.TargetDirection;
 
@@ -26,7 +28,15 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     @Override
     public void play() {
-        position = sampler.sample();
+        ElapsedTime timer = new ElapsedTime();
+        timer.reset();
+        Sampler.GoldPosition pos;
+        while (timer.seconds() < 1.8 && opModeIsActive())
+        {
+            pos = sampler.sample();
+            if (pos != Sampler.GoldPosition.UNKNOWN)
+                position = pos;
+        }
         begin();
     }
 
@@ -46,7 +56,12 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected void land() {
         setLandingMotorPower(DEPLOY_POWER);
-        sleep(2800);
+        sleep(2500);
+        setArcadeDrive(-0.13,0.0);
+        sleep(750);
+        setArcadeDrive(0.0,0.0);
+        setLandingMotorPower(-DEPLOY_POWER);
+        sleep(2000);
         driveDistanceTime(3.0);
         setLandingMotorPower(0.0);
     }
@@ -93,30 +108,29 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected void sampleCrater() {
         double centerDrive = 33.5;
-        double turnedDrive = 35.0;
         switch (position) {
             case LEFT:
-                turnDegreesPID(-SAMPLE_TURN_ANGLE, 2500);
+                turnDegreesPID(-SAMPLE_TURN_ANGLE, 2200);
                 setIntake(1.0);
-                driveDistanceTime(turnedDrive, lastTurnDirection);
+                driveDistanceTime(36.0, lastTurnDirection);
                 setIntake(0.0);
-                driveDistanceTime(-turnedDrive, lastTurnDirection);
-                turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 1500);
+                driveDistanceTime(-36.0, lastTurnDirection);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 1200);
                 break;
             case RIGHT:
-                turnDegreesPID(SAMPLE_TURN_ANGLE, 2500);
+                turnDegreesPID(SAMPLE_TURN_ANGLE, 2200);
                 setIntake(1.0);
-                driveDistanceTime(turnedDrive, lastTurnDirection);
+                driveDistanceTime(36.0, lastTurnDirection);
                 setIntake(0.0);
-                driveDistanceTime(-turnedDrive, lastTurnDirection);
-                turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 2500);
+                driveDistanceTime(-36.0, lastTurnDirection);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 2200);
                 break;
             default:
                 setIntake(1.0);
                 driveDistanceTime(centerDrive);
                 setIntake(0.0);
                 driveDistanceTime(-centerDrive);
-                turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 2000);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 1800);
                 break;
         }
     }
@@ -148,7 +162,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void parkCrater() {
-        turnPID(TargetDirection.makeTargetAtFieldPosition(90.0), 2000);
+        turnPID(TargetDirection.makeTargetAtFieldPosition(90.0), 1800);
         driveDistanceTime(-88.0, lastTurnDirection);
     }
 
@@ -160,9 +174,9 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected void driveToDepot() {
         driveDistanceTime(63.0, lastTurnDirection);
-        turnPID(TargetDirection.makeTargetAtFieldPosition(93.0), 3000);
+        turnPID(TargetDirection.makeTargetAtFieldPosition(93.0), 2000);
         driveDistanceTime(65.0, lastTurnDirection);
-        turnPID(TargetDirection.makeTargetAtFieldPosition(135.0), 2000);
+        turnPID(TargetDirection.makeTargetAtFieldPosition(135.0), 1500);
     }
 
     protected void driveDistanceTime(double inches) {

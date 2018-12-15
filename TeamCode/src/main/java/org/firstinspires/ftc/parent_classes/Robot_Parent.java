@@ -31,7 +31,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected final double TEAM_MARKER_SERVO_UP = 0.7;
     protected final double TEAM_MARKER_SERVO_DOWN = 0.0;
     private final double AUTO_DRIVE_CAP = 0.5;
-    protected final double DEPLOY_POWER = 0.6;
+    protected final double DEPLOY_POWER = 0.4;
 
     @Override
     public void runOpMode() throws InterruptedException {
