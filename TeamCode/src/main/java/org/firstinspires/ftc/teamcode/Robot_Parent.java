@@ -23,7 +23,6 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected Servo markerReleaser;
     private BNO055IMU imu;
     protected DcMotor intakeMotor;
-    protected CRServo intakeShifter;
     protected boolean isMovingToGoal = false;
 
     private boolean isArmHolding = false;
@@ -48,7 +47,6 @@ public abstract class Robot_Parent extends LinearOpMode {
         markerReleaser = hardwareMap.get(Servo.class, "mr");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         intakeMotor = hardwareMap.get(DcMotor.class, "im");
-        intakeShifter = hardwareMap.get(CRServo.class, "is");
 
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -68,7 +66,6 @@ public abstract class Robot_Parent extends LinearOpMode {
         armLander.setDirection(DcMotor.Direction.FORWARD);
         markerReleaser.setDirection(Servo.Direction.REVERSE);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
-        intakeShifter.setDirection(CRServo.Direction.FORWARD);
 
         setupImu();
 
@@ -178,9 +175,6 @@ public abstract class Robot_Parent extends LinearOpMode {
         intakeMotor.setPower(intakePower);
     }
 
-    protected void setIntakeShifter(double intakeRaisePower) {
-        intakeShifter.setPower(intakeRaisePower);
-    }
 
     protected void holdArmPosition() {
         if (!isArmHolding) {

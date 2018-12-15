@@ -81,10 +81,10 @@ public class Field_Centric extends Teleop_Parent {
         }
 
         //Set lander to certain positions, and maps them to certain joystick positions
-        if(gamepad1.y || gamepad2.y){
+        if(gamepad2.y){
             setArmLander(LIFT_POWER_UP);
         }
-        else if((gamepad1.a || gamepad2.a) && (!gamepad1.start && !gamepad2.start)){
+        else if((gamepad2.a) && (!gamepad1.start && !gamepad2.start)){
             setArmLander(LIFT_POWER_DOWN);
         }
         else{
@@ -99,20 +99,14 @@ public class Field_Centric extends Teleop_Parent {
             driveSlowFactor = false;
         }
 
-        if(gamepad1.left_trigger > 0.1f){
+        if(gamepad2.left_trigger > 0.1f){
             setIntakeMotor(INTAKE_POWER_END);
-        } else if(gamepad1.left_bumper) {
+        } else if(gamepad2.left_bumper) {
             setIntakeMotor(-INTAKE_POWER_END);
         }else{
             setIntakeMotor(0.0);
         }
 
-        if(gamepad1.x){
-            setIntakeShifter(INTAKE_SHIFTER_POWER);
-        }
-        else{
-            setIntakeShifter(0.0);
-        }
     }
 }
 

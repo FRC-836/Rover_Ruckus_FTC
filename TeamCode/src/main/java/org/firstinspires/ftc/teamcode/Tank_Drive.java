@@ -51,10 +51,10 @@ public class Tank_Drive extends Teleop_Parent {
         }
 
         //Sets power of armLander and maps it to joystick controls
-        if(gamepad1.y){
+        if(gamepad2.y){
             setArmLander(LIFT_POWER_UP);
         }
-        else if(gamepad1.a){
+        else if ((gamepad2.a) && (!gamepad1.start && !gamepad2.start)){
             setArmLander(LIFT_POWER_DOWN);
         }
         else{
@@ -70,20 +70,14 @@ public class Tank_Drive extends Teleop_Parent {
         }
 
 
-        if(gamepad1.left_trigger > 0.1f){
+        if(gamepad2.left_trigger > 0.1f){
             setIntakeMotor(INTAKE_POWER_END);
-        } else if(gamepad1.left_bumper) {
+        } else if(gamepad2.left_bumper) {
             setIntakeMotor(-INTAKE_POWER_END);
         }else{
             setIntakeMotor(0.0);
             }
 
-        if(gamepad1.x){
-            setIntakeShifter(INTAKE_SHIFTER_POWER);
-        }
-        else{
-            setIntakeShifter(0.0);
-        }
     }
     //Sets the power of individual motors to be called based on powers created when run() begins
     private void setTankDrive (double leftDrivePower, double rightDrivePower, double leftStrafePower, double rightStrafePower){
