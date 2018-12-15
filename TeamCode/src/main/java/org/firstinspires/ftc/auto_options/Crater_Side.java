@@ -14,10 +14,20 @@ public class Crater_Side extends Autonomous_Parent {
 
     @Override
     public void begin() {
+        if (!opModeIsActive())
+            return;
         land();
+        if (!opModeIsActive())
+            return;
         sampleCrater();
+        if (!opModeIsActive())
+            return;
         driveToDepot();
+        if (!opModeIsActive())
+            return;
         placeTeamMarker();
+        if (!opModeIsActive())
+            return;
         parkCrater();
     }
 }

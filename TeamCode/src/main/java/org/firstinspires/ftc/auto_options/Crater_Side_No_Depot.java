@@ -14,7 +14,11 @@ public class Crater_Side_No_Depot extends Autonomous_Parent {
 
     @Override
     public void begin() {
+        if (!opModeIsActive())
+            return;
         land();
+        if (!opModeIsActive())
+            return;
         sampleParkCrater();
     }
 }

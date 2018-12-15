@@ -14,8 +14,14 @@ public class Depot_Side_Park_Away extends Autonomous_Parent {
 
     @Override
     public void begin() {
+        if (!opModeIsActive())
+            return;
         land();
+        if (!opModeIsActive())
+            return;
         sampleDepot();
+        if (!opModeIsActive())
+            return;
         parkDepot();
     }
 }
