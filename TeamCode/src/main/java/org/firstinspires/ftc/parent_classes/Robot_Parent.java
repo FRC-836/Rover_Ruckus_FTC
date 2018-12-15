@@ -21,6 +21,10 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor landingMotor;
     protected CRServo latchLockServo;
     protected Servo teamMarkerServo;
+    protected CRServo leftIntakeServo;
+    protected CRServo rightIntakeServo;
+    protected DcMotor intakeMotor;
+
     private boolean isLocked = true;
 
     protected PID_Controller goToTurnPID = new PID_Controller(0.025, 0.0, 0.0);
@@ -45,6 +49,9 @@ public abstract class Robot_Parent extends LinearOpMode {
         landingMotor = hardwareMap.get(DcMotor.class, "lm");
         teamMarkerServo = hardwareMap.get(Servo.class, "tms");
         latchLockServo = hardwareMap.get(CRServo.class, "ll");
+        leftIntakeServo = hardwareMap.get(CRServo.class, "lis");
+        rightIntakeServo = hardwareMap.get(CRServo.class, "ris");
+        intakeMotor = hardwareMap.get(DcMotor.class, "im");
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -53,10 +60,14 @@ public abstract class Robot_Parent extends LinearOpMode {
         landingMotor.setDirection(DcMotor.Direction.REVERSE);
         teamMarkerServo.setDirection(Servo.Direction.FORWARD);
         latchLockServo.setDirection(CRServo.Direction.REVERSE);
+        leftIntakeServo.setDirection(CRServo.Direction.FORWARD);
+        rightIntakeServo.setDirection(CRServo.Direction.FORWARD);
+        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
 
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         landingMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         setupImu();
 
@@ -80,8 +91,11 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     // Functions
 
-    protected void setIntake(double intakePower) {
+    protected void setIntake(double servoIntakePower, double motorIntakePower) {
         //TODO: need intake
+        leftIntakeServo.setPower(servoIntakePower);
+        rightIntakeServo.setPower(servoIntakePower);
+        intakeMotor.setPower(motorIntakePower);
     }
 
     protected void setArcadeDrive(double forwardPower, double turnPower) {
