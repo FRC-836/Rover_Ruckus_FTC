@@ -9,11 +9,13 @@ public class Arcade_Drive extends Teleop_Parent {
     private double forwardPower = 0.0;
     private double turnPower = 0.0;
     private double strafePower = 0.0;
+    private double rotatorPos = 0.0;
 
     @Override
     public void begin() {
         teleopTurnPID.resetPID();
         currentFacingDirection = TargetDirection.makeTargetToRobotsRight(0.0);
+        rotatorPos = getArmRotatorPosition();
     }
 
     //Begins teleop
@@ -101,6 +103,10 @@ public class Arcade_Drive extends Teleop_Parent {
             setIntakeMotor(-INTAKE_POWER_END);
         }else{
             setIntakeMotor(0.0);
+        }
+
+        if(gamepad1.a) {
+
         }
     }
 }

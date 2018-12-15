@@ -69,7 +69,6 @@ public class Tank_Drive extends Teleop_Parent {
             driveSlowFactor = false;
         }
 
-
         if(gamepad2.left_trigger > 0.1f){
             setIntakeMotor(INTAKE_POWER_END);
         } else if(gamepad2.left_bumper) {
