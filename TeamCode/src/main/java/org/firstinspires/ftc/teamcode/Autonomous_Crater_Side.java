@@ -16,11 +16,23 @@ public class Autonomous_Crater_Side extends Autonomous_Parent {
 
         deploy();
 
+        if(!opModeIsActive())
+            return;
+
         sampleCraterSide();
+
+        if(!opModeIsActive())
+            return;
 
         goToDepotCraterSide();
 
+        if(!opModeIsActive())
+            return;
+
         releaseMarker();
+
+        if(!opModeIsActive())
+            return;
 
         parkInCraterCraterSide();
     }
