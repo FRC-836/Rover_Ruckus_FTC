@@ -91,10 +91,12 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     // Functions
 
-    protected void setIntake(double servoIntakePower, double motorIntakePower) {
-        //TODO: need intake
+    protected void setServoIntake(double servoIntakePower) {
         leftIntakeServo.setPower(servoIntakePower);
         rightIntakeServo.setPower(servoIntakePower);
+    }
+
+    protected void setMotorIntake(double motorIntakePower) {
         intakeMotor.setPower(motorIntakePower);
     }
 
