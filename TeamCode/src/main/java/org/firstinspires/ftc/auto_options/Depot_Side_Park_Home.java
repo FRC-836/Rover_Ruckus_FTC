@@ -15,7 +15,7 @@ public class Depot_Side_Park_Home extends Autonomous_Parent {
         driveDistanceTime(60.0);
         placeTeamMarker();
         turnPID(TargetDirection.makeTargetAtFieldPosition(-90.0), 4000);
-        driveDistanceTime(86.0);
+        driveDistanceTime(86.0, lastTurnDirection);
 
     }
 }
