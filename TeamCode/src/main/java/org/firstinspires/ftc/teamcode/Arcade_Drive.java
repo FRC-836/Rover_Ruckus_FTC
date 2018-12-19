@@ -9,13 +9,11 @@ public class Arcade_Drive extends Teleop_Parent {
     private double forwardPower = 0.0;
     private double turnPower = 0.0;
     private double strafePower = 0.0;
-    private double rotatorPos = 0.0;
 
     @Override
     public void begin() {
         teleopTurnPID.resetPID();
         currentFacingDirection = TargetDirection.makeTargetToRobotsRight(0.0);
-        rotatorPos = getArmRotatorPosition();
     }
 
     //Begins teleop
@@ -63,9 +61,22 @@ public class Arcade_Drive extends Teleop_Parent {
         else if(gamepad1.dpad_down){
             setArmRotatorGoal(LIFT_POWER_DOWN);
         }
-        else{
+        else if(gamepad1.y) { // Up
+            armHasBeenHolding = false;
+            holdArmPosition(ARM_POSITION_UP);
+        }
+        else if (gamepad1.x) { // Center
+            armHasBeenHolding = false;
+            holdArmPosition(ARM_POSITION_DOWN);
+        }
+        else if (gamepad1.a) { // Down
+            armHasBeenHolding = false;
+            holdArmPosition(ARM_POSITION_DOWN);
+        }
+        else {
             holdArmPosition();
         }
+
 
         //Extends the arm to certain positions, and maps them to certain joystick positions
         if(gamepad1.right_bumper){
@@ -103,10 +114,6 @@ public class Arcade_Drive extends Teleop_Parent {
             setIntakeMotor(-INTAKE_POWER_END);
         }else{
             setIntakeMotor(0.0);
-        }
-
-        if(gamepad1.a) {
-
         }
     }
 }

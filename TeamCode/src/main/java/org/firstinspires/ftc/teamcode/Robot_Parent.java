@@ -3,16 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 public abstract class Robot_Parent extends LinearOpMode {
     //Set up robot parts/controllers
-    protected final double EC_PER_DEGREE_ARM = 20.04;
-    protected final double EC_PER_IN_ARM = 104.7;
     protected DcMotor backLeftDrive;
     protected DcMotor backRightDrive;
     protected DcMotor frontLeftDrive;
@@ -24,8 +20,12 @@ public abstract class Robot_Parent extends LinearOpMode {
     private BNO055IMU imu;
     protected DcMotor intakeMotor;
     protected boolean isMovingToGoal = false;
+    protected int armSetUp = 0;
 
-    private boolean isArmHolding = false;
+    protected boolean armHasBeenHolding = false;
+
+    protected final int ARM_POSITION_UP = 490;
+    protected final int ARM_POSITION_DOWN = 1206;
 
     public double pStableHoldTurn = 0.019;
     public double dStableHoldTurn = 0.00195;
@@ -33,6 +33,15 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
     protected PID_Controller armHoldPID = new PID_Controller(0.000165, 0.0, 0.000375);
+
+
+    enum ArmHoldStatus {
+        HOLDING,
+        SAFELY_LOWERING,
+        LOWERED
+    }
+
+    protected ArmHoldStatus armHoldStatus = ArmHoldStatus.HOLDING;
 
     //Maps robot parts to data values in config file, sets up opMode
     @Override
@@ -77,8 +86,8 @@ public abstract class Robot_Parent extends LinearOpMode {
             telemetry.addData("status", "waiting for start command...");
             telemetry.update();
         }
+        armSetUp = getArmRotatorPosition();
         go();
-
     }
 
     //Sets up empty versions of methods to be called on init and start, respectively
@@ -99,7 +108,7 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     //Sets power of armRotator
     protected void setArmRotator(double turnPower) {
-        isArmHolding = false;
+        armHasBeenHolding = false;
         isMovingToGoal = false;
         armRotator.setPower(turnPower);
     }
@@ -168,20 +177,35 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     protected int getArmRotatorPosition() {
-        return armRotator.getCurrentPosition();
+        return armRotator.getCurrentPosition() - armSetUp;
     }
 
     protected void setIntakeMotor(double intakePower) {
         intakeMotor.setPower(intakePower);
     }
 
-
     protected void holdArmPosition() {
-        if (!isArmHolding) {
-            armHoldPID.setSetpoint(getArmRotatorPosition());
+        switch (armHoldStatus)
+        {
+            case LOWERED:
+                setArmRotator(0.0);
+                break;
+            case HOLDING:
+                holdArmPosition(getArmRotatorPosition());
+                break;
+            case SAFELY_LOWERING:
+                holdArmPosition(getArmRotatorPosition());
+                // TODO: Detect if we've finished safely lowering
+                break;
+        }
+    }
+
+    protected void holdArmPosition(int armPositionToHold) {
+        if (!armHasBeenHolding) {
+            armHoldPID.setSetpoint(armPositionToHold);
             armHoldPID.resetPID();
         }
         setArmRotator(armHoldPID.update(getArmRotatorPosition()));
-        isArmHolding = true;
+        armHasBeenHolding = true;
     }
 }
