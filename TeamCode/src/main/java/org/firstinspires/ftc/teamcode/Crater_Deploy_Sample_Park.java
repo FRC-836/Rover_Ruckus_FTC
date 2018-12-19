@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(name = "Crater Deploy and Sample")
-public class Crater_Deploy_And_Sample extends Autonomous_Parent{
+public class Crater_Deploy_Sample_Park extends Autonomous_Parent{
     @Override
     public void getReady(){
         super.getReady();
@@ -17,5 +17,7 @@ public class Crater_Deploy_And_Sample extends Autonomous_Parent{
         deploy();
 
         sampleCraterSide();
+
+
     }
 }
