@@ -108,5 +108,7 @@ public class Arcade_Drive extends Teleop_Parent {
         if(gamepad1.a) {
 
         }
+        telemetry.addData("Arm Position",getArmRotatorPosition());
+        telemetry.update();
     }
 }
