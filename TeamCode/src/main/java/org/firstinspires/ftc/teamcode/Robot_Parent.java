@@ -32,7 +32,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     public double holdTurnMultiplier = 5.25;
 
     protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
-    protected PID_Controller armHoldPID = new PID_Controller(0.0002, 0.00005, 0.000375);//P was 0.000165
+    protected PID_Controller armHoldPID = new PID_Controller(0.0002, 0.0001, 0.000375);//P was 0.000165
 
 
     enum ArmHoldStatus {

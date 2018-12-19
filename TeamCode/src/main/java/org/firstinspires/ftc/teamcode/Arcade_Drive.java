@@ -116,6 +116,7 @@ public class Arcade_Drive extends Teleop_Parent {
             setIntakeMotor(0.0);
         }
         telemetry.addData("Arm Position",getArmRotatorPosition());
+        telemetry.addData("Arm Motor Power", armRotator.getPower());
         telemetry.update();
     }
 }
