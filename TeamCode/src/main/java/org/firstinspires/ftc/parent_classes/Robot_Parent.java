@@ -61,7 +61,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         teamMarkerServo.setDirection(Servo.Direction.FORWARD);
         latchLockServo.setDirection(CRServo.Direction.REVERSE);
         leftIntakeServo.setDirection(CRServo.Direction.FORWARD);
-        rightIntakeServo.setDirection(CRServo.Direction.FORWARD);
+        rightIntakeServo.setDirection(CRServo.Direction.REVERSE);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
 
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
