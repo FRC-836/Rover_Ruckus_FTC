@@ -12,7 +12,7 @@ public abstract class Teleop_Parent extends Robot_Parent {
     final double INTAKE_POWER_END = -1.0;
     final double INTAKE_SHIFTER_POWER = 0.6;
     private final double ARM_POWER_PER_MS_SPEED_UP = 0.0013;
-    private final double ARM_POWER_PER_MS_SPEED_DOWN = 0.005;
+    private final double ARM_POWER_PER_MS_SPEED_DOWN = 0.01;
     protected PID_Controller teleopTurnPID = new PID_Controller(0.012, 0.0, 0.0013);
     protected TargetDirection currentFacingDirection;
 

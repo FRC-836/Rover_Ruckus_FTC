@@ -10,6 +10,10 @@ public class Arcade_Drive extends Teleop_Parent {
     private double turnPower = 0.0;
     private double strafePower = 0.0;
 
+    private boolean yEnabled = true;
+    private boolean xEnabled = true;
+    private boolean aEnabled = true;
+
     @Override
     public void begin() {
         teleopTurnPID.resetPID();
@@ -20,9 +24,9 @@ public class Arcade_Drive extends Teleop_Parent {
     @Override
     public void run() {
         setMarkerReleaser(-1.0);
-        forwardPower = -gamepad1.left_stick_y + gamepad2.left_stick_x*P2_MULT;
-        turnPower = gamepad1.right_stick_x + gamepad2.right_stick_x*P2_MULT;
-        strafePower = gamepad1.left_stick_x + gamepad2.left_stick_y*P2_MULT;
+        forwardPower = -gamepad1.left_stick_y + gamepad2.left_stick_x * P2_MULT;
+        turnPower = gamepad1.right_stick_x + gamepad2.right_stick_x * P2_MULT;
+        strafePower = gamepad1.left_stick_x + gamepad2.left_stick_y * P2_MULT;
 
         if (Math.abs(strafePower) > Math.abs(forwardPower))
             forwardPower = 0.0;
@@ -35,7 +39,7 @@ public class Arcade_Drive extends Teleop_Parent {
             strafePower *= SLOW_DRIVE_SCALE_FACTOR;
         }
 
-        if(Math.abs(turnPower) < 0.00005f) {
+        if (Math.abs(turnPower) < 0.00005f) {
             if (!holdingTurn) {
                 setDrive(forwardPower, 0.0, strafePower);
                 teleopTurnPID.resetPID();
@@ -47,76 +51,92 @@ public class Arcade_Drive extends Teleop_Parent {
             } else {
                 turnPower = teleopTurnPID.update(currentFacingDirection.calculateDistanceFromTarget());
             }
-        }
-        else
-        {
+        } else {
             holdingTurn = false;
         }
         setDrive(forwardPower, turnPower, strafePower);
 
+        boolean yIsPressed = false;
+        boolean aIsPressed = false;
+        boolean xIsPressed = false;
+
+        if (gamepad1.y) {
+            if (yEnabled)
+                yIsPressed = true;
+            yEnabled = false;
+        } else {
+            yEnabled = true;
+        }
+        if (gamepad1.x) {
+            if (xEnabled)
+                xIsPressed = true;
+            xEnabled = false;
+        } else {
+            xEnabled = true;
+        }
+        if (gamepad1.a) {
+            if (aEnabled)
+                aIsPressed = true;
+            aEnabled = false;
+        } else {
+            aEnabled = true;
+        }
+
         //Lifts the arm to certain positions and maps them to certain joystick positions
-        if(gamepad1.dpad_up){
+        if (gamepad1.dpad_up) {
             setArmRotatorGoal(LIFT_POWER_UP);
-        }
-        else if(gamepad1.dpad_down){
+        } else if (gamepad1.dpad_down) {
             setArmRotatorGoal(LIFT_POWER_DOWN);
-        }
-        else if(gamepad1.y) { // Up
+        } else if (yIsPressed) { // Up
             armHasBeenHolding = false;
             holdArmPosition(ARM_POSITION_UP);
-        }
-        else if (gamepad1.x) { // Center
+        } else if (xIsPressed) { // Center
             armHasBeenHolding = false;
             holdArmPosition(ARM_POSITION_DOWN);
-        }
-        else if (gamepad1.a) { // Down
+        } else if (aIsPressed) { // Down
             armHasBeenHolding = false;
             holdArmPosition(ARM_POSITION_DOWN);
-        }
-        else {
+        } else {
             holdArmPosition();
         }
 
 
         //Extends the arm to certain positions, and maps them to certain joystick positions
-        if(gamepad1.right_bumper){
+        if (gamepad1.right_bumper) {
             setArmExtender(LIFT_POWER_UP);
-        }
-        else if(gamepad1.right_trigger > 0.1f){
+        } else if (gamepad1.right_trigger > 0.1f) {
             setArmExtender(LIFT_POWER_DOWN);
-        }
-        else{
+        } else {
             setArmExtender(0.0);
         }
 
         //Set lander to certain positions, and maps them to certain joystick positions
-        if(gamepad2.y){
+        if (gamepad2.y) {
             setArmLander(LIFT_POWER_UP);
-        }
-        else if((gamepad2.a) && (!gamepad1.start && !gamepad2.start)){
+        } else if ((gamepad2.a) && (!gamepad1.start && !gamepad2.start)) {
             setArmLander(LIFT_POWER_DOWN);
-        }
-        else{
+        } else {
             setArmLander(LIFT_POWER_IDLE);
         }
 
         //Enables or disables a slower drive
-        if(gamepad1.dpad_left) {
+        if (gamepad1.dpad_left) {
             driveSlowFactor = true;
-        }
-        else if(gamepad1.dpad_right) {
+        } else if (gamepad1.dpad_right) {
             driveSlowFactor = false;
         }
 
-        if(gamepad2.left_trigger > 0.1f){
+        if (gamepad2.left_trigger > 0.1f) {
             setIntakeMotor(INTAKE_POWER_END);
-        } else if(gamepad2.left_bumper) {
+        } else if (gamepad2.left_bumper) {
             setIntakeMotor(-INTAKE_POWER_END);
-        }else{
+        } else {
             setIntakeMotor(0.0);
         }
-        telemetry.addData("Arm Position",getArmRotatorPosition());
+
+        telemetry.addData("Arm Position", getArmRotatorPosition());
         telemetry.addData("Arm Motor Power", armRotator.getPower());
+        telemetry.addData("Setpoint", armHoldPID.getSetpoint());
         telemetry.update();
     }
 }

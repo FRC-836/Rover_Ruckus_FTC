@@ -36,6 +36,7 @@ public class PID_Controller{
     public void setSetpoint(double newSetpoint) {
         this.setpoint = newSetpoint;
     }
+    public double getSetpoint(){return setpoint;}
 
     //Sets up p, i, and d values based on their respective formulas, and sets up errors, setpoints,
     // and times, and processes them, returns the sum of p, i, and d values

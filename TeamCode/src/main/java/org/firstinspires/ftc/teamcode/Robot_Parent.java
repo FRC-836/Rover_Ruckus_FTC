@@ -25,14 +25,14 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected boolean armHasBeenHolding = false;
 
     protected final int ARM_POSITION_UP = 490;
-    protected final int ARM_POSITION_DOWN = 1206;
+    protected final int ARM_POSITION_DOWN = ARM_POSITION_UP + 716; // 1206 when UP = 490
 
     public double pStableHoldTurn = 0.019;
     public double dStableHoldTurn = 0.00195;
     public double holdTurnMultiplier = 5.25;
 
     protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
-    protected PID_Controller armHoldPID = new PID_Controller(0.0002, 0.0001, 0.000375);//P was 0.000165
+    protected PID_Controller armHoldPID = new PID_Controller(0.0015, 0.0, 0.000375);//P was 0.000165
 
 
     enum ArmHoldStatus {
@@ -184,25 +184,31 @@ public abstract class Robot_Parent extends LinearOpMode {
         intakeMotor.setPower(intakePower);
     }
 
+    private int transformArmPosition(int armRotatorPosition) {
+        double m = -238.0 / (-ARM_POSITION_UP + ARM_POSITION_DOWN + 318.0);
+        double b = -m * ARM_POSITION_UP;
+        return armRotatorPosition;//(int) (((m * armRotatorPosition) + b) + armRotatorPosition);
+    }
+
     protected void holdArmPosition() {
         switch (armHoldStatus)
         {
-            case LOWERED:
-                setArmRotator(0.0);
-                break;
             case HOLDING:
-                holdArmPosition(getArmRotatorPosition());
+                holdArmPosition(transformArmPosition(getArmRotatorPosition()));
                 break;
             case SAFELY_LOWERING:
-                holdArmPosition(getArmRotatorPosition());
+                holdArmPosition(transformArmPosition(getArmRotatorPosition()));
                 // TODO: Detect if we've finished safely lowering
+                break;
+            case LOWERED:
+                setArmRotator(0.0);
                 break;
         }
     }
 
     protected void holdArmPosition(int armPositionToHold) {
         if (!armHasBeenHolding) {
-            armHoldPID.setSetpoint(armPositionToHold);
+            armHoldPID.setSetpoint(transformArmPosition(armPositionToHold));
             armHoldPID.resetPID();
         }
         setArmRotator(armHoldPID.update(getArmRotatorPosition()));
