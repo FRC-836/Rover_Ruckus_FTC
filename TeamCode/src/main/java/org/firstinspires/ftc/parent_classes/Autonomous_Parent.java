@@ -116,24 +116,24 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         switch (position) {
             case LEFT:
                 turnDegreesPID(-SAMPLE_TURN_ANGLE, 2200);
-                //setServoIntake(1.0);
+                initIntake();
                 driveDistanceTime(36.0, lastTurnDirection);
-                //setServoIntake(0.0);
+                stopIntake();
                 driveDistanceTime(-36.0, lastTurnDirection);
                 turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 1200);
                 break;
             case RIGHT:
                 turnDegreesPID(SAMPLE_TURN_ANGLE, 2200);
-                //setServoIntake(1.0);
+                initIntake();
                 driveDistanceTime(36.0, lastTurnDirection);
-                //setServoIntake(0.0);
+                stopIntake();
                 driveDistanceTime(-36.0, lastTurnDirection);
                 turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 2200);
                 break;
             default:
-                //setServoIntake(1.0);
+                initIntake();
                 driveDistanceTime(centerDrive);
-                //setServoIntake(0.0);
+                stopIntake();
                 driveDistanceTime(-centerDrive);
                 turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 1800);
                 break;
@@ -144,20 +144,20 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         switch (position) {
             case LEFT:
                 turnDegreesPID(-27.5, 2000);
-                setServoIntake(1.0);
+                initIntake();
                 driveDistanceTime(40.0);
-                setServoIntake(0.0);
+                stopIntake();
                 break;
             case RIGHT:
                 turnDegreesPID(27.5, 2000);
-                setServoIntake(1.0);
+                initIntake();
                 driveDistanceTime(40.0);
-                setServoIntake(0.0);
+                stopIntake();
                 break;
             default:
-                setServoIntake(1.0);
+                initIntake();
                 driveDistanceTime(40.0);
-                setServoIntake(0.0);
+                stopIntake();
                 break;
         }
     }
@@ -255,5 +255,18 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected double turnDegreesPID(double degrees, long millis) {
         TargetDirection target = TargetDirection.makeTargetToRobotsRight(degrees);
         return turnPID(target, millis);
+    }
+
+    protected void initIntake() {
+        setServoIntake(1.0);
+        sleep(600);
+        setServoIntake(0.0);
+        setMotorIntake(1.0);
+    }
+
+    protected  void stopIntake() {
+        setServoIntake(-1.0);
+        sleep(600);
+        setMotorIntake(0.0);
     }
 }
