@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.parent_classes;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.sun.tools.javac.comp.Todo;
 
 import org.firstinspires.ftc.teamcode.PID_Controller;
 import org.firstinspires.ftc.teamcode.TargetDirection;
 
 public abstract class Autonomous_Parent extends Robot_Parent {
 
-    // TODO: remember to set values to diff number
     private final double ENCODER_COUNTS_PER_INCH = 81.19;
     private final double EARLY_STOP_DEGREES = 5.0;
     private final double MILLIS_PER_INCH = 27.7;
@@ -107,28 +107,29 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void sampleCrater() {
+        // must set intakeMotor for sampling, and correclty set intakeCRServo
         double centerDrive = 33.5;
         switch (position) {
             case LEFT:
                 turnDegreesPID(-SAMPLE_TURN_ANGLE, 2200);
-                setServoIntake(1.0);
+                //setServoIntake(1.0);
                 driveDistanceTime(36.0, lastTurnDirection);
-                setServoIntake(0.0);
+                //setServoIntake(0.0);
                 driveDistanceTime(-36.0, lastTurnDirection);
                 turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 1200);
                 break;
             case RIGHT:
                 turnDegreesPID(SAMPLE_TURN_ANGLE, 2200);
-                setServoIntake(1.0);
+                //setServoIntake(1.0);
                 driveDistanceTime(36.0, lastTurnDirection);
-                setServoIntake(0.0);
+                //setServoIntake(0.0);
                 driveDistanceTime(-36.0, lastTurnDirection);
                 turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 2200);
                 break;
             default:
-                setServoIntake(1.0);
+                //setServoIntake(1.0);
                 driveDistanceTime(centerDrive);
-                setServoIntake(0.0);
+                //setServoIntake(0.0);
                 driveDistanceTime(-centerDrive);
                 turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 1800);
                 break;
