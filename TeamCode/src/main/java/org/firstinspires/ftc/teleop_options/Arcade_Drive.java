@@ -47,6 +47,20 @@ public class Arcade_Drive extends Teleop_Parent {
         updatePowers(goalForwardPower, goalTurnPower);
         setArcadeDrive(forwardPower, turnPower);
         setLandingMotorPower(latchingPower);
+
+        if (gamepad1.right_bumper)
+            setServoIntake(1.0);
+        else if (gamepad1.right_trigger > 0.5)
+            setServoIntake(-1.0);
+        else
+            setServoIntake(0.05);
+
+        if (gamepad1.b)
+            setMotorIntake(1.0);
+        else if (gamepad1.x)
+            setMotorIntake(-1.0);
+        else
+            setMotorIntake(0.0);
     }
 
     protected void updatePowers(double goalPowerForward, double goalPowerTurn) {

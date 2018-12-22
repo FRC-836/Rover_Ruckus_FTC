@@ -23,6 +23,9 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     public void initialize() {
         isAuto = true;
         setup();
+        setServoIntake(1.0);
+        sleep(500);
+        setServoIntake(0.0);
         sampler.init(telemetry, hardwareMap);
     }
 
