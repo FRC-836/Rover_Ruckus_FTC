@@ -23,14 +23,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     public void initialize() {
         isAuto = true;
         setup();
-        setServoIntake(1.0);
-        sleep(500);
-        setServoIntake(0.0);
-        sampler.init(telemetry, hardwareMap);
     }
 
     @Override
     public void play() {
+        setServoIntake(-1.0);
+        sleep(500);
+        setServoIntake(0.0);
+        sampler.init(telemetry, hardwareMap);
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
         Sampler.GoldPosition pos;
@@ -60,7 +60,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void land() {
         setLandingMotorPower(DEPLOY_POWER);
         sleep(2500);
-        setArcadeDrive(-0.13,0.0);
+        setArcadeDrive(0.13,0.0);
         sleep(750);
         setArcadeDrive(0.0,0.0);
         setLandingMotorPower(-DEPLOY_POWER);
@@ -143,13 +143,13 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void sampleParkCrater() {
         switch (position) {
             case LEFT:
-                turnDegreesPID(-27.5, 2000);
+                turnDegreesPID(-29.5, 2000);
                 initIntake();
                 driveDistanceTime(40.0);
                 stopIntake();
                 break;
             case RIGHT:
-                turnDegreesPID(27.5, 2000);
+                turnDegreesPID(29.5, 2000);
                 initIntake();
                 driveDistanceTime(40.0);
                 stopIntake();
@@ -258,15 +258,14 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void initIntake() {
-        setServoIntake(1.0);
-        sleep(600);
+        sleep(500);
         setServoIntake(0.0);
         setMotorIntake(1.0);
     }
 
     protected  void stopIntake() {
-        setServoIntake(-1.0);
-        sleep(600);
+        setServoIntake(1.0);
+        sleep(500);
         setMotorIntake(0.0);
     }
 }
