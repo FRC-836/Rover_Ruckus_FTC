@@ -18,9 +18,9 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor armLander;
     protected Servo markerReleaser;
     private BNO055IMU imu;
+    private BNO055IMU armImu;
     protected DcMotor intakeMotor;
     protected boolean isMovingToGoal = false;
-    protected int armSetUp = 0;
 
     protected boolean armHasBeenHolding = false;
 
@@ -33,7 +33,7 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
 
-    protected PID_Controller armHoldPID = new PID_Controller(0.0015, 0.0, 0.000375);//P was 0.000165
+    protected PID_Controller armHoldPID = new PID_Controller(0.0287, 0.0, 0.00717);
 
 
     enum ArmHoldStatus {
@@ -56,6 +56,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         armLander = hardwareMap.get(DcMotor.class, "al");
         markerReleaser = hardwareMap.get(Servo.class, "mr");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
+        armImu = hardwareMap.get(BNO055IMU.class, "imu2");
         intakeMotor = hardwareMap.get(DcMotor.class, "im");
 
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -80,6 +81,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         setupImu();
 
         TargetDirection.setImu(imu);
+        ArmTargetDirection.setImu(armImu);
 
         getReady();
         
@@ -87,7 +89,6 @@ public abstract class Robot_Parent extends LinearOpMode {
             telemetry.addData("status", "waiting for start command...");
             telemetry.update();
         }
-        armSetUp = getArmRotatorPosition();
         go();
     }
 
@@ -131,6 +132,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         imuParameters.temperatureUnit = BNO055IMU.TempUnit.FARENHEIT;
 
         imu.initialize(imuParameters);
+        armImu.initialize(imuParameters);
     }
 
     protected void waitSeconds(double seconds) {
@@ -177,15 +179,15 @@ public abstract class Robot_Parent extends LinearOpMode {
         return armLander.getCurrentPosition();
     }
 
-    protected int getArmRotatorPosition() {
-        return armRotator.getCurrentPosition() - armSetUp;
+    protected double getArmRotatorPosition() {
+        return ArmTargetDirection.getPitch();
     }
 
     protected void setIntakeMotor(double intakePower) {
         intakeMotor.setPower(intakePower);
     }
 
-    private int transformArmPosition(int armRotatorPosition) {
+    private double transformArmPosition(double armRotatorPosition) {
         double m = -238.0 / (-ARM_POSITION_UP + ARM_POSITION_DOWN + 318.0);
         double b = -m * ARM_POSITION_UP;
         return armRotatorPosition;//(int) (((m * armRotatorPosition) + b) + armRotatorPosition);
@@ -207,7 +209,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         }
     }
 
-    protected void holdArmPosition(int armPositionToHold) {
+    protected void holdArmPosition(double armPositionToHold) {
         if (!armHasBeenHolding) {
             armHoldPID.setSetpoint(transformArmPosition(armPositionToHold));
             armHoldPID.resetPID();
