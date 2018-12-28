@@ -11,7 +11,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     private final double ENCODER_COUNTS_PER_INCH = 81.19;
     private final double EARLY_STOP_DEGREES = 5.0;
     private final double MILLIS_PER_INCH = 27.7;
-    private final double SAMPLE_TURN_ANGLE = 27.5;
+    private final double SAMPLE_TURN_ANGLE = 29.0;
 
     protected Sampler sampler = new Sampler();
     protected Sampler.GoldPosition position = Sampler.GoldPosition.UNKNOWN;
@@ -111,7 +111,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void sampleCrater() {
-        // must set intakeMotor for sampling, and correclty set intakeCRServo
         double centerDrive = 33.5;
         switch (position) {
             case LEFT:
@@ -167,21 +166,23 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void parkCrater() {
-        turnPID(TargetDirection.makeTargetAtFieldPosition(90.0), 1800);
+        //turnPID(TargetDirection.makeTargetAtFieldPosition(90.0), 1800);
         driveDistanceTime(-88.0, lastTurnDirection);
     }
 
     protected void placeTeamMarker() {
         dropTeamMarker();
         sleep(1000);
+        teamMarkerServo.setPosition(0.3);
+        teamMarkerServo.setPosition(0.0);
         retractTeamMarkerServo();
     }
 
     protected void driveToDepot() {
         driveDistanceTime(63.0, lastTurnDirection);
         turnPID(TargetDirection.makeTargetAtFieldPosition(93.0), 2000);
-        driveDistanceTime(65.0, lastTurnDirection);
-        turnPID(TargetDirection.makeTargetAtFieldPosition(135.0), 1500);
+        driveDistanceTime(70.0, lastTurnDirection);
+       // turnPID(TargetDirection.makeTargetAtFieldPosition(135.0), 1500);
     }
 
     protected void driveDistanceTime(double inches) {
