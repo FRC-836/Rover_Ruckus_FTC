@@ -56,7 +56,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         armLander = hardwareMap.get(DcMotor.class, "al");
         markerReleaser = hardwareMap.get(Servo.class, "mr");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-        armImu = hardwareMap.get(BNO055IMU.class, "imu2");
+        armImu = hardwareMap.get(BNO055IMU.class, "arm_imu");
         intakeMotor = hardwareMap.get(DcMotor.class, "im");
 
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
