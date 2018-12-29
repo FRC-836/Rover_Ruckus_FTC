@@ -9,7 +9,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class ArmTargetDirection {
     // Private Variables
-    private static double absolutePitchAtZeroPitch;
     private static BNO055IMU imu;
 
     private double pitchAtTargetZero;
@@ -24,10 +23,6 @@ public class ArmTargetDirection {
         ArmTargetDirection.imu = imu;
     }
 
-    public static void setCurrentPitch(double armsCurrentPitch){
-        ArmTargetDirection.absolutePitchAtZeroPitch = getAbsolutePitch() - armsCurrentPitch;
-    }
-
     // Public functions to change directions
     public void moveTargetForwards(double degrees) { pitchAtTargetZero += degrees; }
     public void moveTargetBackwards(double degrees) { pitchAtTargetZero -= degrees; }
@@ -38,7 +33,7 @@ public class ArmTargetDirection {
         return errorCorrecter(-angles.thirdAngle);
     }
     private static double calculatePitch() {
-        return errorCorrecter(getAbsolutePitch() - absolutePitchAtZeroPitch);
+        return errorCorrecter(getAbsolutePitch());
     }
     public static double getPitch() { return calculatePitch(); }
     public double calculateDistanceFromTarget() {
