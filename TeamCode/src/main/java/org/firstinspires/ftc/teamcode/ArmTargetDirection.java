@@ -47,7 +47,12 @@ public class ArmTargetDirection {
 
     // Error correction to make everything on the range 0 to +360
     private static double errorCorrecter(double pitch){
-        pitch = pitch % 360.0;
-        return pitch;
+        return mod(pitch, 360.0);
+    }
+
+    protected static double mod(double a, double b)
+    {
+        double out = ((a % b) + ((a < 0) ? b : 0));
+        return (out >= b) ? 0 : out;
     }
 }
