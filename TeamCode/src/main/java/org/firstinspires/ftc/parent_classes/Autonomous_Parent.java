@@ -70,41 +70,33 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void sampleDepot() {
-        // must set intakeMotor for sampling, and correclty set intakeCRServo
         switch (position) {
             case LEFT:
-                driveDistanceTime(8.0);
-                telemetry.addLine("Left");
-                telemetry.update();
-                sleep(1000);
-                turnDegreesPID(-SAMPLE_TURN_ANGLE, 2000);
-                //setServoIntake(1.0);
+                turnDegreesPID(-SAMPLE_TURN_ANGLE, 2200);
+                initIntake();
                 driveDistanceTime(44.0, lastTurnDirection);
-                //setServoIntake(0.0);
+                stopIntake();
                 turnDegreesPID(45.0 + SAMPLE_TURN_ANGLE, 4000);
                 driveDistanceTime(30.0, lastTurnDirection);
                 placeTeamMarker();
                 turnPID(TargetDirection.makeTargetAtFieldPosition(180.0), 3000);
                 break;
             case RIGHT:
-                driveDistanceTime(8.0);
-                telemetry.addLine("Right");
-                telemetry.update();
-                sleep(2000);
-                turnDegreesPID(SAMPLE_TURN_ANGLE, 2000);
-               // setServoIntake(1.0);
+                turnDegreesPID(SAMPLE_TURN_ANGLE, 2200);
+                initIntake();
                 driveDistanceTime(44.0, lastTurnDirection);
-                //setServoIntake(0.0);
+                stopIntake();
                 turnDegreesPID(-45.0 - SAMPLE_TURN_ANGLE, 4000);
                 driveDistanceTime(30.0, lastTurnDirection);
                 placeTeamMarker();
                 turnPID(TargetDirection.makeTargetAtFieldPosition(180.0), 5000);
                 break;
             default:
-                //setServoIntake(1.0);
-                driveDistanceTime(78.0);
-                //setServoIntake(0.0);
-                turnPID(TargetDirection.makeTargetAtFieldPosition(180.0), 4000);
+                initIntake();
+                driveDistanceTime(28.0);
+                stopIntake();
+                driveDistanceTime(38.0);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(195.0), 2000);
                 placeTeamMarker();
                 break;
         }
@@ -162,7 +154,10 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void parkDepot() {
-        driveDistanceTime(-60.0, lastTurnDirection);
+        driveDistanceTime(-37.0, lastTurnDirection);
+        turnPID(TargetDirection.makeTargetAtFieldPosition(178.0), 2000);
+        driveDistanceTime(-53);
+
     }
 
     protected void parkCrater() {
@@ -264,7 +259,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected  void stopIntake() {
         setServoIntake(1.0);
-        sleep(500);
+        sleep(400);
         setMotorIntake(0.0);
     }
 }
