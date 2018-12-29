@@ -4,13 +4,13 @@ import com.qualcomm.robotcore.util.Range;
 
 public abstract class Teleop_Parent extends Robot_Parent {
     //Final and boolean powers which are used to set powers of specific parts of the robot
-    boolean driveSlowFactor = false;
-    final double SLOW_DRIVE_SCALE_FACTOR = 0.5;
-    final double LIFT_POWER_UP = 1.0;
-    final double LIFT_POWER_DOWN = -1.0;
-    final double LIFT_POWER_IDLE = 0.0;
-    final double INTAKE_POWER_END = -1.0;
-    final double INTAKE_SHIFTER_POWER = 0.6;
+    protected boolean driveSlowFactor = false;
+    protected final double SLOW_DRIVE_SCALE_FACTOR = 0.5;
+    protected final double LIFT_POWER_UP = 1.0;
+    protected final double LIFT_POWER_DOWN = -1.0;
+    protected final double LIFT_POWER_IDLE = 0.0;
+    protected final double INTAKE_POWER_END = -1.0;
+    protected final double INTAKE_SHIFTER_POWER = 0.6;
     private final double ARM_POWER_PER_MS_SPEED_UP = 0.0013;
     private final double ARM_POWER_PER_MS_SPEED_DOWN = 0.01;
     protected PID_Controller teleopTurnPID = new PID_Controller(0.012, 0.0, 0.0013);

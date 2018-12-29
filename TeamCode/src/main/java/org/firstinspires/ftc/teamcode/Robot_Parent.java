@@ -24,8 +24,8 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected boolean armHasBeenHolding = false;
 
-    protected final int ARM_POSITION_UP = 490;
-    protected final int ARM_POSITION_DOWN = ARM_POSITION_UP + 716; // 1206 when UP = 490
+    protected final double ARM_POSITION_UP = 90.0;
+    protected final double ARM_POSITION_DOWN = 180.0;
 
     public double pStableHoldTurn = 0.019;
     public double dStableHoldTurn = 0.00195;
@@ -33,7 +33,7 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
 
-    protected PID_Controller armHoldPID = new PID_Controller(0.0287, 0.0, 0.00717);
+    protected PID_Controller armHoldPID = new PID_Controller(0.00574, 0.0, 0.001434);//p was 0.0287, d was 0.00717
 
 
     enum ArmHoldStatus {

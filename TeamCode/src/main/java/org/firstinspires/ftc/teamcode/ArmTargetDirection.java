@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class ArmTargetDirection {
-    // Private Variables
+    // Private
     private static BNO055IMU imu;
 
     private double pitchAtTargetZero;
@@ -45,12 +45,9 @@ public class ArmTargetDirection {
     public static ArmTargetDirection makeTargetToRobotsForward(double degreesToForward) { return new ArmTargetDirection(calculatePitch() + degreesToForward); }
     public static ArmTargetDirection makeTargetToRobotsBackward(double degreesToBackward) { return new ArmTargetDirection(calculatePitch() - degreesToBackward); }
 
-    // Error correction to make everything on the range -180 to +180
+    // Error correction to make everything on the range 0 to +360
     private static double errorCorrecter(double pitch){
-        if (pitch > 180f)
-            pitch = ((pitch + 180f) % 360f) - 180f;
-        else if (pitch < -180f)
-            pitch = 180f - ((180f - pitch) % 360f);
+        pitch = pitch % 360.0;
         return pitch;
     }
 }
