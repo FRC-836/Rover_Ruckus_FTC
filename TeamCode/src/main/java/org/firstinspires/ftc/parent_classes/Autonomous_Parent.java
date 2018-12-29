@@ -28,7 +28,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     @Override
     public void play() {
         setServoIntake(-1.0);
-        sleep(500);
+        sleep(800);
         setServoIntake(0.0);
         sampler.init(telemetry, hardwareMap);
         ElapsedTime timer = new ElapsedTime();
@@ -72,26 +72,27 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void sampleDepot() {
         switch (position) {
             case LEFT:
-                turnDegreesPID(-SAMPLE_TURN_ANGLE, 2000);
+                turnDegreesPID(-SAMPLE_TURN_ANGLE, 1800);
                 initIntake();
                 driveDistanceTime(28.0, lastTurnDirection);
                 stopIntake();
-                driveDistanceTime(16.0);
-                turnDegreesPID(45.0 + SAMPLE_TURN_ANGLE, 4000);
-                driveDistanceTime(30.0, lastTurnDirection);
+                driveDistanceTime(32.0);
+                turnDegreesPID(45.0 + SAMPLE_TURN_ANGLE, 2000);
+                driveDistanceTime(34.0, lastTurnDirection);
                 placeTeamMarker();
                 turnPID(TargetDirection.makeTargetAtFieldPosition(180.0), 3000);
                 break;
             case RIGHT:
-                turnDegreesPID(SAMPLE_TURN_ANGLE, 2000);
+                turnDegreesPID(SAMPLE_TURN_ANGLE, 1800);
                 initIntake();
                 driveDistanceTime(28.0, lastTurnDirection);
                 stopIntake();
-                driveDistanceTime(16.0);
-                turnDegreesPID(-45.0 - SAMPLE_TURN_ANGLE, 4000);
-                driveDistanceTime(30.0, lastTurnDirection);
+                driveDistanceTime(32.0);
+                turnDegreesPID(-45.0 - SAMPLE_TURN_ANGLE, 2000);
+                driveDistanceTime(45.0, lastTurnDirection);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(165.0), 2700);
                 placeTeamMarker();
-                turnPID(TargetDirection.makeTargetAtFieldPosition(180.0), 5000);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(185.0), 1000);
                 break;
             default:
                 initIntake();
@@ -108,15 +109,15 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         double centerDrive = 33.5;
         switch (position) {
             case LEFT:
-                turnDegreesPID(-SAMPLE_TURN_ANGLE, 2000);
+                turnDegreesPID(-SAMPLE_TURN_ANGLE, 1200);
                 initIntake();
                 driveDistanceTime(36.0, lastTurnDirection);
                 stopIntake();
                 driveDistanceTime(-36.0, lastTurnDirection);
-                turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 1200);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 1000);
                 break;
             case RIGHT:
-                turnDegreesPID(SAMPLE_TURN_ANGLE, 2000);
+                turnDegreesPID(SAMPLE_TURN_ANGLE, 1200);
                 initIntake();
                 driveDistanceTime(36.0, lastTurnDirection);
                 stopIntake();
@@ -136,48 +137,50 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void sampleParkCrater() {
         switch (position) {
             case LEFT:
-                turnDegreesPID(-29.5, 2000);
+                turnDegreesPID(-SAMPLE_TURN_ANGLE, 2000);
                 initIntake();
-                driveDistanceTime(40.0);
+                driveDistanceTime(36.0, lastTurnDirection);
                 stopIntake();
                 break;
             case RIGHT:
-                turnDegreesPID(29.5, 2000);
+                turnDegreesPID(SAMPLE_TURN_ANGLE, 2000);
                 initIntake();
-                driveDistanceTime(40.0);
+                driveDistanceTime(36.0, lastTurnDirection);
                 stopIntake();
                 break;
             default:
                 initIntake();
-                driveDistanceTime(40.0);
+                driveDistanceTime(33.0);
                 stopIntake();
                 break;
         }
+
+        driveDistanceTime(10.0);
     }
 
     protected void parkDepot() {
         driveDistanceTime(-37.0, lastTurnDirection);
-        turnPID(TargetDirection.makeTargetAtFieldPosition(178.0), 2000);
-        driveDistanceTime(-53);
+        turnPID(TargetDirection.makeTargetAtFieldPosition(178.0), 800);
+        driveDistanceTime(-56);
 
     }
 
     protected void parkCrater() {
-        turnPID(TargetDirection.makeTargetAtFieldPosition(90.0), 1800);
+        turnPID(TargetDirection.makeTargetAtFieldPosition(90.0), 1600);
         driveDistanceTime(-88.0, lastTurnDirection);
     }
 
     protected void placeTeamMarker() {
         dropTeamMarker();
-        sleep(1200);
+        sleep(1100);
         retractTeamMarkerServo();
     }
 
     protected void driveToDepot() {
         driveDistanceTime(63.0, lastTurnDirection);
-        turnPID(TargetDirection.makeTargetAtFieldPosition(93.0), 2000);
+        turnPID(TargetDirection.makeTargetAtFieldPosition(93.0), 1500);
         driveDistanceTime(70.0, lastTurnDirection);
-        turnPID(TargetDirection.makeTargetAtFieldPosition(135.0), 1500);
+        turnPID(TargetDirection.makeTargetAtFieldPosition(135.0), 1000);
     }
 
     protected void driveDistanceTime(double inches) {
