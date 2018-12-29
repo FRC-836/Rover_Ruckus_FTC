@@ -72,20 +72,22 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void sampleDepot() {
         switch (position) {
             case LEFT:
-                turnDegreesPID(-SAMPLE_TURN_ANGLE, 2200);
+                turnDegreesPID(-SAMPLE_TURN_ANGLE, 2000);
                 initIntake();
-                driveDistanceTime(44.0, lastTurnDirection);
+                driveDistanceTime(28.0, lastTurnDirection);
                 stopIntake();
+                driveDistanceTime(16.0);
                 turnDegreesPID(45.0 + SAMPLE_TURN_ANGLE, 4000);
                 driveDistanceTime(30.0, lastTurnDirection);
                 placeTeamMarker();
                 turnPID(TargetDirection.makeTargetAtFieldPosition(180.0), 3000);
                 break;
             case RIGHT:
-                turnDegreesPID(SAMPLE_TURN_ANGLE, 2200);
+                turnDegreesPID(SAMPLE_TURN_ANGLE, 2000);
                 initIntake();
-                driveDistanceTime(44.0, lastTurnDirection);
+                driveDistanceTime(28.0, lastTurnDirection);
                 stopIntake();
+                driveDistanceTime(16.0);
                 turnDegreesPID(-45.0 - SAMPLE_TURN_ANGLE, 4000);
                 driveDistanceTime(30.0, lastTurnDirection);
                 placeTeamMarker();
@@ -106,7 +108,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         double centerDrive = 33.5;
         switch (position) {
             case LEFT:
-                turnDegreesPID(-SAMPLE_TURN_ANGLE, 2200);
+                turnDegreesPID(-SAMPLE_TURN_ANGLE, 2000);
                 initIntake();
                 driveDistanceTime(36.0, lastTurnDirection);
                 stopIntake();
@@ -114,7 +116,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 turnPID(TargetDirection.makeTargetAtFieldPosition(170.0), 1200);
                 break;
             case RIGHT:
-                turnDegreesPID(SAMPLE_TURN_ANGLE, 2200);
+                turnDegreesPID(SAMPLE_TURN_ANGLE, 2000);
                 initIntake();
                 driveDistanceTime(36.0, lastTurnDirection);
                 stopIntake();
