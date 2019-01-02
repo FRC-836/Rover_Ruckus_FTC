@@ -33,7 +33,9 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
 
-    protected PID_Controller armHoldPID = new PID_Controller(0.006, 0.0, 0.001);//p was 0.0287, d was 0.00717
+    protected PID_Controller armHoldP = new PID_Controller(0.006, 0.0, 0.0);
+    protected PID_Controller armHoldD = new PID_Controller(0.0, 0.0, 0.001);
+    boolean useP = true;
 
     private final double K_GRAVITY = 0.2;
     protected boolean isAuto;
@@ -111,14 +113,17 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontRightDrive.setPower(forwardPower - turnPower - strafePower);
     }
 
-    //Sets power of armRotator
     protected void setArmRotator(double armPower) {
+        setArmRotator(armPower, !isAuto);
+    }
+
+    protected void setArmRotator(double armPower, boolean useGravity) {
         armHasBeenHolding = false;
         isMovingToGoal = false;
 
         armRotatorPower = armPower;
 
-        if (!isAuto)
+        if (useGravity)
             armPower += K_GRAVITY * Math.cos(Math.toRadians(getArmRotatorPosition()));
 
         armRotator.setPower(armPower);
@@ -210,20 +215,33 @@ public abstract class Robot_Parent extends LinearOpMode {
                 break;
             case SAFELY_LOWERING:
                 holdArmPosition(transformArmPosition(getArmRotatorPosition()));
-                // TODO: Detect if we've finished safely lowering
+                if (Math.abs(armRotatorPower) < 0.1 && Math.abs(getArmRotatorPosition() - ARM_POSITION_DOWN) < 10.0)
+                    armHoldStatus = ArmHoldStatus.LOWERED;
                 break;
             case LOWERED:
-                setArmRotator(0.0);
+                setArmRotator(0.0, false);
                 break;
         }
     }
 
     protected void holdArmPosition(double armPositionToHold) {
         if (!armHasBeenHolding) {
-            armHoldPID.setSetpoint(transformArmPosition(armPositionToHold));
-            armHoldPID.resetPID();
+            double position = transformArmPosition(armPositionToHold);
+            armHoldP.setSetpoint(position);
+            armHoldP.resetPID();
+            armHoldD.setSetpoint(position);
+            armHoldD.resetPID();
         }
-        setArmRotator(armHoldPID.update(getArmRotatorPosition()));
+        // Always use the derivative controller
+        double power = armHoldD.update(getArmRotatorPosition());
+
+        if (useP)
+            // If using the proportional controller, add the proportional component
+            power += armHoldP.update(getArmRotatorPosition());
+        else
+            // If NOT using the proportional controller, at least keep the controller updated
+            armHoldP.update(getArmRotatorPosition());
+        setArmRotator(power);
         armHasBeenHolding = true;
     }
 }

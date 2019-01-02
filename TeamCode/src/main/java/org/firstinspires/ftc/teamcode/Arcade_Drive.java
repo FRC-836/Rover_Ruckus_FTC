@@ -88,13 +88,19 @@ public class Arcade_Drive extends Teleop_Parent {
         } else if (gamepad1.left_trigger > 0.1f) {
             setArmRotatorGoal(LIFT_POWER_DOWN);
         } else if (yIsPressed) { // Up
+            armHoldStatus = ArmHoldStatus.HOLDING;
             armHasBeenHolding = false;
+            useP = true;
             holdArmPosition(ARM_POSITION_UP);
         } else if (xIsPressed) { // Center
+            armHoldStatus = ArmHoldStatus.HOLDING;
             armHasBeenHolding = false;
+            useP = true;
             holdArmPosition(ARM_POSITION_DOWN);
         } else if (aIsPressed) { // Down
+            armHoldStatus = ArmHoldStatus.SAFELY_LOWERING;
             armHasBeenHolding = false;
+            useP = true;
             holdArmPosition(ARM_POSITION_DOWN);
         } else {
             holdArmPosition();
@@ -136,7 +142,7 @@ public class Arcade_Drive extends Teleop_Parent {
 
         telemetry.addData("Arm Position", getArmRotatorPosition());
         telemetry.addData("Arm Motor Power", armRotator.getPower());
-        telemetry.addData("Setpoint", armHoldPID.getSetpoint());
+        telemetry.addData("Setpoint", armHoldP.getSetpoint());
         telemetry.update();
     }
 }
