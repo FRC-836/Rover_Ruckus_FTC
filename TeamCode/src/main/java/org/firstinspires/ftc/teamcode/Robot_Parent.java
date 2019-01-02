@@ -37,6 +37,7 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     private final double K_GRAVITY = 0.2;
     protected boolean isAuto;
+    protected double armRotatorPower = 0.0;
 
     enum ArmHoldStatus {
         HOLDING,
@@ -111,14 +112,16 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     //Sets power of armRotator
-    protected void setArmRotator(double turnPower) {
+    protected void setArmRotator(double armPower) {
         armHasBeenHolding = false;
         isMovingToGoal = false;
 
-        if (!isAuto)
-            turnPower += K_GRAVITY * Math.cos(Math.toRadians(getArmRotatorPosition()));
+        armRotatorPower = armPower;
 
-        armRotator.setPower(turnPower);
+        if (!isAuto)
+            armPower += K_GRAVITY * Math.cos(Math.toRadians(getArmRotatorPosition()));
+
+        armRotator.setPower(armPower);
     }
 
     //Sets power of armExtender

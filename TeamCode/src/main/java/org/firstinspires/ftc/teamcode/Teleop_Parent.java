@@ -16,7 +16,6 @@ public abstract class Teleop_Parent extends Robot_Parent {
     protected PID_Controller teleopTurnPID = new PID_Controller(0.012, 0.0, 0.0013);
     protected TargetDirection currentFacingDirection;
 
-    private double armRotatorPower = 0.0;
     private double armRotatorGoal = 0.0;
     private long lastCheckedTime = 0;
 
@@ -48,7 +47,7 @@ public abstract class Teleop_Parent extends Robot_Parent {
 
     protected void setArmRotatorGoal(double goalPower) {
         armRotatorGoal = goalPower;
-        armRotatorPower = armRotator.getPower();
+
         if (!isMovingToGoal)
             lastCheckedTime = System.currentTimeMillis();
 
