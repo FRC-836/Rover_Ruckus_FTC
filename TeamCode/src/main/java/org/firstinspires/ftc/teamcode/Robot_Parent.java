@@ -215,8 +215,8 @@ public abstract class Robot_Parent extends LinearOpMode {
                 break;
             case SAFELY_LOWERING:
                 holdArmPosition(transformArmPosition(getArmRotatorPosition()));
-                if (Math.abs(armRotatorPower) < 0.1 && Math.abs(getArmRotatorPosition() - ARM_POSITION_DOWN) < 10.0)
-                    armHoldStatus = ArmHoldStatus.LOWERED;
+                //if (Math.abs(armRotatorPower) < 0.1 && Math.abs(getArmRotatorPosition() - ARM_POSITION_DOWN) < 10.0)
+                //    armHoldStatus = ArmHoldStatus.LOWERED;
                 break;
             case LOWERED:
                 setArmRotator(0.0, false);
