@@ -83,9 +83,9 @@ public class Arcade_Drive extends Teleop_Parent {
         }
 
         //Lifts the arm to certain positions and maps them to certain joystick positions
-        if (gamepad1.dpad_up) {
+        if (gamepad1.left_bumper) {
             setArmRotatorGoal(LIFT_POWER_UP);
-        } else if (gamepad1.dpad_down) {
+        } else if (gamepad1.left_trigger > 0.1f) {
             setArmRotatorGoal(LIFT_POWER_DOWN);
         } else if (yIsPressed) { // Up
             armHasBeenHolding = false;
