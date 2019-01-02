@@ -27,6 +27,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     //Sets up CV on init
     @Override
     public void getReady() {
+        isAuto = true;
         sampler = new Sampler(false, hardwareMap, telemetry, false);
         telemetry.addLine("IS initilized");
         telemetry.update();

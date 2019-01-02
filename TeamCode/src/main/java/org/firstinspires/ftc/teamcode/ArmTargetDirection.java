@@ -30,7 +30,7 @@ public class ArmTargetDirection {
     // Calculation functions
     private static double getAbsolutePitch() {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        return errorCorrecter(-angles.thirdAngle);
+        return errorCorrecter(angles.thirdAngle);
     }
     private static double calculatePitch() {
         return errorCorrecter(getAbsolutePitch());

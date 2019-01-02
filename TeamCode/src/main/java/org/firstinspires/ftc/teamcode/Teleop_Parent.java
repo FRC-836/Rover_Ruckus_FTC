@@ -23,7 +23,7 @@ public abstract class Teleop_Parent extends Robot_Parent {
     //Called on init
     @Override
     public void getReady() {
-
+        isAuto = false;
     }
 
     //Called on start, does actions when the robot is running
