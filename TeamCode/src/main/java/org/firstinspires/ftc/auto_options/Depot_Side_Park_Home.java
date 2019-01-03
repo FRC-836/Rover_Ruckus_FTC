@@ -16,16 +16,11 @@ public class Depot_Side_Park_Home extends Autonomous_Parent {
         land();
         if (!opModeIsActive())
             return;
-        driveDistanceTime(60.0);
+        sampleDepot();
         if (!opModeIsActive())
             return;
         placeTeamMarker();
         if (!opModeIsActive())
             return;
-        turnPID(TargetDirection.makeTargetAtFieldPosition(-90.0), 4000);
-        if (!opModeIsActive())
-            return;
-        driveDistanceTime(86.0, lastTurnDirection);
-
     }
 }
