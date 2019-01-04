@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.auto_options;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import org.firstinspires.ftc.parent_classes.Autonomous_Parent;
 import org.firstinspires.ftc.teamcode.TargetDirection;
 
+@Autonomous (name = "Depot_Side_Park_Home")
 public class Depot_Side_Park_Home extends Autonomous_Parent {
     @Override
     public void setup() {
@@ -19,8 +22,6 @@ public class Depot_Side_Park_Home extends Autonomous_Parent {
         sampleDepot();
         if (!opModeIsActive())
             return;
-        placeTeamMarker();
-        if (!opModeIsActive())
-            return;
+        parkDepotHome();
     }
 }

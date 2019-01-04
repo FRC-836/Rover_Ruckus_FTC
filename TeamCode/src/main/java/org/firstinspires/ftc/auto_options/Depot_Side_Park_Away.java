@@ -22,6 +22,6 @@ public class Depot_Side_Park_Away extends Autonomous_Parent {
         sampleDepot();
         if (!opModeIsActive())
             return;
-        parkDepot();
+        parkDepotAway();
     }
 }
