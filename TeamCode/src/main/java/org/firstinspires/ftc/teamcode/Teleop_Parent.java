@@ -47,8 +47,6 @@ public abstract class Teleop_Parent extends Robot_Parent {
     }
 
     protected void setArmRotatorGoal(double goalPower) {
-        useP = false;
-        armHoldStatus = ArmHoldStatus.HOLDING;
         armRotatorGoal = goalPower;
 
         if (!isMovingToGoal)
@@ -70,10 +68,6 @@ public abstract class Teleop_Parent extends Robot_Parent {
         if (Math.abs(armRotatorPower - armRotatorGoal) < 0.1)
             armRotatorPower = armRotatorGoal;
 
-        if (armRotatorGoal > ARM_ROTATOR_MINIMUM && armRotatorPower < ARM_ROTATOR_MINIMUM)
-            armRotatorPower = ARM_ROTATOR_MINIMUM;
-        if (armRotatorGoal < -ARM_ROTATOR_MINIMUM && armRotatorPower > -ARM_ROTATOR_MINIMUM)
-            armRotatorPower = -ARM_ROTATOR_MINIMUM;
         armRotatorPower = Range.clip(armRotatorPower, -0.75, 0.75);
 
         setArmRotator(armRotatorPower);

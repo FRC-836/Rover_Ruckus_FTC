@@ -90,10 +90,10 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         getReady();
 
-        while (!opModeIsActive() && !isStopRequested()) {
+       /* while (!opModeIsActive() && !isStopRequested()) {
             telemetry.addData("status", "waiting for start command...");
             telemetry.update();
-        }
+        }*/
         go();
     }
 
