@@ -465,7 +465,7 @@ public class FtcRobotControllerActivity extends Activity
       networkType = NetworkType.fromString(preferencesHelper.readString(context.getString(R.string.pref_pairing_kind), NetworkType.globalDefaultAsString()));
     }
 
-    // update the app_settings
+    // update the appsettings
     preferencesHelper.writeStringPrefIfDifferent(context.getString(R.string.pref_pairing_kind), networkType.toString());
   }
 
