@@ -89,15 +89,12 @@ public class Arcade_Drive extends Teleop_Parent {
             setArmRotatorGoal(LIFT_POWER_DOWN);
         } else if (yIsPressed) { // Up
             armHasBeenHolding = false;
-            useP = true;
             holdArmPosition(ARM_POSITION_UP);
         } else if (xIsPressed) { // Center
             armHasBeenHolding = false;
-            useP = true;
             holdArmPosition(ARM_POSITION_DOWN);
         } else if (aIsPressed) { // Down5
             armHasBeenHolding = false;
-            useP = true;
             holdArmPosition(ARM_POSITION_DOWN);
         } else {
             holdArmPosition();

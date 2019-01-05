@@ -37,10 +37,6 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected PID_Controller armHoldPID = new PID_Controller(0.0068, 0.0, 0.001);//p was 0.0287, d was 0.00717
     protected PID_Controller armHoldDownPID = new PID_Controller(0.004, 0.0, 0.001);
 
-    //protected PID_Controller armHoldP = new PID_Controller(0.006, 0.0, 0.0);
-    //protected PID_Controller armHoldD = new PID_Controller(0.0, 0.0, 0.001);
-    boolean useP = true;
-
     private final double K_GRAVITY = 0.2;
     protected boolean isAuto;
     protected double armRotatorPower = 0.0;
@@ -224,32 +220,12 @@ public abstract class Robot_Parent extends LinearOpMode {
                 break;
         }
     }
-    /*protected void holdArmPositionDown(double armPositionToHold){
-        if (!armHasBeenHolding) {
-            armHoldDownPID.setSetpoint(transformArmPosition(armPositionToHold));
-            armHoldDownPID.resetPID();
-        }
-        setArmRotator(armHoldDownPID.update(getArmRotatorPosition()));
-        armHasBeenHolding = true;
-    }*/
     protected void holdArmPosition(double armPositionToHold){
         if (!armHasBeenHolding) {
-            double position = transformArmPosition(armPositionToHold);
             armHoldPID.setSetpoint(transformArmPosition(armPositionToHold));
             armHoldPID.resetPID();
         }
         setArmRotator(armHoldPID.update(getArmRotatorPosition()));
-/*
-        // Always use the derivative controller
-        double power = armHoldD.update(getArmRotatorPosition());
-
-        if (useP)
-            // If using the proportional controller, add the proportional component
-            power += armHoldP.update(getArmRotatorPosition());
-        else
-            // If NOT using the proportional controller, at least keep the controller updated
-            armHoldP.update(getArmRotatorPosition());
-        setArmRotator(power);
-        armHasBeenHolding = true;*/
+        armHasBeenHolding = true;
     }
 }
