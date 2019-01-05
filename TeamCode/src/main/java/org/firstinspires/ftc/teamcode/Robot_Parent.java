@@ -34,7 +34,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
 
     //protected PID_Controller armHoldPID = new PID_Controller(0.006, 0.0, 0.001);
-    protected PID_Controller armHoldPID = new PID_Controller(0.0068, 0.0, 0.001);//p was 0.0287, d was 0.00717
+    protected PID_Controller armHoldPID = new PID_Controller(0.0074, 0.0, 0.001);//p was 0.0287, d was 0.00717
     protected PID_Controller armHoldDownPID = new PID_Controller(0.004, 0.0, 0.001);
 
     private final double K_GRAVITY = 0.2;
@@ -231,7 +231,11 @@ public abstract class Robot_Parent extends LinearOpMode {
             armHoldPID.setSetpoint(transformArmPosition(armPositionToHold));
             armHoldPID.resetPID();
         }
-        setArmRotator(armHoldPID.update(getArmRotatorPosition()));
-        armHasBeenHolding = true;
+        long time = System.currentTimeMillis();
+        while(time < 10000) {
+            setArmRotator(armHoldPID.update(getArmRotatorPosition()));
+            armHasBeenHolding = true;
+        }
+        armHoldPID.resetPID();
     }
 }
