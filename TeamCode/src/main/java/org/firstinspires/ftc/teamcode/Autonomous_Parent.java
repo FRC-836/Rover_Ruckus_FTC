@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.BensCV.Sampler;
@@ -28,7 +29,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     @Override
     public void getReady() {
         isAuto = true;
-        sampler = new Sampler(false, hardwareMap, telemetry, false);
+        sampler = new Sampler( hardwareMap, telemetry, false);
         telemetry.addLine("IS initilized");
         telemetry.update();
     }

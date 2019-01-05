@@ -8,8 +8,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 public class Sampler {
     private Gold_Detector detector;
-    private boolean isVertical;
-    private WebcamName webcamName;
     private boolean debug = true;//this is the only part of this program that should be changed
     private boolean isGoldSeen = false;
     private boolean isLeft = false;
@@ -19,21 +17,21 @@ public class Sampler {
     private HardwareMap hardwareMap;
     private position positionIdentifier = position.NONE;
 
-    public enum position {
+
+    public enum position{
         LEFT,
         CENTER,
         RIGHT,
         NONE
     }
 
-    public Sampler(boolean isVertical, HardwareMap hardwareMap, Telemetry telemetry, boolean debug) {
-        this.isVertical = isVertical;
+
+    public Sampler(HardwareMap hardwareMap, Telemetry telemetry, boolean debug){
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
         this.debug = debug;
     }
-
-    public void initialize() {
+    public void initialize(){
         telemetry.addData("Status", "Gold_Test");
 
         detector = new Gold_Detector();
@@ -78,28 +76,9 @@ public class Sampler {
     public void halt() {
         detector.disable();
     }
-
-    public void goldPosDetector() {
-        if (isVertical) {
-            double goldXPos = detector.getXPosition();
-            if (0.0 <= goldXPos && 233.0 >= goldXPos) {
-                isLeft = true;
-                telemetry.addLine("Gold Position: Right");
-                positionIdentifier = position.LEFT;
-            } else if (233.0 < goldXPos && 466.0 >= goldXPos) {
-                isCenter = true;
-                telemetry.addLine("Gold Position: Center");
-                positionIdentifier = position.CENTER;
-            } else if (446.0 < goldXPos && 700.0 >= goldXPos) {
-                isRight = true;
-                telemetry.addLine("Gold Position: Left");
-                positionIdentifier = position.RIGHT;
-            } else {
-                positionIdentifier = position.NONE;
-            }
-        } else {
-            double goldYPos = detector.getXPosition();
-            if (0.0 <= goldYPos && 233.0 >= goldYPos) {
+    public void  goldPosDetector() {
+            double goldYPos = detector.getYPosition();
+            if (0.0 <= goldYPos && 80.0 >= goldYPos) {
                 isLeft = true;
                 telemetry.addLine("Gold Position: Left");
                 positionIdentifier = position.LEFT;
@@ -117,4 +96,3 @@ public class Sampler {
             }
         }
     }
-}

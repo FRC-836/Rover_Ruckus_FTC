@@ -14,7 +14,7 @@ public class Image_Display_Test extends OpMode {
 
     @Override
     public void init() {
-        sampler = new Sampler(false, hardwareMap, telemetry, true);
+        sampler = new Sampler( hardwareMap, telemetry, true);
         sampler.initialize();
     }
 
