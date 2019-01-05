@@ -95,7 +95,7 @@ public class Arcade_Drive extends Teleop_Parent {
             armHasBeenHolding = false;
             useP = true;
             holdArmPosition(ARM_POSITION_DOWN);
-        } else if (aIsPressed) { // Down
+        } else if (aIsPressed) { // Down5
             armHasBeenHolding = false;
             useP = true;
             holdArmPosition(ARM_POSITION_DOWN);
@@ -139,7 +139,7 @@ public class Arcade_Drive extends Teleop_Parent {
 
         telemetry.addData("Arm Position", getArmRotatorPosition());
         telemetry.addData("Arm Motor Power", armRotator.getPower());
-        telemetry.addData("Setpoint", armHoldPID.getSetpoint());
+        telemetry.addData("Setpoint", armHoldDownPID.getSetpoint());
         telemetry.update();
     }
 }

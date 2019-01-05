@@ -24,8 +24,8 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected boolean armHasBeenHolding = false;
 
-    protected final double ARM_POSITION_UP = 90.0;
-    protected final double ARM_POSITION_DOWN = 190.0;
+    protected final double ARM_POSITION_UP = 95.0;
+    protected final double ARM_POSITION_DOWN = 185.0;
 
     public double pStableHoldTurn = 0.019;
     public double dStableHoldTurn = 0.00195;
@@ -33,7 +33,9 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
 
-    protected PID_Controller armHoldPID = new PID_Controller(0.006, 0.0, 0.001);//p was 0.0287, d was 0.00717
+    //protected PID_Controller armHoldPID = new PID_Controller(0.006, 0.0, 0.001);
+    protected PID_Controller armHoldPID = new PID_Controller(0.0068, 0.0, 0.001);//p was 0.0287, d was 0.00717
+    protected PID_Controller armHoldDownPID = new PID_Controller(0.004, 0.0, 0.001);
 
     //protected PID_Controller armHoldP = new PID_Controller(0.006, 0.0, 0.0);
     //protected PID_Controller armHoldD = new PID_Controller(0.0, 0.0, 0.001);
@@ -91,7 +93,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         ArmTargetDirection.setImu(armImu);
 
         getReady();
-        
+
         while (!opModeIsActive() && !isStopRequested()) {
             telemetry.addData("status", "waiting for start command...");
             telemetry.update();
@@ -210,8 +212,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     protected void holdArmPosition() {
-        switch (armHoldStatus)
-        {
+        switch (armHoldStatus) {
             case HOLDING:
                 holdArmPosition(transformArmPosition(getArmRotatorPosition()));
                 break;
@@ -223,8 +224,15 @@ public abstract class Robot_Parent extends LinearOpMode {
                 break;
         }
     }
-
-    protected void holdArmPosition(double armPositionToHold) {
+    /*protected void holdArmPositionDown(double armPositionToHold){
+        if (!armHasBeenHolding) {
+            armHoldDownPID.setSetpoint(transformArmPosition(armPositionToHold));
+            armHoldDownPID.resetPID();
+        }
+        setArmRotator(armHoldDownPID.update(getArmRotatorPosition()));
+        armHasBeenHolding = true;
+    }*/
+    protected void holdArmPosition(double armPositionToHold){
         if (!armHasBeenHolding) {
             double position = transformArmPosition(armPositionToHold);
             armHoldPID.setSetpoint(transformArmPosition(armPositionToHold));
