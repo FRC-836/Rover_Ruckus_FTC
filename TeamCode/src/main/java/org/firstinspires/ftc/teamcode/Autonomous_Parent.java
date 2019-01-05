@@ -228,12 +228,12 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
         switch (goldTarget)
         {
-            case LEFT:
-                turnRightPID(90.0 - SAMPLE_TURN_ANGLE, 1600);
+            case RIGHT:
+                turnRightPID(70.0 - SAMPLE_TURN_ANGLE, 1600);
                 driveDistancePID(30.0, 2000);
                 driveDistancePID(-longDrive, 1600);
                 break;
-            case RIGHT:
+            case LEFT:
                 sleep(1000);
                 turnRightPID(90.0 + SAMPLE_TURN_ANGLE, 1600);
                 driveDistancePID(longDrive, 2000);
@@ -271,7 +271,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void parkInCraterCraterSide() {
-        driveDistancePID(7.25, 800);
+        driveDistancePID(7.55, 800);
         driveStrafePID(54.0, 3850);
         driveDistancePID(12.0, 500);
         driveStrafePID(7.0, 480);

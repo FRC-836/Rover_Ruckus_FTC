@@ -74,12 +74,6 @@ public class Tank_Drive extends Teleop_Parent {
             setIntakeMotor(0.0);
         }
 
-        if(gamepad1.dpad_left){
-            setIntakeShifter(INTAKE_SHIFTER_POWER);
-        }
-        else{
-            setIntakeShifter(0.0);
-        }
     }
     //Sets the power of individual motors to be called based on powers created when run() begins
     private void setTankDrive (double leftDrivePower, double rightDrivePower, double leftStrafePower, double rightStrafePower){

@@ -15,11 +15,14 @@ public class Autonomous_Depot_Side extends Autonomous_Parent {
         super.go();
 
         deploy();
-
+        if(!opModeIsActive())
+            return;
         sampleDepotSide();
-
+        if(!opModeIsActive())
+            return;
         releaseMarker();
-
+        if(!opModeIsActive())
+            return;
         parkInCraterDepotSide();
     }
 }

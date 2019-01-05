@@ -22,8 +22,8 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor armLander;
     protected Servo markerReleaser;
     private BNO055IMU imu;
+    private BNO055IMU armImu;
     protected DcMotor intakeMotor;
-    protected CRServo intakeShifter;
 
     private boolean isArmHolding = false;
 
@@ -47,7 +47,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         markerReleaser = hardwareMap.get(Servo.class, "mr");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         intakeMotor = hardwareMap.get(DcMotor.class, "im");
-        intakeShifter = hardwareMap.get(CRServo.class, "is");
+        armImu = hardwareMap.get(BNO055IMU.class, "arm_imu");
 
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -67,7 +67,6 @@ public abstract class Robot_Parent extends LinearOpMode {
         armLander.setDirection(DcMotor.Direction.FORWARD);
         markerReleaser.setDirection(Servo.Direction.REVERSE);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
-        intakeShifter.setDirection(CRServo.Direction.FORWARD);
 
         setupImu();
 
@@ -120,6 +119,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         imuParameters.temperatureUnit = BNO055IMU.TempUnit.FARENHEIT;
 
         imu.initialize(imuParameters);
+        armImu.initialize(imuParameters);
     }
 
     protected void waitSeconds(double seconds) {
@@ -174,9 +174,6 @@ public abstract class Robot_Parent extends LinearOpMode {
         intakeMotor.setPower(intakePower);
     }
 
-    protected void setIntakeShifter(double intakeRaisePower) {
-        intakeShifter.setPower(intakeRaisePower);
-    }
 
     protected void holdArmPosition() {
         if (!isArmHolding) {
