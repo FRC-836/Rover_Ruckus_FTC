@@ -83,10 +83,8 @@ public class Gold_Detector extends Base_Detector {
             Imgproc.putText(displayMat, "Chosen", bestRect.tl(), 0, 1, new Scalar(255, 255, 255));
 
 
-            xPos = bestRect.x + (bestRect.width / 2);//was xCenter
-            yPos = bestRect.y;
+            xPos = bestRect.y + (bestRect.height / 2);//was xCenter
             goldXPos = xPos;
-            goldYPos = yPos;
 
             Imgproc.circle(displayMat, new Point( xPos, bestRect.y + (bestRect.height / 2)), 5, new Scalar(0,255,0),2);
 

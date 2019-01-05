@@ -51,9 +51,7 @@ public class Sampler {
             if (detector.isFound()) {
                 isGoldSeen = true;
                 double goldXPos = detector.getXPosition();
-                double goldYPos = detector.getYPosition();
                 telemetry.addData("X Position", goldXPos);
-                telemetry.addData("Y Position", goldYPos);
                 telemetry.addLine("Object Seen");
                 goldPosDetector();
                 isGoldSeen = false;
@@ -64,9 +62,7 @@ public class Sampler {
             }
         } else {
             double goldXPos = detector.getXPosition();
-            double goldYPos = detector.getYPosition();
             telemetry.addData("X Position", goldXPos);
-            telemetry.addData("Y Position", goldYPos);
             goldPosDetector();
         }
     }
@@ -74,20 +70,20 @@ public class Sampler {
         detector.disable();
     }
     public position  goldPosDetector() {
-            double goldYPos = detector.getYPosition();
-            if (0.0 <= goldYPos && 80.0 >= goldYPos) {
+            double goldXPos = detector.getXPosition();
+            if (0.0 <= goldXPos && 214.0 >= goldXPos) {
                 isLeft = true;
-                telemetry.addLine("Gold Position: Right");
-                return position.RIGHT;
-            } else if (80.0 < goldYPos && 160.0 >= goldYPos) {
+                telemetry.addLine("Gold Position: Left");
+                return position.LEFT;
+            } else if (214.0 < goldXPos && 428.0 >= goldXPos) {
                 isCenter = true;
                 telemetry.addLine("Gold Position: Center");
                 return position.CENTER;
 
-            } else if (160.0 < goldYPos && 240.0 >= goldYPos) {
+            } else if (428.0 < goldXPos && 640.0 >= goldXPos) {
                 isRight = true;
-                telemetry.addLine("Gold Position: Left");
-                return position.LEFT;
+                telemetry.addLine("Gold Position: Right");
+                return position.RIGHT;
             } else {
                 return position.NONE;
             }
