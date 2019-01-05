@@ -51,7 +51,7 @@ public class Sampler {
         detector.enable();
     }
 
-    public void run() {
+    public position run() {
         if (!debug) {
             if (detector.isFound()) {
                 isGoldSeen = true;
@@ -72,6 +72,7 @@ public class Sampler {
             telemetry.addData("X Position", goldXPos);
             goldPosDetector();
         }
+        return positionIdentifier;
     }
 
     public void halt() {
@@ -115,6 +116,5 @@ public class Sampler {
                 positionIdentifier = position.NONE;
             }
         }
-
     }
 }
