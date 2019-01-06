@@ -25,12 +25,13 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     @Override
     public void getReady() {
         sampler = new Sampler(false, hardwareMap, telemetry, false);
-        sampler.initialize();
     }
 
     //Sets up CV and time measurement, activates on start
     @Override
     public void go() {
+        sampler.initialize();
+        sleep(900);
         goldTarget = sampler.run();
         telemetry.clear();
         telemetry.addData("Total runtime", "%6.3f seconds", runtime.seconds());
@@ -191,32 +192,37 @@ public abstract class Autonomous_Parent extends Robot_Parent {
            telemetry.update();
        }
        armLander.setPower(0.0);
-       driveStrafePID(5.0, 1600);
+       driveStrafePID(5.0, 950);
     }
 
     protected void sampleDepotSide() {
         double driveToGoldDrive = 38.0;
         double setGrid = 180.0;
-        double driveToDepot = 26.0;
+        double driveToDepot = 35.0;
         switch (goldTarget)
         {
             case LEFT:
-                turnRightPID(-SAMPLE_TURN_ANGLE + 90.0, 1600);
+                turnRightPID(-SAMPLE_TURN_ANGLE + 85.0, 1600);
                 driveDistancePID(driveToGoldDrive, 2000);
                 turnToFieldPID(setGrid,2000);
                 driveDistancePID(driveToDepot, 1450);
                 break;
             case RIGHT:
-                turnRightPID(SAMPLE_TURN_ANGLE + 90.0, 1600);
+                turnRightPID(SAMPLE_TURN_ANGLE + 70.0, 1600);
+                driveDistancePID(driveToGoldDrive, 2000);
+                turnToFieldPID(setGrid, 2000);
+                driveStrafePID(-30.0, 1450);
+                break;
+            case NONE:
+                turnRightPID(SAMPLE_TURN_ANGLE + 70.0, 1600);
                 driveDistancePID(driveToGoldDrive, 2000);
                 turnToFieldPID(setGrid, 2000);
                 driveStrafePID(-driveToDepot, 1450);
                 break;
-            case NONE:
             case CENTER:
             default:
-                turnRightPID(90.0, 1600);
-                driveDistancePID(52.0, 2500);
+                turnRightPID(70.0, 1600);
+                driveDistancePID(55.0, 2500);
                 turnToFieldPID(setGrid, 1250);
                 break;
         }
@@ -228,33 +234,42 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
         switch (goldTarget)
         {
-            case RIGHT:
-                turnRightPID(70.0 - SAMPLE_TURN_ANGLE, 1600);
+            case LEFT:
+                turnRightPID(75.0 - SAMPLE_TURN_ANGLE, 1600);
                 driveDistancePID(30.0, 2000);
                 driveDistancePID(-longDrive, 1600);
                 break;
-            case LEFT:
+            case RIGHT:
                 sleep(1000);
-                turnRightPID(90.0 + SAMPLE_TURN_ANGLE, 1600);
+                turnRightPID(70.0 + SAMPLE_TURN_ANGLE, 1600);
                 driveDistancePID(longDrive, 2000);
                 driveDistancePID(-longDrive, 1600);
                 break;
             case NONE:
+                sleep(1000);
+                turnRightPID(70.0 + SAMPLE_TURN_ANGLE, 1600);
+                driveDistancePID(longDrive, 2000);
+                driveDistancePID(-longDrive, 1600);
+                break;
             case CENTER:
+                turnRightPID(74.0, 1600);
+                driveDistancePID(shortDrive, 2000);
+                driveDistancePID(-shortDrive, 1600);
+                break;
             default:
-                turnRightPID(90.0, 1600);
+                turnRightPID(70.0, 1600);
                 driveDistancePID(shortDrive, 2000);
                 driveDistancePID(-shortDrive, 1600);
                 break;
         }
-        turnToFieldPID(168.0, 2000);
+        turnToFieldPID(160.0, 1800);
     }
 
     protected void goToDepotCraterSide() {
-        driveDistancePID(42.0, 2000);
+        driveDistancePID(43.0, 2000);
         turnToFieldPID(180.0, 500);
         driveStrafePID(-60.0, 2000);
-        driveDistancePID(-7.0, 800 );
+        driveDistancePID(-7.0, 800);
     }
 
     protected void releaseMarker() {
@@ -271,19 +286,18 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected void parkInCraterCraterSide() {
-        driveDistancePID(7.55, 800);
-        driveStrafePID(54.0, 3850);
-        driveDistancePID(12.0, 500);
-        driveStrafePID(7.0, 480);
-        moveTime(0.3, 800, true, true);
+        driveDistancePID(10.0, 800);
+        driveStrafePID(60.0, 3850);
+        driveDistancePID(15.0, 500);
+        moveTime(0.35, 650, true, true);
     }
 
     protected void parkInCraterDepotSide() {
         driveDistancePID(-15.0, 1450);
         moveTime(0.5, 800, false, true);
-        driveStrafePID(2.8, 800);
-        driveDistancePID(-43.0, 3300);
+        driveStrafePID(0.5, 650);
+        driveDistancePID(-50.0, 3300);
         driveStrafePID(-4.0, 500);
-        moveTime(0.35, 1400, false, false);
+        moveTime(0.3, 1000, false, false);
     }
 }
