@@ -40,14 +40,6 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected boolean isAuto;
     protected double armRotatorPower = 0.0;
 
-    enum ArmHoldStatus {
-        HOLDING,
-        SAFELY_LOWERING,
-        LOWERED
-    }
-
-    protected ArmHoldStatus armHoldStatus = ArmHoldStatus.HOLDING;
-
     //Maps robot parts to data values in config file, sets up opMode
     @Override
     public void runOpMode() throws InterruptedException {
@@ -203,20 +195,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     protected void holdArmPosition() {
-        switch (armHoldStatus)
-        {
-            case HOLDING:
-                holdArmPosition(transformArmPosition(getArmRotatorPosition()));
-                break;
-            case SAFELY_LOWERING:
-                holdArmPosition(transformArmPosition(getArmRotatorPosition()));
-                //if (Math.abs(armRotatorPower) < 0.1 && Math.abs(getArmRotatorPosition() - ARM_POSITION_DOWN) < 10.0)
-                //    armHoldStatus = ArmHoldStatus.LOWERED;
-                break;
-            case LOWERED:
-                setArmRotator(0.0, false);
-                break;
-        }
+        holdArmPosition(transformArmPosition(getArmRotatorPosition()));
     }
 
     protected void holdArmPosition(double armPositionToHold) {

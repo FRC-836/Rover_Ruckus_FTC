@@ -14,9 +14,7 @@ public abstract class Teleop_Parent extends Robot_Parent {
     protected final double ARM_EXTENDER_POWER_IDLE = 0.0;
     protected final double ARM_ROTATOR_POWER_UP = 1.0;
     protected final double ARM_ROTATOR_POWER_DOWN = -1.0;
-    protected final double ARM_ROTATOR_POWER_IDLE = 0.0;
     protected final double INTAKE_POWER_END = -1.0;
-    protected final double INTAKE_SHIFTER_POWER = 0.6;
     private final double ARM_POWER_PER_MS_SPEED_UP = 0.0013;
     private final double ARM_POWER_PER_MS_SPEED_DOWN = 0.01;
     private final double ARM_ROTATOR_MINIMUM = 0.2;
@@ -49,12 +47,13 @@ public abstract class Teleop_Parent extends Robot_Parent {
 
     //Transfers float inputs of joystick values to doubles
     protected double mapJoyStick(float joyStickInput){
-        return (double)joyStickInput;
+        double output = (double)joyStickInput;
+        output = Math.pow(output, 3.0);
+        return output;
     }
 
     protected void setArmRotatorGoal(double goalPower) {
         useP = false;
-        armHoldStatus = ArmHoldStatus.HOLDING;
         armRotatorGoal = goalPower;
 
         if (!isMovingToGoal)

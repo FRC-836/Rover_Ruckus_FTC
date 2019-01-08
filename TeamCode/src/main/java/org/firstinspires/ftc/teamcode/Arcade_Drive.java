@@ -12,7 +12,6 @@ public class Arcade_Drive extends Teleop_Parent {
 
     private boolean yEnabled = true;
     private boolean xEnabled = true;
-    private boolean aEnabled = true;
 
     @Override
     public void begin() {
@@ -24,9 +23,9 @@ public class Arcade_Drive extends Teleop_Parent {
     @Override
     public void run() {
         setMarkerReleaser(-1.0);
-        forwardPower = -gamepad1.left_stick_y + gamepad2.left_stick_x * P2_MULT;
-        turnPower = gamepad1.right_stick_x + gamepad2.right_stick_x * P2_MULT;
-        strafePower = gamepad1.left_stick_x + gamepad2.left_stick_y * P2_MULT;
+        forwardPower = mapJoyStick(-gamepad1.left_stick_y) + mapJoyStick(gamepad2.left_stick_x) * P2_MULT;
+        turnPower = mapJoyStick(gamepad1.right_stick_x) + mapJoyStick(gamepad2.right_stick_x) * P2_MULT;
+        strafePower = mapJoyStick(gamepad1.left_stick_x) + mapJoyStick(gamepad2.left_stick_y) * P2_MULT;
 
         if (Math.abs(strafePower) > Math.abs(forwardPower))
             forwardPower = 0.0;
@@ -74,13 +73,6 @@ public class Arcade_Drive extends Teleop_Parent {
         } else {
             xEnabled = true;
         }
-        if (gamepad1.a) {
-            if (aEnabled)
-                aIsPressed = true;
-            aEnabled = false;
-        } else {
-            aEnabled = true;
-        }
 
         //Lifts the arm to certain positions and maps them to certain joystick positions
         if (gamepad1.left_bumper) {
@@ -88,17 +80,10 @@ public class Arcade_Drive extends Teleop_Parent {
         } else if (gamepad1.left_trigger > 0.1f) {
             setArmRotatorGoal(ARM_ROTATOR_POWER_DOWN);
         } else if (yIsPressed) { // Up
-            armHoldStatus = ArmHoldStatus.HOLDING;
             armHasBeenHolding = false;
             useP = true;
             holdArmPosition(ARM_POSITION_UP);
         } else if (xIsPressed) { // Center
-            armHoldStatus = ArmHoldStatus.HOLDING;
-            armHasBeenHolding = false;
-            useP = true;
-            holdArmPosition(ARM_POSITION_DOWN);
-        } else if (aIsPressed) { // Down
-            armHoldStatus = ArmHoldStatus.SAFELY_LOWERING;
             armHasBeenHolding = false;
             useP = true;
             holdArmPosition(ARM_POSITION_DOWN);
