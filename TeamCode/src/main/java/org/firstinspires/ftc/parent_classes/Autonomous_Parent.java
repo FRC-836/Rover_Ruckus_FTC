@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.parent_classes;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.sun.tools.javac.comp.Todo;
 
 import org.firstinspires.ftc.teamcode.PID_Controller;
 import org.firstinspires.ftc.teamcode.TargetDirection;
@@ -27,9 +26,9 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     @Override
     public void play() {
-        setServoIntake(-1.0);
+        setIntakeLifter(-1.0);
         sleep(800);
-        setServoIntake(0.0);
+        setIntakeLifter(0.0);
         sampler.init(telemetry, hardwareMap);
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
@@ -265,12 +264,12 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected void initIntake() {
         sleep(500);
-        setServoIntake(0.0);
+        setIntakeLifter(0.0);
         setMotorIntake(1.0);
     }
 
     protected  void stopIntake() {
-        setServoIntake(1.0);
+        setIntakeLifter(1.0);
         sleep(320);
         setMotorIntake(0.0);
     }

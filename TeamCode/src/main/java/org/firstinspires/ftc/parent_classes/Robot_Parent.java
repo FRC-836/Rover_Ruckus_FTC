@@ -21,8 +21,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected DcMotor landingMotor;
     protected CRServo latchLockServo;
     protected Servo teamMarkerServo;
-    protected CRServo leftIntakeServo;
-    protected CRServo rightIntakeServo;
+    protected DcMotorSimple intakeLifter;
     protected DcMotor intakeMotor;
 
     private boolean isLocked = true;
@@ -49,8 +48,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         landingMotor = hardwareMap.get(DcMotor.class, "lm");
         teamMarkerServo = hardwareMap.get(Servo.class, "tms");
         latchLockServo = hardwareMap.get(CRServo.class, "ll");
-        leftIntakeServo = hardwareMap.get(CRServo.class, "lis");
-        rightIntakeServo = hardwareMap.get(CRServo.class, "ris");
+        intakeLifter = hardwareMap.get(CRServo.class, "il");
         intakeMotor = hardwareMap.get(DcMotor.class, "im");
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -60,8 +58,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         landingMotor.setDirection(DcMotor.Direction.REVERSE);
         teamMarkerServo.setDirection(Servo.Direction.FORWARD);
         latchLockServo.setDirection(CRServo.Direction.REVERSE);
-        leftIntakeServo.setDirection(CRServo.Direction.FORWARD);
-        rightIntakeServo.setDirection(CRServo.Direction.REVERSE);
+        intakeLifter.setDirection(CRServo.Direction.FORWARD);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
 
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -91,9 +88,8 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     // Functions
 
-    protected void setServoIntake(double servoIntakePower) {
-        leftIntakeServo.setPower(servoIntakePower);
-        rightIntakeServo.setPower(servoIntakePower);
+    protected void setIntakeLifter(double intakeLifterPower) {
+        intakeLifter.setPower(intakeLifterPower);
     }
 
     protected void setMotorIntake(double motorIntakePower) {

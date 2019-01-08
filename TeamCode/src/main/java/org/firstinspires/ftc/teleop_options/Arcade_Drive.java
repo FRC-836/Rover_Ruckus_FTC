@@ -49,11 +49,11 @@ public class Arcade_Drive extends Teleop_Parent {
         setLandingMotorPower(latchingPower);
 
         if (gamepad1.right_bumper)
-            setServoIntake(1.0);
+            setIntakeLifter(1.0);
         else if (gamepad1.right_trigger > 0.5)
-            setServoIntake(-1.0);
+            setIntakeLifter(-1.0);
         else
-            setServoIntake(0.05);
+            setIntakeLifter(0.05);
 
         if (gamepad1.b)
             setMotorIntake(1.0);
