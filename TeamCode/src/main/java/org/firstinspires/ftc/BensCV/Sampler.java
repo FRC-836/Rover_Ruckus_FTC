@@ -93,17 +93,17 @@ public class Sampler {
             }
         }
         else {
-            double goldYPos = detector.getXPosition();
-            if (0.0 <= goldYPos && 233.0 >= goldYPos) {
+            double goldXPos = detector.getXPosition();
+            if (0.0 <= goldXPos && 214.0 >= goldXPos) {
                 isLeft = true;
                 telemetry.addLine("Gold Position: Left");
                 positionIdentifier = position.LEFT;
-            } else if (233.0 < goldYPos && 466.0 >= goldYPos) {
+            } else if (214.0 < goldXPos && 428.0 >= goldXPos) {
                 isCenter = true;
                 telemetry.addLine("Gold Position: Center");
                 positionIdentifier = position.CENTER;
 
-            } else if (466.0 < goldYPos && 700.0 >= goldYPos) {
+            } else if (428.0 < goldXPos && 640.0 >= goldXPos) {
                 isRight = true;
                 telemetry.addLine("Gold Position: Right");
                 positionIdentifier = position.RIGHT;

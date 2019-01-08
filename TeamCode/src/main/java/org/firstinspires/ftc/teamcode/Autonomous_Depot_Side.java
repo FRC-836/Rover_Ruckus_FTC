@@ -23,9 +23,12 @@ public class Autonomous_Depot_Side extends Autonomous_Parent {
 
         if(!opModeIsActive())
             return;
+
         releaseMarker();
+
         if(!opModeIsActive())
             return;
+
         parkInCraterDepotSide();
     }
 }

@@ -29,7 +29,6 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     public double pStableHoldTurn = 0.019;
     public double dStableHoldTurn = 0.00195;
-    public double holdTurnMultiplier = 5.25;
 
     protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
 
@@ -61,8 +60,8 @@ public abstract class Robot_Parent extends LinearOpMode {
         armLander = hardwareMap.get(DcMotor.class, "al");
         markerReleaser = hardwareMap.get(Servo.class, "mr");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-        armImu = hardwareMap.get(BNO055IMU.class, "arm_imu");
         intakeMotor = hardwareMap.get(DcMotor.class, "im");
+        armImu = hardwareMap.get(BNO055IMU.class, "arm_imu");
 
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -89,7 +88,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         ArmTargetDirection.setImu(armImu);
 
         getReady();
-        
+
         while (!opModeIsActive() && !isStopRequested()) {
             telemetry.addData("status", "waiting for start command...");
             telemetry.update();
@@ -147,10 +146,6 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         imu.initialize(imuParameters);
         armImu.initialize(imuParameters);
-    }
-
-    protected void waitSeconds(double seconds) {
-        sleep((long) (seconds * 1000.0));
     }
 
     //Sets power of armLander

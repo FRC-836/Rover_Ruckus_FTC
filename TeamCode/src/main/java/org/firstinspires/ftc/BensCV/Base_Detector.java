@@ -19,7 +19,7 @@ public abstract class Base_Detector extends OpenCVPipeline {
     private List<Base_Image_Triangulator> scorers = new ArrayList<>();
     private Size firstSize;
     private Size adjustedSize;
-    public Size reducedImageQuality = new Size(720,640);//divide by width
+    public Size reducedImageQuality = new Size(640, 640);//divide by width
     private Mat mainMat = new Mat();
 
     public Speed_Settings.detectionSpeed speed = Speed_Settings.detectionSpeed.MODERATE;
@@ -61,7 +61,7 @@ public abstract class Base_Detector extends OpenCVPipeline {
         if (rgba.empty()){return rgba; }
 
         Imgproc.resize(mainMat, mainMat, adjustedSize);//thou shalt be shrunken
-        mainMat = mainMat.submat(0,720,0,250);
+        mainMat = mainMat.submat(0,640,0,200);
         Imgproc.resize(process(mainMat), mainMat, getFirstSize());//thou shalt be made big again
         Imgproc.putText(mainMat,"389 Computer Vision" + detectorName + ": " +
                 getAdjustedSize().toString() + " - " + speed.toString(), new Point(5,30),0,0.5,
