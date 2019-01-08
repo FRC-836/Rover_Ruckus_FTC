@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "Arcade Drive", group = "")
 public class Arcade_Drive extends Teleop_Parent {
-    private final double P2_MULT = 0.5;
+    private final double P2_MULT = 0.3;
     private boolean holdingTurn = false;
     private double forwardPower = 0.0;
     private double turnPower = 0.0;
@@ -84,9 +84,9 @@ public class Arcade_Drive extends Teleop_Parent {
 
         //Lifts the arm to certain positions and maps them to certain joystick positions
         if (gamepad1.left_bumper) {
-            setArmRotatorGoal(LIFT_POWER_UP);
+            setArmRotatorGoal(ARM_ROTATOR_POWER_UP);
         } else if (gamepad1.left_trigger > 0.1f) {
-            setArmRotatorGoal(LIFT_POWER_DOWN);
+            setArmRotatorGoal(ARM_ROTATOR_POWER_DOWN);
         } else if (yIsPressed) { // Up
             armHoldStatus = ArmHoldStatus.HOLDING;
             armHasBeenHolding = false;
@@ -109,20 +109,20 @@ public class Arcade_Drive extends Teleop_Parent {
 
         //Extends the arm to certain positions, and maps them to certain joystick positions
         if (gamepad1.right_bumper) {
-            setArmExtender(LIFT_POWER_UP);
+            setArmExtender(ARM_EXTENDER_POWER_UP);
         } else if (gamepad1.right_trigger > 0.1f) {
-            setArmExtender(LIFT_POWER_DOWN);
+            setArmExtender(ARM_EXTENDER_POWER_DOWN);
         } else {
-            setArmExtender(0.0);
+            setArmExtender(ARM_EXTENDER_POWER_IDLE);
         }
 
         //Set lander to certain positions, and maps them to certain joystick positions
         if (gamepad2.y) {
-            setArmLander(LIFT_POWER_UP);
+            setArmLander(ARM_LANDER_POWER_UP);
         } else if ((gamepad2.a) && (!gamepad1.start && !gamepad2.start)) {
-            setArmLander(LIFT_POWER_DOWN);
+            setArmLander(ARM_LANDER_POWER_DOWN);
         } else {
-            setArmLander(LIFT_POWER_IDLE);
+            setArmLander(ARM_LANDER_POWER_IDLE);
         }
 
         //Enables or disables a slower drive

@@ -6,9 +6,15 @@ public abstract class Teleop_Parent extends Robot_Parent {
     //Final and boolean powers which are used to set powers of specific parts of the robot
     protected boolean driveSlowFactor = false;
     protected final double SLOW_DRIVE_SCALE_FACTOR = 0.5;
-    protected final double LIFT_POWER_UP = 1.0;
-    protected final double LIFT_POWER_DOWN = -1.0;
-    protected final double LIFT_POWER_IDLE = 0.0;
+    protected final double ARM_LANDER_POWER_UP = 1.0;
+    protected final double ARM_LANDER_POWER_DOWN = -1.0;
+    protected final double ARM_LANDER_POWER_IDLE = 0.0;
+    protected final double ARM_EXTENDER_POWER_UP = 1.0;
+    protected final double ARM_EXTENDER_POWER_DOWN = -1.0;
+    protected final double ARM_EXTENDER_POWER_IDLE = 0.0;
+    protected final double ARM_ROTATOR_POWER_UP = 1.0;
+    protected final double ARM_ROTATOR_POWER_DOWN = -1.0;
+    protected final double ARM_ROTATOR_POWER_IDLE = 0.0;
     protected final double INTAKE_POWER_END = -1.0;
     protected final double INTAKE_SHIFTER_POWER = 0.6;
     private final double ARM_POWER_PER_MS_SPEED_UP = 0.0013;
