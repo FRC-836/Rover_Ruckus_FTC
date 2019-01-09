@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "Arcade Drive", group = "")
 public class Arcade_Drive extends Teleop_Parent {
@@ -10,22 +11,34 @@ public class Arcade_Drive extends Teleop_Parent {
     private double turnPower = 0.0;
     private double strafePower = 0.0;
 
+    private final double SLOW_TURN_THRESH = (ARM_POSITION_DOWN + ARM_POSITION_UP) / 2.0;
+    private final double SLOW_TURN_MULT = 0.3;
+
     private boolean yEnabled = true;
     private boolean xEnabled = true;
+
+    private ElapsedTime tracker = new ElapsedTime();
 
     @Override
     public void begin() {
         teleopTurnPID.resetPID();
         currentFacingDirection = TargetDirection.makeTargetToRobotsRight(0.0);
+        tracker.reset();
     }
 
     //Begins teleop
     @Override
     public void run() {
+        telemetry.addData("Loop Around", tracker.milliseconds());
+        tracker.reset();
+
         setMarkerReleaser(-1.0);
         forwardPower = mapJoyStick(-gamepad1.left_stick_y) + mapJoyStick(gamepad2.left_stick_x) * P2_MULT;
         turnPower = mapJoyStick(gamepad1.right_stick_x) + mapJoyStick(gamepad2.right_stick_x) * P2_MULT;
         strafePower = mapJoyStick(gamepad1.left_stick_x) + mapJoyStick(gamepad2.left_stick_y) * P2_MULT;
+
+        if (getArmRotatorPosition() > SLOW_TURN_THRESH)
+            turnPower *= SLOW_TURN_MULT;
 
         if (Math.abs(strafePower) > Math.abs(forwardPower))
             forwardPower = 0.0;
@@ -55,8 +68,10 @@ public class Arcade_Drive extends Teleop_Parent {
         }
         setDrive(forwardPower, turnPower, strafePower);
 
+        telemetry.addData("Drive", tracker.milliseconds());
+        tracker.reset();
+
         boolean yIsPressed = false;
-        boolean aIsPressed = false;
         boolean xIsPressed = false;
 
         if (gamepad1.y) {
@@ -91,6 +106,8 @@ public class Arcade_Drive extends Teleop_Parent {
             holdArmPosition();
         }
 
+        telemetry.addData("Arm Rotator", tracker.milliseconds());
+        tracker.reset();
 
         //Extends the arm to certain positions, and maps them to certain joystick positions
         if (gamepad1.right_bumper) {
@@ -110,6 +127,9 @@ public class Arcade_Drive extends Teleop_Parent {
             setArmLander(ARM_LANDER_POWER_IDLE);
         }
 
+        telemetry.addData("Arm Extender and Lander", tracker.milliseconds());
+        tracker.reset();
+
         //Enables or disables a slower drive
         if (gamepad1.dpad_left) {
             driveSlowFactor = true;
@@ -124,6 +144,8 @@ public class Arcade_Drive extends Teleop_Parent {
         } else {
             setIntakeMotor(0.0);
         }
+
+        telemetry.addData("Slow Drive and Intake", tracker.milliseconds());
 
         telemetry.addData("Arm Position", getArmRotatorPosition());
         telemetry.addData("Arm Motor Power", armRotator.getPower());
