@@ -19,6 +19,8 @@ public class Arcade_Drive extends Teleop_Parent {
 
     private ElapsedTime tracker = new ElapsedTime();
 
+    private boolean verboseTiming = false;
+
     @Override
     public void begin() {
         teleopTurnPID.resetPID();
@@ -68,8 +70,10 @@ public class Arcade_Drive extends Teleop_Parent {
         }
         setDrive(forwardPower, turnPower, strafePower);
 
-        telemetry.addData("Drive", tracker.milliseconds());
-        tracker.reset();
+        if (verboseTiming) {
+            telemetry.addData("Drive", tracker.milliseconds());
+            tracker.reset();
+        }
 
         boolean yIsPressed = false;
         boolean xIsPressed = false;
@@ -106,8 +110,10 @@ public class Arcade_Drive extends Teleop_Parent {
             holdArmPosition();
         }
 
-        telemetry.addData("Arm Rotator", tracker.milliseconds());
-        tracker.reset();
+        if (verboseTiming) {
+            telemetry.addData("Arm Rotator", tracker.milliseconds());
+            tracker.reset();
+        }
 
         //Extends the arm to certain positions, and maps them to certain joystick positions
         if (gamepad1.right_bumper) {
@@ -127,8 +133,10 @@ public class Arcade_Drive extends Teleop_Parent {
             setArmLander(ARM_LANDER_POWER_IDLE);
         }
 
-        telemetry.addData("Arm Extender and Lander", tracker.milliseconds());
-        tracker.reset();
+        if (verboseTiming) {
+            telemetry.addData("Arm Extender and Lander", tracker.milliseconds());
+            tracker.reset();
+        }
 
         //Enables or disables a slower drive
         if (gamepad1.dpad_left) {
@@ -145,8 +153,9 @@ public class Arcade_Drive extends Teleop_Parent {
             setIntakeMotor(0.0);
         }
 
-        telemetry.addData("Slow Drive and Intake", tracker.milliseconds());
-
+        if (verboseTiming) {
+            telemetry.addData("Slow Drive and Intake", tracker.milliseconds());
+        }
         telemetry.addData("Arm Position", getArmRotatorPosition());
         telemetry.addData("Arm Motor Power", armRotator.getPower());
         telemetry.addData("Setpoint", armHoldP.getSetpoint());
