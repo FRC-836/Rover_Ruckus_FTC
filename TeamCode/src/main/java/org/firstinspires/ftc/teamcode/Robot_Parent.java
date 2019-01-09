@@ -26,6 +26,8 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected final double ARM_POSITION_UP = 90.0;
     protected final double ARM_POSITION_DOWN = 190.0;
+    private final double ARM_ROTATOR_ENCODER_TO_ANGLE = 1.0 / 9.5; // 10 encoder counts per degree
+    private double armRotatorDrift;
 
     public double pStableHoldTurn = 0.019;
     public double dStableHoldTurn = 0.00195;
@@ -42,7 +44,7 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     //Maps robot parts to data values in config file, sets up opMode
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         backLeftDrive = hardwareMap.get(DcMotor.class, "bld");
         backRightDrive = hardwareMap.get(DcMotor.class, "brd");
         frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
@@ -85,6 +87,13 @@ public abstract class Robot_Parent extends LinearOpMode {
             telemetry.addData("status", "waiting for start command...");
             telemetry.update();
         }
+
+        // Calibrate arm encoder
+        double armPos = ArmTargetDirection.getPitch();
+        if (armPos < 5.0) // Invalid
+            armPos = 50.0;
+        calibrateArmRotatorEncoder(getArmRotatorEstimate_Drifting(), armPos);
+
         go();
     }
 
@@ -180,8 +189,37 @@ public abstract class Robot_Parent extends LinearOpMode {
         return armLander.getCurrentPosition();
     }
 
+    private double getArmRotatorEstimate_Drifting()
+    {
+        double armPosition = armRotator.getCurrentPosition();
+        armPosition *= ARM_ROTATOR_ENCODER_TO_ANGLE;
+        return armPosition;
+    }
+
+    private double getArmRotatorEstimate_Calibrated()
+    {
+        double armPosition = getArmRotatorEstimate_Drifting();
+        armPosition += armRotatorDrift;
+        return armPosition;
+    }
+
+    private void calibrateArmRotatorEncoder(double driftingArmReading, double imuArmReading)
+    {
+        armRotatorDrift = imuArmReading - driftingArmReading;
+    }
+
     protected double getArmRotatorPosition() {
-        return ArmTargetDirection.getPitch();
+        double armPosition = ArmTargetDirection.getPitch();
+
+        if (armPosition < 5.0)
+        { // Invalid IMU Reading
+            return getArmRotatorEstimate_Calibrated();
+        }
+        else
+        { // Valid IMU Reading
+            calibrateArmRotatorEncoder(getArmRotatorEstimate_Drifting(), armPosition);
+            return armPosition;
+        }
     }
 
     protected void setIntakeMotor(double intakePower) {
