@@ -17,7 +17,7 @@ public class Arcade_Drive extends Teleop_Parent {
     private boolean yEnabled = true;
     private boolean xEnabled = true;
 
-    private ElapsedTime tracker = new ElapsedTime();
+    private long lastTime = 0;
 
     private boolean verboseTiming = false;
 
@@ -25,14 +25,12 @@ public class Arcade_Drive extends Teleop_Parent {
     public void begin() {
         teleopTurnPID.resetPID();
         currentFacingDirection = TargetDirection.makeTargetToRobotsRight(0.0);
-        tracker.reset();
     }
 
     //Begins teleop
     @Override
     public void run() {
-        telemetry.addData("Loop Around", tracker.milliseconds());
-        tracker.reset();
+        timeIt("Loop Around");
 
         setMarkerReleaser(-1.0);
         forwardPower = mapJoyStick(-gamepad1.left_stick_y) + mapJoyStick(gamepad2.left_stick_x) * P2_MULT;
@@ -70,10 +68,8 @@ public class Arcade_Drive extends Teleop_Parent {
         }
         setDrive(forwardPower, turnPower, strafePower);
 
-        if (verboseTiming) {
-            telemetry.addData("Drive", tracker.milliseconds());
-            tracker.reset();
-        }
+        if (verboseTiming)
+            timeIt("Drive");
 
         boolean yIsPressed = false;
         boolean xIsPressed = false;
@@ -110,10 +106,8 @@ public class Arcade_Drive extends Teleop_Parent {
             holdArmPosition();
         }
 
-        if (verboseTiming) {
-            telemetry.addData("Arm Rotator", tracker.milliseconds());
-            tracker.reset();
-        }
+        if (verboseTiming)
+            timeIt("Arm Rotator");
 
         //Extends the arm to certain positions, and maps them to certain joystick positions
         if (gamepad1.right_bumper) {
@@ -133,10 +127,8 @@ public class Arcade_Drive extends Teleop_Parent {
             setArmLander(ARM_LANDER_POWER_IDLE);
         }
 
-        if (verboseTiming) {
-            telemetry.addData("Arm Extender and Lander", tracker.milliseconds());
-            tracker.reset();
-        }
+        if (verboseTiming)
+            timeIt("Arm Extender and Lander");
 
         //Enables or disables a slower drive
         if (gamepad1.dpad_left) {
@@ -153,12 +145,19 @@ public class Arcade_Drive extends Teleop_Parent {
             setIntakeMotor(0.0);
         }
 
-        if (verboseTiming) {
-            telemetry.addData("Slow Drive and Intake", tracker.milliseconds());
-        }
+        if (verboseTiming)
+            timeIt("Slow Drive and Intake");
+
         telemetry.addData("Arm Position", getArmRotatorPosition());
         telemetry.addData("Arm Motor Power", armRotator.getPower());
         telemetry.addData("Setpoint", armHoldP.getSetpoint());
         telemetry.update();
+    }
+
+    private void timeIt(String message)
+    {
+        long time = System.currentTimeMillis();
+        telemetry.addData(message,time - lastTime);
+        lastTime = time;
     }
 }
