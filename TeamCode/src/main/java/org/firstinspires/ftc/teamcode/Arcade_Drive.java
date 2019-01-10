@@ -3,10 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name = "Arcade Drive", group = "")
+@TeleOp(name = "Arcade Drive")
 public class Arcade_Drive extends Teleop_Parent {
     private final double P2_MULT = 0.3;
-    private boolean holdingTurn = false;
     private double forwardPower = 0.0;
     private double turnPower = 0.0;
     private double strafePower = 0.0;
@@ -14,12 +13,16 @@ public class Arcade_Drive extends Teleop_Parent {
     private final double SLOW_TURN_THRESH = (ARM_POSITION_DOWN + ARM_POSITION_UP) / 2.0;
     private final double SLOW_TURN_MULT = 0.3;
 
-    private boolean yEnabled = true;
-    private boolean xEnabled = true;
+    private double lastHeading = 0.0;
+    private ElapsedTime lastHeadingTime = new ElapsedTime();
+    private final double ANGULAR_VELOCITY_THRESHOLD = 2.0;
+
+    private boolean lastY = false;
+    private boolean lastX = false;
 
     private long lastTime = 0;
 
-    private boolean verboseTiming = false;
+    private boolean verboseTiming = true;
 
     @Override
     public void begin() {
@@ -52,42 +55,28 @@ public class Arcade_Drive extends Teleop_Parent {
         }
 
         if (Math.abs(turnPower) < 0.00005f) {
-            if (!holdingTurn) {
-                setDrive(forwardPower, 0.0, strafePower);
+            if (Math.abs(TargetDirection.getHeading() - lastHeading)/lastHeadingTime.milliseconds() < ANGULAR_VELOCITY_THRESHOLD) {
                 teleopTurnPID.resetPID();
                 teleopTurnPID.update(0.0);
-                sleep(100);
-                teleopTurnPID.update(0.0);
                 currentFacingDirection = TargetDirection.makeTargetToRobotsRight(0.0);
-                holdingTurn = true;
             } else {
                 turnPower = teleopTurnPID.update(currentFacingDirection.calculateDistanceFromTarget());
             }
-        } else {
-            holdingTurn = false;
         }
         setDrive(forwardPower, turnPower, strafePower);
 
         if (verboseTiming)
             timeIt("Drive");
 
-        boolean yIsPressed = false;
-        boolean xIsPressed = false;
+        boolean yButton = gamepad1.y;
+        boolean xButton = gamepad1.x;
 
-        if (gamepad1.y) {
-            if (yEnabled)
-                yIsPressed = true;
-            yEnabled = false;
-        } else {
-            yEnabled = true;
-        }
-        if (gamepad1.x) {
-            if (xEnabled)
-                xIsPressed = true;
-            xEnabled = false;
-        } else {
-            xEnabled = true;
-        }
+        boolean yIsPressed = yButton && !lastY;
+        boolean xIsPressed = xButton && !lastX;
+
+        lastY = yButton;
+        lastX = xButton;
+
 
         //Lifts the arm to certain positions and maps them to certain joystick positions
         if (gamepad1.left_bumper) {
