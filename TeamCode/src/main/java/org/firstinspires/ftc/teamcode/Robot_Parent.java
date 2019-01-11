@@ -90,6 +90,7 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         // Calibrate arm encoder
         double armPos = ArmTargetDirection.getPitch();
+        armImu.close();
         if (armPos < 5.0) // Invalid
             armPos = 50.0;
         calibrateArmRotatorEncoder(getArmRotatorEstimate_Drifting(), armPos);
@@ -209,7 +210,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     }
 
     protected double getArmRotatorPosition() {
-        double armPosition = ArmTargetDirection.getPitch();
+        /*double armPosition = ArmTargetDirection.getPitch();
 
         if (armPosition < 5.0)
         { // Invalid IMU Reading
@@ -220,6 +221,8 @@ public abstract class Robot_Parent extends LinearOpMode {
             calibrateArmRotatorEncoder(getArmRotatorEstimate_Drifting(), armPosition);
             return armPosition;
         }
+        */
+        return getArmRotatorEstimate_Calibrated();
     }
 
     protected void setIntakeMotor(double intakePower) {

@@ -26,7 +26,8 @@ public class Arcade_Drive_Fast extends LinearOpMode {
     private PID_Controller armHoldD = new PID_Controller(0.0, 0.0, 0.0015);
     private boolean useP = true;
 
-    private Sensor_Thread sensorThread;
+    private Sensor_Runnable sensorRunnable;
+    private Thread sensorThread;
 
     //Maps robot parts to data values in config file, sets up opMode
     @Override
@@ -75,17 +76,18 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         teleopTurnPID.resetPID();
         teleopTurnPID.setSetpoint(0.0);
 
-        sensorThread = new Sensor_Thread(armRotator);
+        sensorRunnable = new Sensor_Runnable(armRotator, telemetry);
+        sensorThread = new Thread(sensorRunnable);
         sensorThread.start();
 
         while (opModeIsActive()) {
             run();
+            sensorThread.run();
+            sensorRunnable.incrementCounter();
         }
     }
     private boolean driveSlowFactor = false;
     private PID_Controller teleopTurnPID = new PID_Controller(0.012, 0.0, 0.0013);
-
-    private long lastCheckedTime = 0;
 
     private boolean lastY = false;
     private boolean lastX = false;
@@ -105,10 +107,7 @@ public class Arcade_Drive_Fast extends LinearOpMode {
 
     private void setArmRotator(double armPower) {
         armHasBeenHolding = false;
-
-        armPower += 0.3 * Math.cos(Math.toRadians(sensorThread.getArmRotatorPosition()));
-
-        sensorThread.setArmRotatorPower(armPower);
+        sensorRunnable.setArmRotatorPower(armPower);
     }
 
     //Sets power of armExtender
@@ -140,7 +139,7 @@ public class Arcade_Drive_Fast extends LinearOpMode {
     }
 
     private void holdArmPosition() {
-        holdArmPosition(sensorThread.getArmRotatorPosition());
+        holdArmPosition(sensorRunnable.getArmRotatorPosition());
     }
 
     private void holdArmPosition(double armPositionToHold) {
@@ -151,14 +150,14 @@ public class Arcade_Drive_Fast extends LinearOpMode {
             armHoldD.resetPID();
         }
         // Always use the derivative controller
-        double power = armHoldD.update(sensorThread.getArmRotatorPosition());
+        double power = armHoldD.update(sensorRunnable.getArmRotatorPosition());
 
         if (useP)
             // If using the proportional controller, add the proportional component
-            power += armHoldP.update(sensorThread.getArmRotatorPosition());
+            power += armHoldP.update(sensorRunnable.getArmRotatorPosition());
         else
             // If NOT using the proportional controller, at least keep the controller updated
-            armHoldP.update(sensorThread.getArmRotatorPosition());
+            armHoldP.update(sensorRunnable.getArmRotatorPosition());
         setArmRotator(power);
         armHasBeenHolding = true;
     }
@@ -187,7 +186,7 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         double strafePower = mapJoyStick(gamepad1.left_stick_x) + mapJoyStick(gamepad2.left_stick_y) * p2_MULT;
 
         double SLOW_TURN_MULT = 0.3;
-        if (sensorThread.getArmRotatorPosition() > 140.0)
+        if (sensorRunnable.getArmRotatorPosition() > 140.0)
             turnPower *= SLOW_TURN_MULT;
 
         if (Math.abs(strafePower) > Math.abs(forwardPower))
@@ -276,16 +275,14 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         if (verboseTiming)
             timeIt("Slow Drive and Intake");
 
-        telemetry.addData("Arm Position", sensorThread.getArmRotatorPosition());
-        telemetry.addData("Arm Motor Power", sensorThread.getArmRotatorPower());
-        telemetry.addData("Setpoint", armHoldP.getSetpoint());
-        telemetry.update();
+        //telemetry.addData("Setpoint", armHoldP.getSetpoint());
+        //telemetry.update();
     }
 
     private void timeIt(String message)
     {
         long time = System.currentTimeMillis();
-        telemetry.addData(message,time - lastTime);
+        //telemetry.addData(message,time - lastTime);
         lastTime = time;
     }
 }
