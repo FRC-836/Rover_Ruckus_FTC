@@ -14,7 +14,6 @@ public class Arcade_Drive_Fast extends LinearOpMode {
     private DcMotor backRightDrive;
     private DcMotor frontLeftDrive;
     private DcMotor frontRightDrive;
-    private DcMotor armRotator;
     private DcMotor armExtender;
     private DcMotor armLander;
     private Servo markerReleaser;
@@ -24,13 +23,13 @@ public class Arcade_Drive_Fast extends LinearOpMode {
 
     private boolean armHasBeenHolding = false;
 
-    private double armRotatorDrift;
-
     private PID_Controller armHoldP = new PID_Controller(0.006, 0.0, 0.0);
     private PID_Controller armHoldD = new PID_Controller(0.0, 0.0, 0.001);
     private boolean useP = true;
 
     private double armRotatorPower = 0.0;
+
+    private Sensor_Thread sensorThread;
 
     //Maps robot parts to data values in config file, sets up opMode
     @Override
@@ -39,12 +38,12 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         backRightDrive = hardwareMap.get(DcMotor.class, "brd");
         frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
         frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
-        armRotator = hardwareMap.get(DcMotor.class, "ar");
         armExtender = hardwareMap.get(DcMotor.class, "ae");
         armLander = hardwareMap.get(DcMotor.class, "al");
         markerReleaser = hardwareMap.get(Servo.class, "mr");
         intakeMotor = hardwareMap.get(DcMotor.class, "im");
         armImu = hardwareMap.get(BNO055IMU.class, "arm_imu");
+        DcMotor armRotator = hardwareMap.get(DcMotor.class, "ar");
 
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -74,15 +73,14 @@ public class Arcade_Drive_Fast extends LinearOpMode {
             telemetry.update();
         }
 
-        // Calibrate arm encoder
-        double armPos = ArmTargetDirection.getPitch();
-        if (armPos < 5.0) // Invalid
-            armPos = 50.0;
-        calibrateArmRotatorEncoder(getArmRotatorEstimate_Drifting(), armPos);
 
         markerReleaser.setPosition(-1.0);
         teleopTurnPID.resetPID();
         teleopTurnPID.setSetpoint(0.0);
+
+        sensorThread = new Sensor_Thread(armRotator);
+        sensorThread.start();
+
         while (opModeIsActive()) {
             run();
         }
@@ -115,9 +113,9 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         armRotatorPower = armPower;
 
         double k_GRAVITY = 0.2;
-        armPower += k_GRAVITY * Math.cos(Math.toRadians(getArmRotatorPosition()));
+        armPower += k_GRAVITY * Math.cos(Math.toRadians(sensorThread.getArmRotatorPosition()));
 
-        armRotator.setPower(armPower);
+        sensorThread.setArmRotatorPower(armPower);
     }
 
     //Sets power of armExtender
@@ -144,47 +142,12 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         armLander.setPower(liftPower);
     }
 
-    private double getArmRotatorEstimate_Drifting()
-    {
-        double armPosition = armRotator.getCurrentPosition();
-        // 10 encoder counts per degree
-        double ARM_ROTATOR_ENCODER_TO_ANGLE = 1.0 / 9.5;
-        armPosition *= ARM_ROTATOR_ENCODER_TO_ANGLE;
-        return armPosition;
-    }
-
-    private double getArmRotatorEstimate_Calibrated()
-    {
-        double armPosition = getArmRotatorEstimate_Drifting();
-        armPosition += armRotatorDrift;
-        return armPosition;
-    }
-
-    private void calibrateArmRotatorEncoder(double driftingArmReading, double imuArmReading)
-    {
-        armRotatorDrift = imuArmReading - driftingArmReading;
-    }
-
-    private double getArmRotatorPosition() {
-        double armPosition = ArmTargetDirection.getPitch();
-
-        if (armPosition < 5.0)
-        { // Invalid IMU Reading
-            return getArmRotatorEstimate_Calibrated();
-        }
-        else
-        { // Valid IMU Reading
-            calibrateArmRotatorEncoder(getArmRotatorEstimate_Drifting(), armPosition);
-            return armPosition;
-        }
-    }
-
     private void setIntakeMotor(double intakePower) {
         intakeMotor.setPower(intakePower);
     }
 
     private void holdArmPosition() {
-        holdArmPosition(getArmRotatorPosition());
+        holdArmPosition(sensorThread.getArmRotatorPosition());
     }
 
     private void holdArmPosition(double armPositionToHold) {
@@ -195,14 +158,14 @@ public class Arcade_Drive_Fast extends LinearOpMode {
             armHoldD.resetPID();
         }
         // Always use the derivative controller
-        double power = armHoldD.update(getArmRotatorPosition());
+        double power = armHoldD.update(sensorThread.getArmRotatorPosition());
 
         if (useP)
             // If using the proportional controller, add the proportional component
-            power += armHoldP.update(getArmRotatorPosition());
+            power += armHoldP.update(sensorThread.getArmRotatorPosition());
         else
             // If NOT using the proportional controller, at least keep the controller updated
-            armHoldP.update(getArmRotatorPosition());
+            armHoldP.update(sensorThread.getArmRotatorPosition());
         setArmRotator(power);
         armHasBeenHolding = true;
     }
@@ -258,11 +221,8 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         double turnPower = mapJoyStick(gamepad1.right_stick_x) + mapJoyStick(gamepad2.right_stick_x) * p2_MULT;
         double strafePower = mapJoyStick(gamepad1.left_stick_x) + mapJoyStick(gamepad2.left_stick_y) * p2_MULT;
 
-        double ARM_POSITION_UP = 90.0;
-        double ARM_POSITION_DOWN = 190.0;
-        double SLOW_TURN_THRESH = (ARM_POSITION_DOWN + ARM_POSITION_UP) / 2.0;
         double SLOW_TURN_MULT = 0.3;
-        if (getArmRotatorPosition() > SLOW_TURN_THRESH)
+        if (sensorThread.getArmRotatorPosition() > 140.0)
             turnPower *= SLOW_TURN_MULT;
 
         if (Math.abs(strafePower) > Math.abs(forwardPower))
@@ -294,19 +254,17 @@ public class Arcade_Drive_Fast extends LinearOpMode {
 
         //Lifts the arm to certain positions and maps them to certain joystick positions
         if (gamepad1.left_bumper) {
-            double ARM_ROTATOR_POWER_UP = 1.0;
-            setArmRotatorGoal(ARM_ROTATOR_POWER_UP);
+            setArmRotatorGoal(1.0);
         } else if (gamepad1.left_trigger > 0.1f) {
-            double ARM_ROTATOR_POWER_DOWN = -1.0;
-            setArmRotatorGoal(ARM_ROTATOR_POWER_DOWN);
+            setArmRotatorGoal(-1.0);
         } else if (yIsPressed) { // Up
             armHasBeenHolding = false;
             useP = true;
-            holdArmPosition(ARM_POSITION_UP);
+            holdArmPosition(90.0);
         } else if (xIsPressed) { // Center
             armHasBeenHolding = false;
             useP = true;
-            holdArmPosition(ARM_POSITION_DOWN);
+            holdArmPosition(190.0);
         } else {
             holdArmPosition();
         }
@@ -360,8 +318,8 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         if (verboseTiming)
             timeIt("Slow Drive and Intake");
 
-        telemetry.addData("Arm Position", getArmRotatorPosition());
-        telemetry.addData("Arm Motor Power", armRotator.getPower());
+        telemetry.addData("Arm Position", sensorThread.getArmRotatorPosition());
+        telemetry.addData("Arm Motor Power", sensorThread.getArmRotatorPower());
         telemetry.addData("Setpoint", armHoldP.getSetpoint());
         telemetry.update();
     }
