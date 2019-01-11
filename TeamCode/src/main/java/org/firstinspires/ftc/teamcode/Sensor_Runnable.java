@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -18,6 +19,8 @@ public class Sensor_Runnable implements Runnable {
     private Semaphore armMotorMutex = new Semaphore(1);
     private Telemetry telemetry;
     private double armRotatorDrift;
+
+    private AtomicBoolean isShutdown = new AtomicBoolean(false);
 
     private DcMotor armRotator;
 
@@ -42,13 +45,29 @@ public class Sensor_Runnable implements Runnable {
 
     @Override
     public void run() {
-        updateArmRotator();
+        while (!isShutdown.get()) {
+            updateArmRotator();
 
-        telemetry.addData("N_Runnable", ++counterRunnable);
-        telemetry.addData("N_Main", counterMain);
-        telemetry.addData("Arm Position", getArmRotatorPosition());
-        telemetry.addData("Arm Motor Power", getArmRotatorPower());
-        telemetry.update();
+            telemetry.addData("N_Runnable", ++counterRunnable);
+            telemetry.addData("N_Main", counterMain);
+            telemetry.addData("Arm Position", getArmRotatorPosition());
+            try {
+                armMotorMutex.acquire();
+
+                telemetry.addData("Arm Motor Power", getArmRotatorPower());
+
+                armMotorMutex.release();
+            } catch (Exception e) {
+                armMotorMutex.release();
+                e.printStackTrace();
+            }
+            telemetry.update();
+        }
+    }
+
+    public void shutdown()
+    {
+        isShutdown.set(true);
     }
 
     public void incrementCounter()

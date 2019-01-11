@@ -71,7 +71,6 @@ public class Arcade_Drive_Fast extends LinearOpMode {
             telemetry.update();
         }
 
-
         markerReleaser.setPosition(-1.0);
         teleopTurnPID.resetPID();
         teleopTurnPID.setSetpoint(0.0);
@@ -82,8 +81,13 @@ public class Arcade_Drive_Fast extends LinearOpMode {
 
         while (opModeIsActive()) {
             run();
-            sensorThread.run();
             sensorRunnable.incrementCounter();
+        }
+        sensorRunnable.shutdown();
+        try {
+            sensorThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
     private boolean driveSlowFactor = false;
