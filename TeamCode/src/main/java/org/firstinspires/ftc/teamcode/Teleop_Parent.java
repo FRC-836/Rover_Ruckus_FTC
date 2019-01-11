@@ -12,8 +12,8 @@ public abstract class Teleop_Parent extends Robot_Parent {
     protected final double ARM_EXTENDER_POWER_UP = 1.0;
     protected final double ARM_EXTENDER_POWER_DOWN = -1.0;
     protected final double ARM_EXTENDER_POWER_IDLE = 0.0;
-    protected final double ARM_ROTATOR_POWER_UP = 1.0;
-    protected final double ARM_ROTATOR_POWER_DOWN = -1.0;
+    protected final double ARM_ROTATOR_POWER_UP = 0.5;
+    protected final double ARM_ROTATOR_POWER_DOWN = -0.5;
     protected final double INTAKE_POWER_END = -1.0;
     private final double ARM_POWER_PER_MS_SPEED_UP = 0.0013;
     private final double ARM_POWER_PER_MS_SPEED_DOWN = 0.01;
@@ -21,8 +21,6 @@ public abstract class Teleop_Parent extends Robot_Parent {
     protected PID_Controller teleopTurnPID = new PID_Controller(0.012, 0.0, 0.0013);
     protected TargetDirection currentFacingDirection;
 
-    private double armRotatorGoal = 0.0;
-    private long lastCheckedTime = 0;
 
     //Called on init
     @Override
@@ -54,35 +52,9 @@ public abstract class Teleop_Parent extends Robot_Parent {
 
     protected void setArmRotatorGoal(double goalPower) {
         useP = false;
-        armRotatorGoal = goalPower;
+        goalPower = Range.clip(goalPower, -0.75, 0.75);
 
-        if (!isMovingToGoal)
-            lastCheckedTime = System.currentTimeMillis();
-
-        long newCheckedTime = System.currentTimeMillis();
-
-        double increment = (double) (newCheckedTime - lastCheckedTime);
-        if (Math.abs(armRotatorGoal) > Math.abs(armRotatorPower))
-            increment *= ARM_POWER_PER_MS_SPEED_UP;
-        else
-            increment *= ARM_POWER_PER_MS_SPEED_DOWN;
-
-        if (armRotatorGoal > armRotatorPower)
-            armRotatorPower += increment;
-        else
-            armRotatorPower -= increment;
-
-        if (Math.abs(armRotatorPower - armRotatorGoal) < 0.1)
-            armRotatorPower = armRotatorGoal;
-
-        if (armRotatorGoal > ARM_ROTATOR_MINIMUM && armRotatorPower < ARM_ROTATOR_MINIMUM)
-            armRotatorPower = ARM_ROTATOR_MINIMUM;
-        if (armRotatorGoal < -ARM_ROTATOR_MINIMUM && armRotatorPower > -ARM_ROTATOR_MINIMUM)
-            armRotatorPower = -ARM_ROTATOR_MINIMUM;
-        armRotatorPower = Range.clip(armRotatorPower, -0.75, 0.75);
-
-        setArmRotator(armRotatorPower);
-        lastCheckedTime = newCheckedTime;
+        setArmRotator(goalPower);
         isMovingToGoal = true;
     }
 

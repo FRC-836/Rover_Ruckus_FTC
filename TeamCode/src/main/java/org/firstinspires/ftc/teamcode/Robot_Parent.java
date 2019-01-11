@@ -24,8 +24,8 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected boolean armHasBeenHolding = false;
 
-    protected final double ARM_POSITION_UP = 90.0;
-    protected final double ARM_POSITION_DOWN = 190.0;
+    protected final double ARM_POSITION_UP = 70.0;
+    protected final double ARM_POSITION_DOWN = 170.0;
     private final double ARM_ROTATOR_ENCODER_TO_ANGLE = 1.0 / 9.5; // 10 encoder counts per degree
     private double armRotatorDrift;
 
@@ -34,11 +34,11 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected PID_Controller holdTurnPID = new PID_Controller(pStableHoldTurn, 0.0, dStableHoldTurn);
 
-    protected PID_Controller armHoldP = new PID_Controller(0.006, 0.0, 0.0);
-    protected PID_Controller armHoldD = new PID_Controller(0.0, 0.0, 0.001);
+    protected PID_Controller armHoldP = new PID_Controller(0.0076, 0.0, 0.0);
+    protected PID_Controller armHoldD = new PID_Controller(0.0, 0.0, 0.0015);
     boolean useP = true;
 
-    private final double K_GRAVITY = 0.2;
+    private final double K_GRAVITY = 0.3;
     protected boolean isAuto;
     protected double armRotatorPower = 0.0;
 
