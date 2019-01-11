@@ -59,6 +59,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     protected void land() {
         setLandingMotorPower(DEPLOY_POWER);
         sleep(2000);
+        setLandingMotorPower(0.0);
         setArcadeDrive(0.13,0.0);
         sleep(750);
         setArcadeDrive(0.0,0.0);
