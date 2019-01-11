@@ -271,7 +271,7 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         if (gamepad2.left_trigger > 0.1f) {
             setIntakeMotor(-1.0);
         } else if (gamepad2.left_bumper) {
-            setIntakeMotor(-1.0);
+            setIntakeMotor(1.0);
         } else {
             setIntakeMotor(0.0);
         }
