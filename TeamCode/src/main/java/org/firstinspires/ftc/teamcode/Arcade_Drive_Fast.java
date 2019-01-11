@@ -19,15 +19,12 @@ public class Arcade_Drive_Fast extends LinearOpMode {
     private Servo markerReleaser;
     private BNO055IMU armImu;
     private DcMotor intakeMotor;
-    private boolean isMovingToGoal = false;
 
     private boolean armHasBeenHolding = false;
 
-    private PID_Controller armHoldP = new PID_Controller(0.006, 0.0, 0.0);
-    private PID_Controller armHoldD = new PID_Controller(0.0, 0.0, 0.001);
+    private PID_Controller armHoldP = new PID_Controller(0.0076, 0.0, 0.0);
+    private PID_Controller armHoldD = new PID_Controller(0.0, 0.0, 0.0015);
     private boolean useP = true;
-
-    private double armRotatorPower = 0.0;
 
     private Sensor_Thread sensorThread;
 
@@ -108,12 +105,8 @@ public class Arcade_Drive_Fast extends LinearOpMode {
 
     private void setArmRotator(double armPower) {
         armHasBeenHolding = false;
-        isMovingToGoal = false;
 
-        armRotatorPower = armPower;
-
-        double k_GRAVITY = 0.2;
-        armPower += k_GRAVITY * Math.cos(Math.toRadians(sensorThread.getArmRotatorPosition()));
+        armPower += 0.3 * Math.cos(Math.toRadians(sensorThread.getArmRotatorPosition()));
 
         sensorThread.setArmRotatorPower(armPower);
     }
@@ -178,37 +171,9 @@ public class Arcade_Drive_Fast extends LinearOpMode {
     private void setArmRotatorGoal(double goalPower) {
         useP = false;
 
-        if (!isMovingToGoal)
-            lastCheckedTime = System.currentTimeMillis();
+        goalPower = Range.clip(goalPower, -0.75, 0.75);
 
-        long newCheckedTime = System.currentTimeMillis();
-
-        double increment = (double) (newCheckedTime - lastCheckedTime);
-        double ARM_POWER_PER_MS_SPEED_UP = 0.0013;
-        double ARM_POWER_PER_MS_SPEED_DOWN = 0.01;
-        if (Math.abs(goalPower) > Math.abs(armRotatorPower))
-            increment *= ARM_POWER_PER_MS_SPEED_UP;
-        else
-            increment *= ARM_POWER_PER_MS_SPEED_DOWN;
-
-        if (goalPower > armRotatorPower)
-            armRotatorPower += increment;
-        else
-            armRotatorPower -= increment;
-
-        if (Math.abs(armRotatorPower - goalPower) < 0.1)
-            armRotatorPower = goalPower;
-
-        double ARM_ROTATOR_MINIMUM = 0.2;
-        if (goalPower > ARM_ROTATOR_MINIMUM && armRotatorPower < ARM_ROTATOR_MINIMUM)
-            armRotatorPower = ARM_ROTATOR_MINIMUM;
-        if (goalPower < -ARM_ROTATOR_MINIMUM && armRotatorPower > -ARM_ROTATOR_MINIMUM)
-            armRotatorPower = -ARM_ROTATOR_MINIMUM;
-        armRotatorPower = Range.clip(armRotatorPower, -0.75, 0.75);
-
-        setArmRotator(armRotatorPower);
-        lastCheckedTime = newCheckedTime;
-        isMovingToGoal = true;
+        setArmRotator(goalPower);
     }
 
     //Begins teleop
@@ -254,17 +219,17 @@ public class Arcade_Drive_Fast extends LinearOpMode {
 
         //Lifts the arm to certain positions and maps them to certain joystick positions
         if (gamepad1.left_bumper) {
-            setArmRotatorGoal(1.0);
+            setArmRotatorGoal(0.5);
         } else if (gamepad1.left_trigger > 0.1f) {
-            setArmRotatorGoal(-1.0);
+            setArmRotatorGoal(-0.5);
         } else if (yIsPressed) { // Up
             armHasBeenHolding = false;
             useP = true;
-            holdArmPosition(90.0);
+            holdArmPosition(70.0);
         } else if (xIsPressed) { // Center
             armHasBeenHolding = false;
             useP = true;
-            holdArmPosition(190.0);
+            holdArmPosition(170.0);
         } else {
             holdArmPosition();
         }
@@ -274,26 +239,20 @@ public class Arcade_Drive_Fast extends LinearOpMode {
 
         //Extends the arm to certain positions, and maps them to certain joystick positions
         if (gamepad1.right_bumper) {
-            double ARM_EXTENDER_POWER_UP = 1.0;
-            setArmExtender(ARM_EXTENDER_POWER_UP);
+            setArmExtender(1.0);
         } else if (gamepad1.right_trigger > 0.1f) {
-            double ARM_EXTENDER_POWER_DOWN = -1.0;
-            setArmExtender(ARM_EXTENDER_POWER_DOWN);
+            setArmExtender(-1.0);
         } else {
-            double ARM_EXTENDER_POWER_IDLE = 0.0;
-            setArmExtender(ARM_EXTENDER_POWER_IDLE);
+            setArmExtender(0.0);
         }
 
         //Set lander to certain positions, and maps them to certain joystick positions
         if (gamepad2.y) {
-            double ARM_LANDER_POWER_UP = 1.0;
-            setArmLander(ARM_LANDER_POWER_UP);
+            setArmLander(1.0);
         } else if ((gamepad2.a) && (!gamepad1.start && !gamepad2.start)) {
-            double ARM_LANDER_POWER_DOWN = -1.0;
-            setArmLander(ARM_LANDER_POWER_DOWN);
+            setArmLander(-1.0);
         } else {
-            double ARM_LANDER_POWER_IDLE = 0.0;
-            setArmLander(ARM_LANDER_POWER_IDLE);
+            setArmLander(0.0);
         }
 
         if (verboseTiming)
@@ -306,11 +265,10 @@ public class Arcade_Drive_Fast extends LinearOpMode {
             driveSlowFactor = false;
         }
 
-        double INTAKE_POWER_END = -1.0;
         if (gamepad2.left_trigger > 0.1f) {
-            setIntakeMotor(INTAKE_POWER_END);
+            setIntakeMotor(-1.0);
         } else if (gamepad2.left_bumper) {
-            setIntakeMotor(-INTAKE_POWER_END);
+            setIntakeMotor(-1.0);
         } else {
             setIntakeMotor(0.0);
         }
