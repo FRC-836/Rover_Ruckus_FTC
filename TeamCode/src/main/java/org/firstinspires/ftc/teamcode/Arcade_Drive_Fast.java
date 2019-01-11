@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Arcade Drive Fast")
@@ -19,8 +20,13 @@ public class Arcade_Drive_Fast extends LinearOpMode {
     private Servo markerReleaser;
     private BNO055IMU armImu;
     private DcMotor intakeMotor;
+    private boolean isTurning = false;
+    protected TargetDirection currentFacingDirection;
+    private double lastHeading;
+    private ElapsedTime lastHeadingTime = new ElapsedTime();
 
     private boolean armHasBeenHolding = false;
+    private boolean isAllowedToResetTurnPid = true;
 
     private PID_Controller armHoldP = new PID_Controller(0.0076, 0.0, 0.0);
     private PID_Controller armHoldD = new PID_Controller(0.0, 0.0, 0.0015);
@@ -28,6 +34,8 @@ public class Arcade_Drive_Fast extends LinearOpMode {
 
     private Sensor_Runnable sensorRunnable;
     private Thread sensorThread;
+
+    private final double ANGULAR_VELOCITY_THRESHOLD = 5.0;
 
     //Maps robot parts to data values in config file, sets up opMode
     @Override
@@ -74,6 +82,10 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         markerReleaser.setPosition(-1.0);
         teleopTurnPID.resetPID();
         teleopTurnPID.setSetpoint(0.0);
+
+        currentFacingDirection = TargetDirection.makeTargetToRobotsRight(0.0);
+        lastHeading = TargetDirection.getHeading();
+        lastHeadingTime.reset();
 
         sensorRunnable = new Sensor_Runnable(armRotator, telemetry);
         sensorThread = new Thread(sensorRunnable);
@@ -204,6 +216,30 @@ public class Arcade_Drive_Fast extends LinearOpMode {
             forwardPower *= SLOW_DRIVE_SCALE_FACTOR;
             strafePower *= SLOW_DRIVE_SCALE_FACTOR;
         }
+
+        double angularVelocity = Math.abs(TargetDirection.getHeading() - lastHeading) / lastHeadingTime.seconds();
+
+        if (angularVelocity < ANGULAR_VELOCITY_THRESHOLD && isAllowedToResetTurnPid)
+        {
+            teleopTurnPID.resetPID();
+            teleopTurnPID.update(0.0);
+            currentFacingDirection = TargetDirection.makeTargetToRobotsRight(0.0);
+            isAllowedToResetTurnPid = false;
+        }
+
+        lastHeading = TargetDirection.getHeading();
+        lastHeadingTime.reset();
+
+        if (Math.abs(turnPower) < 0.00005f) {
+            if (isTurning)
+                isAllowedToResetTurnPid = true;
+            isTurning = false;
+            if (!isAllowedToResetTurnPid)
+                turnPower = teleopTurnPID.update(currentFacingDirection.calculateDistanceFromTarget());
+        } else {
+            isTurning = true;
+        }
+
         setDrive(forwardPower, turnPower, strafePower);
 
         boolean verboseTiming = true;
