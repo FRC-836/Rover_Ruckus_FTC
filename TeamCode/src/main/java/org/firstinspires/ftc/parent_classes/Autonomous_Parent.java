@@ -26,8 +26,8 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     @Override
     public void play() {
-        setIntakeLifter(-1.0);
-        sleep(800);
+        setIntakeLifter(-0.4);
+        sleep(500);
         setIntakeLifter(0.0);
         sampler.init(telemetry, hardwareMap);
         ElapsedTime timer = new ElapsedTime();
@@ -58,7 +58,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     protected void land() {
         setLandingMotorPower(DEPLOY_POWER);
-        sleep(2500);
+        sleep(2000);
         setArcadeDrive(0.13,0.0);
         sleep(750);
         setArcadeDrive(0.0,0.0);
@@ -79,7 +79,10 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 turnDegreesPID(45.0 + SAMPLE_TURN_ANGLE, 2000);
                 driveDistanceTime(34.0, lastTurnDirection);
                 placeTeamMarker();
-                turnPID(TargetDirection.makeTargetAtFieldPosition(180.0), 3000);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(255.0), 2000);
+                driveDistanceTime(37.0, lastTurnDirection);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(265.0), 700);
+                driveDistanceTime(70.0, lastTurnDirection);
                 break;
             case RIGHT:
                 turnDegreesPID(SAMPLE_TURN_ANGLE, 1800);
@@ -99,6 +102,10 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 stopIntake();
                 driveDistanceTime(40.0);
                 placeTeamMarker();
+                turnPID(TargetDirection.makeTargetAtFieldPosition(225.0), 1500);
+                driveDistanceTime(19.0);
+                turnPID(TargetDirection.makeTargetAtFieldPosition(265.0), 1000);
+                driveDistanceTime(85.0);
                 break;
         }
     }
@@ -162,13 +169,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         turnPID(TargetDirection.makeTargetAtFieldPosition(178.0), 800);
         driveDistanceTime(-56);
 
-    }
-
-    protected void parkDepotHome() {
-        turnPID(TargetDirection.makeTargetAtFieldPosition(225.0), 2000);
-        driveDistanceTime(21.0);
-        turnPID(TargetDirection.makeTargetAtFieldPosition(270.0), 1000);
-        driveDistanceTime(65.0);
     }
 
     protected void parkCrater() {
@@ -269,8 +269,8 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     }
 
     protected  void stopIntake() {
-        setIntakeLifter(1.0);
-        sleep(320);
+        setIntakeLifter(0.7);
+        sleep(350);
         setMotorIntake(0.0);
     }
 }

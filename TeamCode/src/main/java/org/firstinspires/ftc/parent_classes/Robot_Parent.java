@@ -58,7 +58,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         landingMotor.setDirection(DcMotor.Direction.REVERSE);
         teamMarkerServo.setDirection(Servo.Direction.FORWARD);
         latchLockServo.setDirection(CRServo.Direction.REVERSE);
-        intakeLifter.setDirection(CRServo.Direction.FORWARD);
+        intakeLifter.setDirection(CRServo.Direction.REVERSE);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
 
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -131,16 +131,14 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected void setLandingMotorPower(double power) {
         if (power > 0.0001) {
-            // Unlock Lander
             latchLockServo.setPower(0.3);
             isLocked = false;
             sleep(250);
             landingMotor.setPower(power);
         } else if (!isLocked) {
             landingMotor.setPower(power);
-            // Lock Lander
-            latchLockServo.setPower(-1.0);
-            sleep(250);
+            latchLockServo.setPower(-0.3);
+            sleep(300);
             latchLockServo.setPower(0.0);
             isLocked = true;
         } else {
