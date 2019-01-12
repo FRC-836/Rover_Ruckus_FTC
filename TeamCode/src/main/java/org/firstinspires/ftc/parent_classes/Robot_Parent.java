@@ -141,7 +141,7 @@ public abstract class Robot_Parent extends LinearOpMode {
             landingMotor.setPower(power);
             latchLockServo.setPower(-0.3);
             sleep(300);
-            latchLockServo.setPower(0.0);
+            latchLockServo.setPower(-0.01);
             isLocked = true;
         } else {
             landingMotor.setPower(power);
