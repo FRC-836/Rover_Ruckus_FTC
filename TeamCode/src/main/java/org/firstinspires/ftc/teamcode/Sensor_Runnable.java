@@ -20,6 +20,9 @@ public class Sensor_Runnable implements Runnable {
     private Telemetry telemetry;
     private double armRotatorDrift;
 
+    private double armPosition = 0.0;
+    private double armPositionEncoder = 0.0;
+
     private boolean imuWorks = true;
 
     private AtomicBoolean isShutdown = new AtomicBoolean(false);
@@ -53,6 +56,9 @@ public class Sensor_Runnable implements Runnable {
             telemetry.addData("N_Runnable", ++counterRunnable);
             telemetry.addData("N_Main", counterMain);
             telemetry.addData("Arm Position", getArmRotatorPosition());
+
+            telemetry.addData("Arm IMU", armPosition);
+            telemetry.addData("Arm Encoder", armPositionEncoder);
             if (imuWorks)
                 telemetry.addLine("Arm IMU Works");
             else
@@ -98,8 +104,8 @@ public class Sensor_Runnable implements Runnable {
     }
 
     private void updateArmRotator() {
-        double armPosition = ArmTargetDirection.getPitch();
-        double armPositionEncoder = 0.0;
+        armPosition = ArmTargetDirection.getPitch();
+        armPositionEncoder = 0.0;
 
         try {
             armMotorMutex.acquire();
