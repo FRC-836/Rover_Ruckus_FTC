@@ -13,9 +13,8 @@ public class Sensor_Runnable implements Runnable {
 
     private int counterRunnable = 0;
     private AtomicInteger counterMain = new AtomicInteger(0);
-    private AtomicInteger counterDrive = new AtomicInteger(0);
 
-    private AtomicLong armRotatorPostion = new AtomicLong(Double.doubleToLongBits(50.0));
+    private AtomicLong armRotatorPostion = new AtomicLong(Double.doubleToLongBits(0.0));
     private AtomicLong armRotatorPower = new AtomicLong(Double.doubleToLongBits(0.0));
     private Semaphore armMotorMutex = new Semaphore(1);
     private Telemetry telemetry;
@@ -50,8 +49,7 @@ public class Sensor_Runnable implements Runnable {
             updateArmRotator();
 
             telemetry.addData("N_Runnable", ++counterRunnable);
-            telemetry.addData("N_Main", counterMain.get());
-            telemetry.addData("N_Drive", counterDrive.get());
+            telemetry.addData("N_Main", counterMain);
             telemetry.addData("Arm Position", getArmRotatorPosition());
             try {
                 armMotorMutex.acquire();
@@ -65,11 +63,6 @@ public class Sensor_Runnable implements Runnable {
             }
             telemetry.update();
         }
-    }
-
-    public void setDriveCounter(int counter)
-    {
-        counterDrive.set(counter);
     }
 
     public void shutdown()

@@ -20,8 +20,6 @@ public class Arcade_Drive_Fast extends LinearOpMode {
     private BNO055IMU armImu;
     private DcMotor intakeMotor;
 
-    private final boolean LOCK_DRIVE = true;
-
     private boolean armHasBeenHolding = false;
 
     private PID_Controller armHoldP = new PID_Controller(0.0076, 0.0, 0.0);
@@ -30,8 +28,6 @@ public class Arcade_Drive_Fast extends LinearOpMode {
 
     private Sensor_Runnable sensorRunnable;
     private Thread sensorThread;
-    private Drive_Runnable driveRunnable;
-    private Thread driveThread;
 
     //Maps robot parts to data values in config file, sets up opMode
     @Override
@@ -76,35 +72,20 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         }
 
         markerReleaser.setPosition(-1.0);
-        if (LOCK_DRIVE) {
-            teleopTurnPID.resetPID();
-            teleopTurnPID.setSetpoint(0.0);
-            driveRunnable = new Drive_Runnable();
-            driveThread = new Thread(driveRunnable);
-            driveThread.start();
-        }
+        teleopTurnPID.resetPID();
+        teleopTurnPID.setSetpoint(0.0);
 
         sensorRunnable = new Sensor_Runnable(armRotator, telemetry);
         sensorThread = new Thread(sensorRunnable);
         sensorThread.start();
 
-        armHoldP.setSetpoint(50.0);
-        armHoldP.resetPID();
-        armHoldD.setSetpoint(50.0);
-        armHoldD.resetPID();
-
         while (opModeIsActive()) {
             run();
             sensorRunnable.incrementCounter();
-            sensorRunnable.setDriveCounter(driveRunnable.getDriveCounter());
         }
         sensorRunnable.shutdown();
-        if (LOCK_DRIVE)
-            driveRunnable.shutdown();
         try {
             sensorThread.join();
-            if (LOCK_DRIVE)
-                driveThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -114,6 +95,8 @@ public class Arcade_Drive_Fast extends LinearOpMode {
 
     private boolean lastY = false;
     private boolean lastX = false;
+
+    private long lastTime = 0;
 
     //Sets each individual drive's power based on forward, turn, and strafe  inputs
     private void setDrive(double forwardPower, double turnPower, double strafePower) {
@@ -191,13 +174,15 @@ public class Arcade_Drive_Fast extends LinearOpMode {
     private void setArmRotatorGoal(double goalPower) {
         useP = false;
 
-        goalPower = Range.clip(goalPower, -1.0, 1.0);
+        goalPower = Range.clip(goalPower, -0.75, 0.75);
 
         setArmRotator(goalPower);
     }
 
     //Begins teleop
     private void run() {
+        timeIt("Loop Around");
+
         markerReleaser.setPosition(-1.0);
         double p2_MULT = 0.3;
         double forwardPower = mapJoyStick(-gamepad1.left_stick_y) + mapJoyStick(gamepad2.left_stick_x) * p2_MULT;
@@ -221,6 +206,10 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         }
         setDrive(forwardPower, turnPower, strafePower);
 
+        boolean verboseTiming = true;
+        if (verboseTiming)
+            timeIt("Drive");
+
         boolean yButton = gamepad1.y;
         boolean xButton = gamepad1.x;
 
@@ -233,9 +222,9 @@ public class Arcade_Drive_Fast extends LinearOpMode {
 
         //Lifts the arm to certain positions and maps them to certain joystick positions
         if (gamepad1.left_bumper) {
-            setArmRotatorGoal(0.8);
+            setArmRotatorGoal(0.5);
         } else if (gamepad1.left_trigger > 0.1f) {
-            setArmRotatorGoal(-0.8);
+            setArmRotatorGoal(-0.5);
         } else if (yIsPressed) { // Up
             armHasBeenHolding = false;
             useP = true;
@@ -247,6 +236,9 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         } else {
             holdArmPosition();
         }
+
+        if (verboseTiming)
+            timeIt("Arm Rotator");
 
         //Extends the arm to certain positions, and maps them to certain joystick positions
         if (gamepad1.right_bumper) {
@@ -266,6 +258,9 @@ public class Arcade_Drive_Fast extends LinearOpMode {
             setArmLander(0.0);
         }
 
+        if (verboseTiming)
+            timeIt("Arm Extender and Lander");
+
         //Enables or disables a slower drive
         if (gamepad1.dpad_left) {
             driveSlowFactor = true;
@@ -281,7 +276,17 @@ public class Arcade_Drive_Fast extends LinearOpMode {
             setIntakeMotor(0.0);
         }
 
+        if (verboseTiming)
+            timeIt("Slow Drive and Intake");
+
         //telemetry.addData("Setpoint", armHoldP.getSetpoint());
         //telemetry.update();
+    }
+
+    private void timeIt(String message)
+    {
+        long time = System.currentTimeMillis();
+        //telemetry.addData(message,time - lastTime);
+        lastTime = time;
     }
 }
