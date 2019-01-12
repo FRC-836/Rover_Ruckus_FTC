@@ -19,6 +19,7 @@ public class Arcade_Drive_Fast extends LinearOpMode {
     private DcMotor armLander;
     private Servo markerReleaser;
     private BNO055IMU armImu;
+    private BNO055IMU imu;
     private DcMotor intakeMotor;
     private boolean isTurning = false;
     protected TargetDirection currentFacingDirection;
@@ -49,6 +50,7 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         markerReleaser = hardwareMap.get(Servo.class, "mr");
         intakeMotor = hardwareMap.get(DcMotor.class, "im");
         armImu = hardwareMap.get(BNO055IMU.class, "arm_imu");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
         DcMotor armRotator = hardwareMap.get(DcMotor.class, "ar");
 
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -73,6 +75,7 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         setupImu();
 
         ArmTargetDirection.setImu(armImu);
+        TargetDirection.setImu(imu);
 
         while (!opModeIsActive() && !isStopRequested()) {
             telemetry.addData("status", "waiting for start command...");
@@ -82,8 +85,9 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         markerReleaser.setPosition(-1.0);
         teleopTurnPID.resetPID();
         teleopTurnPID.setSetpoint(0.0);
-
+        TargetDirection.setCurrentHeading(0.0);
         currentFacingDirection = TargetDirection.makeTargetToRobotsRight(0.0);
+
         lastHeading = TargetDirection.getHeading();
         lastHeadingTime.reset();
 
@@ -142,6 +146,7 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         imuParameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imuParameters.temperatureUnit = BNO055IMU.TempUnit.FARENHEIT;
 
+        imu.initialize(imuParameters);
         armImu.initialize(imuParameters);
     }
 
