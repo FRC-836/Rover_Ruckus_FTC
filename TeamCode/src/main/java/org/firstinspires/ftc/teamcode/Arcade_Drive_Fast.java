@@ -20,6 +20,8 @@ public class Arcade_Drive_Fast extends LinearOpMode {
     private BNO055IMU armImu;
     private DcMotor intakeMotor;
 
+    private final boolean LOCK_DRIVE = true;
+
     private boolean armHasBeenHolding = false;
 
     private PID_Controller armHoldP = new PID_Controller(0.0076, 0.0, 0.0);
@@ -74,16 +76,17 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         }
 
         markerReleaser.setPosition(-1.0);
-        teleopTurnPID.resetPID();
-        teleopTurnPID.setSetpoint(0.0);
+        if (LOCK_DRIVE) {
+            teleopTurnPID.resetPID();
+            teleopTurnPID.setSetpoint(0.0);
+            driveRunnable = new Drive_Runnable();
+            driveThread = new Thread(driveRunnable);
+            driveThread.start();
+        }
 
         sensorRunnable = new Sensor_Runnable(armRotator, telemetry);
         sensorThread = new Thread(sensorRunnable);
         sensorThread.start();
-
-        driveRunnable = new Drive_Runnable();
-        driveThread = new Thread(driveRunnable);
-        driveThread.start();
 
         armHoldP.setSetpoint(50.0);
         armHoldP.resetPID();
@@ -96,10 +99,12 @@ public class Arcade_Drive_Fast extends LinearOpMode {
             sensorRunnable.setDriveCounter(driveRunnable.getDriveCounter());
         }
         sensorRunnable.shutdown();
-        driveRunnable.shutdown();
+        if (LOCK_DRIVE)
+            driveRunnable.shutdown();
         try {
             sensorThread.join();
-            driveThread.join();
+            if (LOCK_DRIVE)
+                driveThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
