@@ -181,7 +181,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     // Task-based Functions
 
     protected void deploy() {
-       int distance = 13150;
+       int distance = 13500;
        int endpoint = getArmLanderPosition() + distance;
        long timeout = System.currentTimeMillis() + 5000;
 
