@@ -20,5 +20,5 @@ public class Depot_Side_Park_Home extends Autonomous_Parent {
         if (!opModeIsActive())
             return;
         sampleDepot();
-        }
+    }
 }

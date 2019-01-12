@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.auto_options;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.parent_classes.Autonomous_Parent;
 import org.firstinspires.ftc.teamcode.TargetDirection;
 
+@Disabled
 @Autonomous (name = "Depot_Side_Park_Away")
 public class Depot_Side_Park_Away extends Autonomous_Parent {
     @Override

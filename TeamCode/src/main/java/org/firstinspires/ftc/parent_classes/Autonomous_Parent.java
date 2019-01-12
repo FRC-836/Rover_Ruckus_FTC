@@ -80,10 +80,11 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 turnDegreesPID(45.0 + SAMPLE_TURN_ANGLE, 2000);
                 driveDistanceTime(34.0, lastTurnDirection);
                 placeTeamMarker();
+                /*
                 turnPID(TargetDirection.makeTargetAtFieldPosition(255.0), 2000);
                 driveDistanceTime(37.0, lastTurnDirection);
                 turnPID(TargetDirection.makeTargetAtFieldPosition(265.0), 700);
-                driveDistanceTime(70.0, lastTurnDirection);
+                driveDistanceTime(70.0, lastTurnDirection);*/
                 break;
             case RIGHT:
                 turnDegreesPID(SAMPLE_TURN_ANGLE, 1800);
@@ -95,7 +96,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 driveDistanceTime(45.0, lastTurnDirection);
                 turnPID(TargetDirection.makeTargetAtFieldPosition(165.0), 2700);
                 placeTeamMarker();
-                turnPID(TargetDirection.makeTargetAtFieldPosition(185.0), 1000);
+                //turnPID(TargetDirection.makeTargetAtFieldPosition(185.0), 1000);
                 break;
             default:
                 initIntake();
@@ -103,10 +104,10 @@ public abstract class Autonomous_Parent extends Robot_Parent {
                 stopIntake();
                 driveDistanceTime(40.0);
                 placeTeamMarker();
-                turnPID(TargetDirection.makeTargetAtFieldPosition(225.0), 1500);
+                /*turnPID(TargetDirection.makeTargetAtFieldPosition(225.0), 1500);
                 driveDistanceTime(19.0);
                 turnPID(TargetDirection.makeTargetAtFieldPosition(265.0), 1000);
-                driveDistanceTime(85.0);
+                driveDistanceTime(85.0);*/
                 break;
         }
     }
