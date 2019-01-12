@@ -210,8 +210,8 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         if (verboseTiming)
             timeIt("Drive");
 
-        boolean yButton = gamepad1.y;
-        boolean xButton = gamepad1.x;
+        boolean yButton = false;//gamepad1.y;
+        boolean xButton = false;//gamepad1.x;
 
         boolean yIsPressed = yButton && !lastY;
         boolean xIsPressed = xButton && !lastX;
