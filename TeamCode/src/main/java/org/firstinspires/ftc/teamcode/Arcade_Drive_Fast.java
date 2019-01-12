@@ -28,6 +28,8 @@ public class Arcade_Drive_Fast extends LinearOpMode {
 
     private Sensor_Runnable sensorRunnable;
     private Thread sensorThread;
+    private Drive_Runnable driveRunnable;
+    private Thread driveThread;
 
     //Maps robot parts to data values in config file, sets up opMode
     @Override
@@ -79,13 +81,25 @@ public class Arcade_Drive_Fast extends LinearOpMode {
         sensorThread = new Thread(sensorRunnable);
         sensorThread.start();
 
+        driveRunnable = new Drive_Runnable();
+        driveThread = new Thread(driveRunnable);
+        driveThread.start();
+
+        armHoldP.setSetpoint(50.0);
+        armHoldP.resetPID();
+        armHoldD.setSetpoint(50.0);
+        armHoldD.resetPID();
+
         while (opModeIsActive()) {
             run();
             sensorRunnable.incrementCounter();
+            sensorRunnable.setDriveCounter(driveRunnable.getDriveCounter());
         }
         sensorRunnable.shutdown();
+        driveRunnable.shutdown();
         try {
             sensorThread.join();
+            driveThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -174,7 +188,7 @@ public class Arcade_Drive_Fast extends LinearOpMode {
     private void setArmRotatorGoal(double goalPower) {
         useP = false;
 
-        goalPower = Range.clip(goalPower, -0.75, 0.75);
+        goalPower = Range.clip(goalPower, -1.0, 1.0);
 
         setArmRotator(goalPower);
     }
@@ -222,9 +236,9 @@ public class Arcade_Drive_Fast extends LinearOpMode {
 
         //Lifts the arm to certain positions and maps them to certain joystick positions
         if (gamepad1.left_bumper) {
-            setArmRotatorGoal(0.5);
+            setArmRotatorGoal(0.8);
         } else if (gamepad1.left_trigger > 0.1f) {
-            setArmRotatorGoal(-0.5);
+            setArmRotatorGoal(-0.8);
         } else if (yIsPressed) { // Up
             armHasBeenHolding = false;
             useP = true;
