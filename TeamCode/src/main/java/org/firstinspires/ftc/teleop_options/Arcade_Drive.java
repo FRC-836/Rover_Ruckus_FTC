@@ -36,9 +36,9 @@ public class Arcade_Drive extends Teleop_Parent {
         double goalTurnPower = gamepad1.right_stick_x;
         double latchingPower;
 
-        if (gamepad1.left_bumper)
+        if (gamepad1.y)
             latchingPower = DEPLOY_POWER;
-        else if (gamepad1.left_trigger > 0.5f)
+        else if (gamepad1.a)
             latchingPower = -1.0;
         else
             latchingPower = 0.0;
@@ -48,16 +48,16 @@ public class Arcade_Drive extends Teleop_Parent {
         setArcadeDrive(forwardPower, turnPower);
         setLandingMotorPower(latchingPower);
 
-        if (gamepad1.right_bumper)
+        if (gamepad1.right_trigger > 0.5)
             setIntakeLifter(1.0);
-        else if (gamepad1.right_trigger > 0.5)
+        else if (gamepad1.left_trigger > 0.5)
             setIntakeLifter(-0.7);
         else
             setIntakeLifter(0.15);
 
         if (gamepad1.b)
             setMotorIntake(1.0);
-        else if (gamepad1.x)
+        else if (gamepad1.left_bumper)
             setMotorIntake(-1.0);
         else
             setMotorIntake(0.0);
