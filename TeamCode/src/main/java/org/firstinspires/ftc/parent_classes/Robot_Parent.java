@@ -35,6 +35,7 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected final double TEAM_MARKER_SERVO_DOWN = 0.0;
     private final double AUTO_DRIVE_CAP = 0.5;
     protected final double DEPLOY_POWER = 0.4;
+    private final double LATCH_LOCK_POWER = 0.1;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -57,7 +58,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         frontRightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         landingMotor.setDirection(DcMotor.Direction.REVERSE);
         teamMarkerServo.setDirection(Servo.Direction.FORWARD);
-        latchLockServo.setDirection(CRServo.Direction.REVERSE);
+        latchLockServo.setDirection(CRServo.Direction.FORWARD);
         intakeLifter.setDirection(CRServo.Direction.REVERSE);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
 
@@ -132,14 +133,14 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected void setLandingMotorPower(double power) {
         if (power > 0.0001) {
             if (isLocked) {
-                latchLockServo.setPower(0.3);
+                latchLockServo.setPower(LATCH_LOCK_POWER);
                 isLocked = false;
                 sleep(250);
                 landingMotor.setPower(power);
             }
         } else if (!isLocked) {
             landingMotor.setPower(power);
-            latchLockServo.setPower(-0.3);
+            latchLockServo.setPower(-LATCH_LOCK_POWER);
             sleep(300);
             latchLockServo.setPower(-0.01);
             isLocked = true;
