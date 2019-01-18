@@ -25,6 +25,8 @@ public class Sampler {
     private final float LEFT_OF_SCREEN = 427.0f;
     private final float RIGHT_OF_SCREEN = 853.0f;
 
+    private final float VERTICAL_CUTOFF = 10000.0f;
+
     public enum GoldPosition {
         LEFT,
         CENTER,
@@ -54,14 +56,16 @@ public class Sampler {
             tfod.activate();
     }
 
-    private float getRecPos(Recognition recognition) {
-        return (recognition.getBottom() + recognition.getTop()) / 2.0f;
+    private float getRecVerticalPos(Recognition recognition) {
+        float vertPos = (recognition.getBottom() + recognition.getTop()) / 2.0f;
+        myTelemetry.addData("Vertical Pos",vertPos);
+        return vertPos;
     }
 
-    private float getRecSidePos(Recognition recognition) {
-        float sidePos = (recognition.getLeft() + recognition.getRight()) / 2.0f;
-        myTelemetry.addData("Side Pos",sidePos);
-        return sidePos;
+    private float getRecHorizontalPos(Recognition recognition) {
+        float horzPos = (recognition.getLeft() + recognition.getRight()) / 2.0f;
+        myTelemetry.addData("Side Pos",horzPos);
+        return horzPos;
     }
 
     public GoldPosition sample() {
@@ -72,6 +76,8 @@ public class Sampler {
                 Vector<Recognition> silverList = new Vector<>();
                 Recognition bestGold = null;
                 for (Recognition newRecognition : updatedRecognitions) {
+                    if (getRecVerticalPos(newRecognition) > VERTICAL_CUTOFF)
+                        continue;
                     if (newRecognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                         if (bestGold == null)
                             bestGold = newRecognition;
@@ -89,8 +95,8 @@ public class Sampler {
                 {
                     if (silverList.size() == 2)
                     {
-                        float silverPos1 = getRecPos(silverList.elementAt(0));
-                        float silverPos2 = getRecPos(silverList.elementAt(1));
+                        float silverPos1 = getRecVerticalPos(silverList.elementAt(0));
+                        float silverPos2 = getRecVerticalPos(silverList.elementAt(1));
                         if ((silverPos1 < LEFT_OF_SCREEN && silverPos2 < LEFT_OF_SCREEN) ||
                                 (silverPos1 > RIGHT_OF_SCREEN && silverPos2 > RIGHT_OF_SCREEN) ||
                                 (silverPos1 >= LEFT_OF_SCREEN && silverPos2 >= LEFT_OF_SCREEN &&
@@ -111,7 +117,7 @@ public class Sampler {
                     }
                     if (silverList.size() == 1)
                     {
-                        float silverPos = getRecPos(silverList.elementAt(0));
+                        float silverPos = getRecVerticalPos(silverList.elementAt(0));
                         if (silverPos <= LEFT_OF_SCREEN)
                             return GoldPosition.CENTER;
                         else if (silverPos < RIGHT_OF_SCREEN)
@@ -132,19 +138,19 @@ public class Sampler {
                         case 1:
                         case 2:
                             // Use the gold position alone to determine location
-                            if (getRecPos(bestGold) > RIGHT_OF_SCREEN)
+                            if (getRecVerticalPos(bestGold) > RIGHT_OF_SCREEN)
                                 return GoldPosition.RIGHT;
-                            else if (getRecPos(bestGold) < LEFT_OF_SCREEN)
+                            else if (getRecVerticalPos(bestGold) < LEFT_OF_SCREEN)
                                 return GoldPosition.LEFT;
                             else
                                 return GoldPosition.CENTER;
                             /*
                             // Determine location of gold based on location relative to 2 silvers
-                            if (getRecPos(bestGold) > getRecPos(silverList.elementAt(0)) &&
-                                    getRecPos(bestGold) > getRecPos(silverList.elementAt(1)))
+                            if (getRecVerticalPos(bestGold) > getRecVerticalPos(silverList.elementAt(0)) &&
+                                    getRecVerticalPos(bestGold) > getRecVerticalPos(silverList.elementAt(1)))
                                 return GoldPosition.LEFT;
-                            else if (getRecPos(bestGold) < getRecPos(silverList.elementAt(0)) &&
-                                    getRecPos(bestGold) < getRecPos(silverList.elementAt(1)))
+                            else if (getRecVerticalPos(bestGold) < getRecVerticalPos(silverList.elementAt(0)) &&
+                                    getRecVerticalPos(bestGold) < getRecVerticalPos(silverList.elementAt(1)))
                                 return GoldPosition.RIGHT;
                             else
                                 return GoldPosition.CENTER;
@@ -162,10 +168,10 @@ public class Sampler {
         // TODO: Make more efficient
         Vector<Recognition> finalList = new Vector<>();
         int bestI = 0;
-        float bestPos = getRecSidePos(silverList.elementAt(bestI));
+        float bestPos = getRecHorizontalPos(silverList.elementAt(bestI));
         for (int i = 1; i < silverList.size(); i++)
         {
-            float pos = getRecSidePos(silverList.elementAt(i));
+            float pos = getRecHorizontalPos(silverList.elementAt(i));
             if (pos < bestPos)
             {
                 bestI = i;
@@ -176,10 +182,10 @@ public class Sampler {
 
         int secondBestI = 0;
         if (bestI == 0) secondBestI = 1;
-        float secondBestPos = getRecSidePos(silverList.elementAt(secondBestI));
+        float secondBestPos = getRecHorizontalPos(silverList.elementAt(secondBestI));
         for (int i = secondBestI + 1; i < silverList.size(); i++)
         {
-            float pos = getRecSidePos(silverList.elementAt(i));
+            float pos = getRecHorizontalPos(silverList.elementAt(i));
             if (pos < secondBestPos && i != bestI)
             {
                 secondBestI = i;
@@ -193,7 +199,7 @@ public class Sampler {
 
     private Recognition findBestGold(Recognition rec1, Recognition rec2) {
         //if (rec1.getConfidence() > rec2.getConfidence())
-        if (getRecSidePos(rec1) < getRecSidePos(rec2))
+        if (getRecHorizontalPos(rec1) < getRecHorizontalPos(rec2))
             return rec1;
         else
             return rec2;
