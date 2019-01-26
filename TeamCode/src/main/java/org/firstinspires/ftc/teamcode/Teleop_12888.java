@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.State_Machines_12888.Team_Marker_State_Machine;
 
-@TeleOp(name = "State Test")
+@TeleOp(name = "State Test 12888")
 public class Teleop_12888 extends LinearOpMode {
     private Team_Marker_State_Machine teamMarker;
 
