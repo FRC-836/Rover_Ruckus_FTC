@@ -20,11 +20,17 @@ public class Lander_And_Latch_State_Machine implements Runnable {
     private CRServo latchLockServo;
     private DcMotor landingMotor;
     private State_Enum currentState;
-    private ElapsedTime timer = new ElapsedTime();
+    private ElapsedTime servoTimer = new ElapsedTime();
+    private ElapsedTime lockingTimer = new ElapsedTime();
     private AtomicBoolean opModeIsActive = new AtomicBoolean(true);
     private final double DEPLOY_POWER = 0.4;
+    private final double UNLOCKING_POWER = 0.5;
+    private final double LOCKED_POWER = 0.0;
+    private final double LOCKING_POWER = -0.5;
+    private final double UNLCOKED_POWER = 0.25;
 
-    private Semaphore stateLock = new Semaphore(1);
+    private Semaphore stateAndTimerLock = new Semaphore(1);
+    private Semaphore timerLock = new Semaphore(1);
 
     public Lander_And_Latch_State_Machine(HardwareMap hardwareMap) {
         latchLockServo = hardwareMap.get(CRServo.class, "ll");
@@ -41,60 +47,62 @@ public class Lander_And_Latch_State_Machine implements Runnable {
     @Override
     public void run() {
         while (opModeIsActive.get()) {
-            switch (getState())
-            {
+            switch (getState()) {
                 case RAISING:
                     landingMotor.setPower(DEPLOY_POWER);
-                    latchLockServo.setPower(-0.1);
+                    latchLockServo.setPower(UNLCOKED_POWER);
                     break;
                 case LOWERING:
                     landingMotor.setPower(-DEPLOY_POWER);
-                    latchLockServo.setPower(0.1);
+                    lockServo();
                     break;
                 case UNLOCKING:
-                    //TODO: give latchlockservo higher power for the unlocking portion of time
                     landingMotor.setPower(0.0);
-                    latchLockServo.setPower(-0.1);
-                    if (timer.milliseconds() > 500.0) {
+                    latchLockServo.setPower(UNLOCKING_POWER);
+                    while (!timerLock.tryAcquire()) {
+                        sleep(0);
+                    }
+                    if (servoTimer.milliseconds() > 500.0) {
                         setState(State_Enum.RAISING);
                     }
+                    timerLock.release();
                     break;
                 case STANDBY:
-                    latchLockServo.setPower(0.1);
                     landingMotor.setPower(0.0);
+                    lockServo();
                     break;
             }
             sleep(15);
         }
     }
 
-    private synchronized State_Enum getState()
-    {
-        while (!stateLock.tryAcquire())
-        {
+    private synchronized State_Enum getState() {
+        while (!stateAndTimerLock.tryAcquire()) {
             sleep(0);
         }
         State_Enum state = currentState;
-        stateLock.release();
+        stateAndTimerLock.release();
 
         return state;
     }
 
-    private synchronized void setState(State_Enum state)
-    {
-        while (!stateLock.tryAcquire())
-        {
+    private synchronized void setState(State_Enum state) {
+        while (!stateAndTimerLock.tryAcquire()) {
             sleep(0);
         }
+        lockingTimer.reset();
         currentState = state;
-        stateLock.release();
+        stateAndTimerLock.release();
     }
 
     public void raise() {
-        if (getState() == State_Enum.STANDBY || getState() == State_Enum.LOWERING)
-        {
+        if (getState() == State_Enum.STANDBY || getState() == State_Enum.LOWERING) {
             setState(State_Enum.UNLOCKING);
-            timer.reset(); // TODO: Make timer access thread-safe
+            while (!timerLock.tryAcquire()) {
+                sleep(0);
+            }
+            servoTimer.reset();
+            timerLock.release();
         }
     }
 
@@ -116,6 +124,17 @@ public class Lander_And_Latch_State_Machine implements Runnable {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    private void lockServo() {
+        while (!stateAndTimerLock.tryAcquire()) {
+            sleep(0);
+        }
+        if (lockingTimer.milliseconds() < 500.0)
+            latchLockServo.setPower(LOCKING_POWER);
+        else
+            latchLockServo.setPower(LOCKED_POWER);
+        stateAndTimerLock.release();
     }
 }
 /*
