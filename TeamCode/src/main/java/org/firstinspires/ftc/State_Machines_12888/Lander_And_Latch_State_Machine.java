@@ -118,7 +118,7 @@ public class Lander_And_Latch_State_Machine implements Runnable {
         opModeIsActive.set(false);
     }
 
-    private final void sleep(long milliseconds) {
+    private synchronized void sleep(long milliseconds) {
         try {
             Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
