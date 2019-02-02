@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -19,20 +21,28 @@ public class Lander_And_Latch_State_Machine implements Runnable {
 
     private CRServo latchLockServo;
     private DcMotor landingMotor;
-    private State_Enum currentState;
-    private ElapsedTime servoTimer = new ElapsedTime();
+    private State_Enum currentState = State_Enum.UNLOCKING;
+    private ElapsedTime unlockingTimer = new ElapsedTime();
     private ElapsedTime lockingTimer = new ElapsedTime();
     private AtomicBoolean opModeIsActive = new AtomicBoolean(true);
     private final double DEPLOY_POWER = 0.4;
-    private final double UNLOCKING_POWER = 0.5;
-    private final double LOCKED_POWER = 0.0;
-    private final double LOCKING_POWER = -0.5;
-    private final double UNLCOKED_POWER = 0.25;
+
+    private final double UNLOCKING_POWER = 1.0;
+    private final double LOCKED_POWER = 0.4;
+    private final double LOCKING_POWER = 0.0;
+    private final double UNLOCKED_POWER = 0.60;
+
+    private final double LOCKING_TIME = 500.0;
+    private final double UNLOCKING_TIME = 500.0;
+
+    private Telemetry telemetry;
 
     private Semaphore stateAndTimerLock = new Semaphore(1);
-    private Semaphore timerLock = new Semaphore(1);
+    private Semaphore unlockingTimerLock = new Semaphore(1);
 
-    public Lander_And_Latch_State_Machine(HardwareMap hardwareMap) {
+    public Lander_And_Latch_State_Machine(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.telemetry = telemetry;
+
         latchLockServo = hardwareMap.get(CRServo.class, "ll");
         landingMotor = hardwareMap.get(DcMotor.class, "lm");
 
@@ -42,36 +52,50 @@ public class Lander_And_Latch_State_Machine implements Runnable {
         landingMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         setState(State_Enum.STANDBY);
+
+        telemetry.addLine("Thread Created");
+        telemetry.update();
     }
 
     @Override
     public void run() {
+        telemetry.addLine("Thread Started");
+        telemetry.update();
+        String state = "None";
         while (opModeIsActive.get()) {
             switch (getState()) {
                 case RAISING:
+                    state = "Raising";
                     landingMotor.setPower(DEPLOY_POWER);
-                    latchLockServo.setPower(UNLCOKED_POWER);
+                    latchLockServo.setPower(UNLOCKED_POWER);
                     break;
                 case LOWERING:
+                    state = "Lowering";
                     landingMotor.setPower(-DEPLOY_POWER);
                     lockServo();
                     break;
                 case UNLOCKING:
+                    state = "Unlocking";
                     landingMotor.setPower(0.0);
                     latchLockServo.setPower(UNLOCKING_POWER);
-                    while (!timerLock.tryAcquire()) {
+                    while (!unlockingTimerLock.tryAcquire()) {
                         sleep(0);
                     }
-                    if (servoTimer.milliseconds() > 500.0) {
+                    if (unlockingTimer.milliseconds() > UNLOCKING_TIME) {
                         setState(State_Enum.RAISING);
                     }
-                    timerLock.release();
+                    unlockingTimerLock.release();
                     break;
                 case STANDBY:
+                    state = "Standby";
                     landingMotor.setPower(0.0);
                     lockServo();
                     break;
             }
+            telemetry.addLine(state);
+            telemetry.addData("Latch Power", latchLockServo.getPower());
+            telemetry.addData("Lander Power", landingMotor.getPower());
+            telemetry.update();
             sleep(15);
         }
     }
@@ -90,20 +114,23 @@ public class Lander_And_Latch_State_Machine implements Runnable {
         while (!stateAndTimerLock.tryAcquire()) {
             sleep(0);
         }
-        lockingTimer.reset();
+
+        if (state == currentState)
+            return;
+        if (state == State_Enum.UNLOCKING && currentState == State_Enum.RAISING)
+            return;
+
+        if (state == State_Enum.UNLOCKING)
+            unlockingTimer.reset();
+        if (currentState == State_Enum.UNLOCKING || currentState == State_Enum.RAISING)
+            lockingTimer.reset();
+
         currentState = state;
         stateAndTimerLock.release();
     }
 
     public void raise() {
-        if (getState() == State_Enum.STANDBY || getState() == State_Enum.LOWERING) {
-            setState(State_Enum.UNLOCKING);
-            while (!timerLock.tryAcquire()) {
-                sleep(0);
-            }
-            servoTimer.reset();
-            timerLock.release();
-        }
+        setState(State_Enum.UNLOCKING);
     }
 
     public void lower() {
@@ -130,7 +157,7 @@ public class Lander_And_Latch_State_Machine implements Runnable {
         while (!stateAndTimerLock.tryAcquire()) {
             sleep(0);
         }
-        if (lockingTimer.milliseconds() < 500.0)
+        if (lockingTimer.milliseconds() < LOCKING_TIME)
             latchLockServo.setPower(LOCKING_POWER);
         else
             latchLockServo.setPower(LOCKED_POWER);
