@@ -27,13 +27,13 @@ public class Lander_And_Latch_State_Machine implements Runnable {
     private AtomicBoolean opModeIsActive = new AtomicBoolean(true);
     private final double DEPLOY_POWER = 0.4;
 
-    private final double UNLOCKING_POWER = 1.0;
-    private final double LOCKED_POWER = 0.4;
-    private final double LOCKING_POWER = 0.0;
-    private final double UNLOCKED_POWER = 0.60;
+    private final double UNLOCKING_POWER = 1.0; // 1.0
+    private final double LOCKED_POWER = -0.2; // 0.4
+    private final double LOCKING_POWER = -1.0; // 0.0
+    private final double UNLOCKED_POWER = 0.2; // 0.6
 
-    private final double LOCKING_TIME = 500.0;
-    private final double UNLOCKING_TIME = 500.0;
+    private final double LOCKING_TIME = 1000.0;
+    private final double UNLOCKING_TIME = 1000.0;
 
     private Telemetry telemetry;
 
@@ -110,11 +110,18 @@ public class Lander_And_Latch_State_Machine implements Runnable {
         return state;
     }
 
+    /** Always call this to set the state */
     private synchronized void setState(State_Enum state) {
         while (!stateAndTimerLock.tryAcquire()) {
             sleep(0);
         }
+        safeSetState(state);
+        stateAndTimerLock.release();
+    }
 
+    /** NEVER CALL THIS other than inside of setState */
+    private void safeSetState(State_Enum state)
+    {
         if (state == currentState)
             return;
         if (state == State_Enum.UNLOCKING && currentState == State_Enum.RAISING)
@@ -126,7 +133,6 @@ public class Lander_And_Latch_State_Machine implements Runnable {
             lockingTimer.reset();
 
         currentState = state;
-        stateAndTimerLock.release();
     }
 
     public void raise() {
