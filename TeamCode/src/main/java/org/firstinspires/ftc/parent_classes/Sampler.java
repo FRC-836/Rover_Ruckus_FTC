@@ -18,7 +18,7 @@ public class Sampler {
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
 
-    private static final String VUFORIA_KEY = "AVOMBtn/////AAAAGWoe5Xr26kwMi197rJ9ukz9CynZI0gtPtGmyzJJF/DX5fVRX6KZpGATlLq8PX8m1UBpwePrOZAkZmI/XhtlNcZ3fbgvlGuYfDwkaUgbaJgrzPut88uA5KdcubkI0uTw/J+S2y/jGLeKM3pnXMxywmGjbNNGRLgt57I9pThzUjuwC8jNi42C3Qo17qpTiHOFRWbRybxGDKk2PAUEVdCFtjW4zuzB+b5xBABGCytzwdPk+riWGBSITihc1tPIWtOP1CDQiMp4B3V1ysJTPxOTXkWmFuSqqFhgePWKoXxVqbcWVcpUDQ1yVPdpK9BxrZfeoVrpWGRfBa9mrSYsB6VBKkKIxMClow9gxYv5SyN440Btn";
+    private static final String VUFORIA_KEY = "AbRx63D/////AAABmQcuuYj/OEgBs4wbGqPsyfkgVNw5GwqEOolRLI1EvofuvPPVX/trImFeHnKWGYnRvu4Ge+bk8QwhE1dpU7VWKIocSCWHgdg4HYiRexBS6d3ZCrK/BkaeS0opFJ80zXooycyHJ45QxonlbbB4lTyOJhzQnmN6tV9+WaSBC2AhwIMr/py6319gJFg8Apt1IvIYp4tkB43EWc9b6Ktw9+bCza9GG5tpHWkwrKHdltM2XVYAeWMySuILWLmlmdo6ADcxfNWRvPQQwf7BI09aj3BDqd4mn/k5/FYK6ow2hzbqPqfYQR9wE6DqfcHMxr+81dUm1DL7MiEubIvgm+0xKoWpVbNEM7O/5sG8oeSOVflVdDD+";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
     private Telemetry myTelemetry;
