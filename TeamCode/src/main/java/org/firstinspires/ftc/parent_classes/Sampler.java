@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -34,14 +35,31 @@ public class Sampler {
         UNKNOWN
     }
 
+    private void sleep(long ms)
+    {
+        try {
+            Thread.sleep(ms);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void init(Telemetry telemetry, HardwareMap hardwareMap) {
         this.myTelemetry = telemetry;
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = CameraDirection.BACK;
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "webcam");
+        //parameters.cameraDirection = CameraDirection.BACK;
 
+        telemetry.addLine("Test 1");
+        telemetry.update();
+        sleep(1000);
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        telemetry.addLine("Test 2");
+        telemetry.update();
+        sleep(1000);
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
