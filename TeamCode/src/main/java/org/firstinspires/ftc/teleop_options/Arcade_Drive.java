@@ -3,11 +3,13 @@ package org.firstinspires.ftc.teleop_options;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.State_Machines_12888.Lander_And_Latch_State_Machine;
 import org.firstinspires.ftc.parent_classes.Teleop_Parent;
 
 @TeleOp(name = "Teleop Arcade")
 public class Arcade_Drive extends Teleop_Parent {
 
+    private Lander_And_Latch_State_Machine landerAndLatchStateMachine;
     //Team is using Regular/H drive train
     double forwardPower = 0.0;
     double turnPower = 0.0;
@@ -26,8 +28,11 @@ public class Arcade_Drive extends Teleop_Parent {
 
     @Override
     public void begin() {
+        landerAndLatchStateMachine = new Lander_And_Latch_State_Machine(hardwareMap, telemetry);
+
         lastCheckedTime = System.currentTimeMillis();
     }
+
 
     @Override
     public void repeat() {
@@ -37,16 +42,15 @@ public class Arcade_Drive extends Teleop_Parent {
         double latchingPower;
 
         if (gamepad1.y)
-            latchingPower = DEPLOY_POWER;
+            landerAndLatchStateMachine.raise();
         else if (gamepad1.a)
-            latchingPower = -1.0;
+            landerAndLatchStateMachine.lower();
         else
-            latchingPower = 0.0;
+            landerAndLatchStateMachine.standby();
 
 
         updatePowers(goalForwardPower, goalTurnPower);
         setArcadeDrive(forwardPower, turnPower);
-        setLandingMotorPower(latchingPower);
 
         if (gamepad1.right_trigger > 0.5)
             setIntakeLifter(1.0);

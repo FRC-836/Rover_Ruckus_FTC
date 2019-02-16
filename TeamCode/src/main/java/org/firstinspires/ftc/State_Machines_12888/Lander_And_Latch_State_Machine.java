@@ -143,7 +143,7 @@ public class Lander_And_Latch_State_Machine implements Runnable {
         setState(State_Enum.LOWERING);
     }
 
-    public void stopLatch() {
+    public void standby() {
         setState(State_Enum.STANDBY);
     }
 
