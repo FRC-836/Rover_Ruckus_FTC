@@ -49,7 +49,7 @@ public class Team_Marker_State_Machine implements Runnable {
         }
     }
 
-    public void stop (){
+    public void stopThread(){
         opModeIsActive.set(false);
     }
 

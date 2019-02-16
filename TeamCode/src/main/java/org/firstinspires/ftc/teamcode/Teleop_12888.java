@@ -27,6 +27,6 @@ public class Teleop_12888 extends LinearOpMode {
             sleep(0);
         }
 
-        teamMarker.stop();
+        teamMarker.stopThread();
     }
 }
