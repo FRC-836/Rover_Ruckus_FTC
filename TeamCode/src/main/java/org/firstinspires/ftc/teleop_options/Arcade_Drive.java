@@ -50,9 +50,9 @@ public class Arcade_Drive extends OpMode {
         double latchingPower;
 
         //latch
-        if (gamepad1.y)
+        if (gamepad1.x)
             landerAndLatchStateMachine.raise();
-        else if (gamepad1.a)
+        else if (gamepad1.b)
             landerAndLatchStateMachine.lower();
         else
             landerAndLatchStateMachine.standby();
@@ -60,6 +60,10 @@ public class Arcade_Drive extends OpMode {
         //team marker servo
         if (gamepad1.dpad_up)
             teamMarkerStateMachine.dropTeamMarker();
+
+        //intake extend/retract
+        if (gamepad1.y)
+            setInOut(0.5);
 
         /*
         updatePowers(goalForwardPower, goalTurnPower);
