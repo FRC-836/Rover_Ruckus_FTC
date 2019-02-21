@@ -1,0 +1,91 @@
+[1mdiff --git a/TeamCode/src/main/java/org/firstinspires/ftc/parent_classes/Robot_Parent.java b/TeamCode/src/main/java/org/firstinspires/ftc/parent_classes/Robot_Parent.java[m
+[1mindex fee3fde..aa45b4f 100644[m
+[1m--- a/TeamCode/src/main/java/org/firstinspires/ftc/parent_classes/Robot_Parent.java[m
+[1m+++ b/TeamCode/src/main/java/org/firstinspires/ftc/parent_classes/Robot_Parent.java[m
+[36m@@ -23,6 +23,7 @@[m [mpublic abstract class Robot_Parent extends LinearOpMode {[m
+     protected Servo teamMarkerServo;[m
+     protected DcMotorSimple intakeLifter;[m
+     protected DcMotor intakeMotor;[m
+[32m+[m[32m    protected DcMotor intakeInOut;[m[41m[m
+ [m
+     private boolean isLocked = true;[m
+ [m
+[36m@@ -51,6 +52,7 @@[m [mpublic abstract class Robot_Parent extends LinearOpMode {[m
+         latchLockServo = hardwareMap.get(CRServo.class, "ll");[m
+         intakeLifter = hardwareMap.get(CRServo.class, "il");[m
+         intakeMotor = hardwareMap.get(DcMotor.class, "im");[m
+[32m+[m[32m        intakeInOut = hardwareMap.get(DcMotor.class, "io");[m[41m[m
+ [m
+         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);[m
+         backRightDrive.setDirection(DcMotor.Direction.FORWARD);[m
+[36m@@ -61,11 +63,13 @@[m [mpublic abstract class Robot_Parent extends LinearOpMode {[m
+         latchLockServo.setDirection(CRServo.Direction.FORWARD);[m
+         intakeLifter.setDirection(CRServo.Direction.REVERSE);[m
+         intakeMotor.setDirection(DcMotor.Direction.FORWARD);[m
+[32m+[m[32m        intakeInOut.setDirection(DcMotor.Direction.FORWARD);[m[41m[m
+ [m
+         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);[m
+         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);[m
+         landingMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);[m
+         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);[m
+[32m+[m[32m        intakeInOut.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);[m[41m[m
+ [m
+         setupImu();[m
+ [m
+[36m@@ -98,12 +102,11 @@[m [mpublic abstract class Robot_Parent extends LinearOpMode {[m
+     }[m
+ [m
+     protected void setArcadeDrive(double forwardPower, double turnPower) {[m
+[31m-        telemetry.addData("Forwards",forwardPower);[m
+[31m-        telemetry.addData("Turn",turnPower);[m
+[32m+[m[32m        telemetry.addData("Forwards", forwardPower);[m[41m[m
+[32m+[m[32m        telemetry.addData("Turn", turnPower);[m[41m[m
+         telemetry.update();[m
+ [m
+[31m-        if (isAuto)[m
+[31m-        {[m
+[32m+[m[32m        if (isAuto) {[m[41m[m
+             forwardPower = Range.clip(forwardPower, -AUTO_DRIVE_CAP, AUTO_DRIVE_CAP);[m
+             turnPower = Range.clip(turnPower, -AUTO_DRIVE_CAP, AUTO_DRIVE_CAP);[m
+         }[m
+[1mdiff --git a/TeamCode/src/main/java/org/firstinspires/ftc/parent_classes/Teleop_Parent.java b/TeamCode/src/main/java/org/firstinspires/ftc/parent_classes/Teleop_Parent.java[m
+[1mindex 2017f8e..ce89c11 100644[m
+[1m--- a/TeamCode/src/main/java/org/firstinspires/ftc/parent_classes/Teleop_Parent.java[m
+[1m+++ b/TeamCode/src/main/java/org/firstinspires/ftc/parent_classes/Teleop_Parent.java[m
+[36m@@ -27,4 +27,9 @@[m [mpublic abstract class Teleop_Parent extends Robot_Parent {[m
+     protected double mapJoystick(double joystickValue) {[m
+         return joystickValue;[m
+     }[m
+[32m+[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    public void setInOut(double inOutPower) {[m[41m[m
+[32m+[m[32m        intakeInOut.setPower(inOutPower);[m[41m[m
+[32m+[m[32m    }[m[41m[m
+ }[m
+[1mdiff --git a/TeamCode/src/main/java/org/firstinspires/ftc/teleop_options/Arcade_Drive.java b/TeamCode/src/main/java/org/firstinspires/ftc/teleop_options/Arcade_Drive.java[m
+[1mindex c1fba1d..fcb6683 100644[m
+[1m--- a/TeamCode/src/main/java/org/firstinspires/ftc/teleop_options/Arcade_Drive.java[m
+[1m+++ b/TeamCode/src/main/java/org/firstinspires/ftc/teleop_options/Arcade_Drive.java[m
+[36m@@ -50,9 +50,9 @@[m [mpublic class Arcade_Drive extends OpMode {[m
+         double latchingPower;[m
+ [m
+         //latch[m
+[31m-        if (gamepad1.y)[m
+[32m+[m[32m        if (gamepad1.x)[m
+             landerAndLatchStateMachine.raise();[m
+[31m-        else if (gamepad1.a)[m
+[32m+[m[32m        else if (gamepad1.b)[m
+             landerAndLatchStateMachine.lower();[m
+         else[m
+             landerAndLatchStateMachine.standby();[m
+[36m@@ -61,6 +61,10 @@[m [mpublic class Arcade_Drive extends OpMode {[m
+         if (gamepad1.dpad_up)[m
+             teamMarkerStateMachine.dropTeamMarker();[m
+ [m
+[32m+[m[32m        //intake extend/retract[m
+[32m+[m[32m        if (gamepad1.y)[m
+[32m+[m[32m            setInOut(0.5);[m
+[32m+[m
+         /*[m
+         updatePowers(goalForwardPower, goalTurnPower);[m
+         setArcadeDrive(forwardPower, turnPower);[m

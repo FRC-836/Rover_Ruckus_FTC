@@ -27,4 +27,9 @@ public abstract class Teleop_Parent extends Robot_Parent {
     protected double mapJoystick(double joystickValue) {
         return joystickValue;
     }
+
+
+    public void setInOut(double inOutPower) {
+        intakeInOut.setPower(inOutPower);
+    }
 }
