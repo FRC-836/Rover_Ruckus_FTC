@@ -23,7 +23,6 @@ public abstract class Robot_Parent extends LinearOpMode {
     protected Servo teamMarkerServo;
     protected DcMotorSimple intakeLifter;
     protected DcMotor intakeMotor;
-    protected DcMotor intakeInOut;
 
     private boolean isLocked = true;
 
@@ -52,7 +51,6 @@ public abstract class Robot_Parent extends LinearOpMode {
         latchLockServo = hardwareMap.get(CRServo.class, "ll");
         intakeLifter = hardwareMap.get(CRServo.class, "il");
         intakeMotor = hardwareMap.get(DcMotor.class, "im");
-        intakeInOut = hardwareMap.get(DcMotor.class, "io");
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -63,13 +61,11 @@ public abstract class Robot_Parent extends LinearOpMode {
         latchLockServo.setDirection(CRServo.Direction.FORWARD);
         intakeLifter.setDirection(CRServo.Direction.REVERSE);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
-        intakeInOut.setDirection(DcMotor.Direction.FORWARD);
 
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         landingMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intakeInOut.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         setupImu();
 
@@ -97,20 +93,17 @@ public abstract class Robot_Parent extends LinearOpMode {
         intakeLifter.setPower(intakeLifterPower);
     }
 
-    protected void setInOut(double inOutPower) {
-        intakeInOut.setPower(inOutPower);
-    }
-
     protected void setMotorIntake(double motorIntakePower) {
         intakeMotor.setPower(motorIntakePower);
     }
 
     protected void setArcadeDrive(double forwardPower, double turnPower) {
-        telemetry.addData("Forwards", forwardPower);
-        telemetry.addData("Turn", turnPower);
+        telemetry.addData("Forwards",forwardPower);
+        telemetry.addData("Turn",turnPower);
         telemetry.update();
 
-        if (isAuto) {
+        if (isAuto)
+        {
             forwardPower = Range.clip(forwardPower, -AUTO_DRIVE_CAP, AUTO_DRIVE_CAP);
             turnPower = Range.clip(turnPower, -AUTO_DRIVE_CAP, AUTO_DRIVE_CAP);
         }
