@@ -97,6 +97,10 @@ public abstract class Robot_Parent extends LinearOpMode {
         intakeLifter.setPower(intakeLifterPower);
     }
 
+    protected void setInOut(double inOutPower) {
+        intakeInOut.setPower(inOutPower);
+    }
+
     protected void setMotorIntake(double motorIntakePower) {
         intakeMotor.setPower(motorIntakePower);
     }
