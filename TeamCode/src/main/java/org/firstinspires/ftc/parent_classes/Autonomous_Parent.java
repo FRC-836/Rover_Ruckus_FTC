@@ -29,7 +29,11 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         setIntakeLifter(-0.4);
         sleep(500);
         setIntakeLifter(0.0);
-        sampler.init(hardwareMap);
+        if (sampler.init(hardwareMap))
+            telemetry.addLine("Camera initialized.");
+        else
+            telemetry.addLine("Camera failed to initialize.");
+        telemetry.update();
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
         Sampler.GoldPosition pos;

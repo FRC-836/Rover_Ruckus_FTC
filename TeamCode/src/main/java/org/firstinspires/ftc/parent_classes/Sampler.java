@@ -23,9 +23,11 @@ public class Sampler {
     private TFObjectDetector tfod;
 
     private final float LEFT_OF_SCREEN = 220.0f;
-    private final float RIGHT_OF_SCREEN = 300.0f;
+    private final float RIGHT_OF_SCREEN = 315.0f;
 
     private final float VERTICAL_CUTOFF = 1000.0f;
+
+    private boolean isCameraWorking = true;
 
     public enum GoldPosition {
         LEFT,
@@ -34,24 +36,37 @@ public class Sampler {
         UNKNOWN
     }
 
-    public void init(HardwareMap hardwareMap) {
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+    public boolean init(HardwareMap hardwareMap) {
+        try {
+            VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
-        //parameters.cameraDirection = CameraDirection.BACK;
+            parameters.vuforiaLicenseKey = VUFORIA_KEY;
+            parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+            //parameters.cameraDirection = CameraDirection.BACK;
 
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+            vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                    "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-            TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-            tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-            tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+            if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+                int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                        "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+                TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+                tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+                tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+            }
+            else
+            {
+                isCameraWorking = false;
+            }
+            if (tfod != null)
+                tfod.activate();
+            else
+                isCameraWorking = false;
         }
-        if (tfod != null)
-            tfod.activate();
+        catch (Exception e)
+        {
+            isCameraWorking = false;
+        }
+        return isCameraWorking;
     }
 
     private float getRecVerticalPos(Recognition recognition) {
@@ -65,6 +80,8 @@ public class Sampler {
     }
 
     public GoldPosition sample() {
+        if (!isCameraWorking)
+            return GoldPosition.UNKNOWN;
         if (tfod != null) {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
