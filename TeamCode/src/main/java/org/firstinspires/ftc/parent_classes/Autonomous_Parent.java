@@ -29,7 +29,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
         setIntakeLifter(-0.4);
         sleep(500);
         setIntakeLifter(0.0);
-        sampler.init(telemetry, hardwareMap);
+        sampler.init(hardwareMap);
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
         Sampler.GoldPosition pos;
