@@ -21,12 +21,11 @@ public class Sampler {
     private static final String VUFORIA_KEY = "AbRx63D/////AAABmQcuuYj/OEgBs4wbGqPsyfkgVNw5GwqEOolRLI1EvofuvPPVX/trImFeHnKWGYnRvu4Ge+bk8QwhE1dpU7VWKIocSCWHgdg4HYiRexBS6d3ZCrK/BkaeS0opFJ80zXooycyHJ45QxonlbbB4lTyOJhzQnmN6tV9+WaSBC2AhwIMr/py6319gJFg8Apt1IvIYp4tkB43EWc9b6Ktw9+bCza9GG5tpHWkwrKHdltM2XVYAeWMySuILWLmlmdo6ADcxfNWRvPQQwf7BI09aj3BDqd4mn/k5/FYK6ow2hzbqPqfYQR9wE6DqfcHMxr+81dUm1DL7MiEubIvgm+0xKoWpVbNEM7O/5sG8oeSOVflVdDD+";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
-    private Telemetry myTelemetry;
 
-    private final float LEFT_OF_SCREEN = 427.0f;
-    private final float RIGHT_OF_SCREEN = 853.0f;
+    private final float LEFT_OF_SCREEN = 220.0f;
+    private final float RIGHT_OF_SCREEN = 300.0f;
 
-    private final float VERTICAL_CUTOFF = 10000.0f;
+    private final float VERTICAL_CUTOFF = 1000.0f;
 
     public enum GoldPosition {
         LEFT,
@@ -35,31 +34,14 @@ public class Sampler {
         UNKNOWN
     }
 
-    private void sleep(long ms)
-    {
-        try {
-            Thread.sleep(ms);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void init(Telemetry telemetry, HardwareMap hardwareMap) {
-        this.myTelemetry = telemetry;
+    public void init(HardwareMap hardwareMap) {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "webcam");
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
         //parameters.cameraDirection = CameraDirection.BACK;
 
-        telemetry.addLine("Test 1");
-        telemetry.update();
-        sleep(1000);
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        telemetry.addLine("Test 2");
-        telemetry.update();
-        sleep(1000);
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
@@ -67,23 +49,19 @@ public class Sampler {
             TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
             tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
             tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
         if (tfod != null)
             tfod.activate();
     }
 
     private float getRecVerticalPos(Recognition recognition) {
-        float vertPos = (recognition.getBottom() + recognition.getTop()) / 2.0f;
-        myTelemetry.addData("Vertical Pos",vertPos);
-        return vertPos;
+        float horzPos = (recognition.getLeft() + recognition.getRight()) / 2.0f;
+        return horzPos;
     }
 
     private float getRecHorizontalPos(Recognition recognition) {
-        float horzPos = (recognition.getLeft() + recognition.getRight()) / 2.0f;
-        myTelemetry.addData("Side Pos",horzPos);
-        return horzPos;
+        float vertPos = (recognition.getBottom() + recognition.getTop()) / 2.0f;
+        return vertPos;
     }
 
     public GoldPosition sample() {
@@ -178,7 +156,6 @@ public class Sampler {
                 // Code to react to updated recognitions goes above this line!
             }
         }
-        myTelemetry.update();
         return GoldPosition.UNKNOWN;
     }
 
