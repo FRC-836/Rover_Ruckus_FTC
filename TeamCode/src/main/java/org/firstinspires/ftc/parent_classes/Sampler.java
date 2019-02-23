@@ -22,8 +22,8 @@ public class Sampler {
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
-    private final float LEFT_OF_SCREEN = 220.0f;
-    private final float RIGHT_OF_SCREEN = 315.0f;
+    private final float LEFT_OF_SCREEN = 213.3f; // 220.0f;
+    private final float RIGHT_OF_SCREEN = 426.7f; // 315.0f;
 
     private final float VERTICAL_CUTOFF = 1000.0f;
 

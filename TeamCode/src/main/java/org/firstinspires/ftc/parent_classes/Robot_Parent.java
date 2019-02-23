@@ -16,12 +16,12 @@ public abstract class Robot_Parent extends LinearOpMode {
 
     protected DcMotor backLeftDrive;
     protected DcMotor backRightDrive;
-    protected DcMotorSimple frontLeftDrive;
-    protected DcMotorSimple frontRightDrive;
+    protected DcMotor frontLeftDrive;
+    protected DcMotor frontRightDrive;
     protected DcMotor landingMotor;
     protected CRServo latchLockServo;
     protected Servo teamMarkerServo;
-    protected DcMotorSimple intakeLifter;
+    protected DcMotor intakeLifter;
     protected DcMotor intakeMotor;
     protected DcMotor intakeInOut;
 
@@ -45,23 +45,23 @@ public abstract class Robot_Parent extends LinearOpMode {
 
         backLeftDrive = hardwareMap.get(DcMotor.class, "bld");
         backRightDrive = hardwareMap.get(DcMotor.class, "brd");
-        frontLeftDrive = hardwareMap.get(DcMotorSimple.class, "fld");
-        frontRightDrive = hardwareMap.get(DcMotorSimple.class, "frd");
+        frontLeftDrive = hardwareMap.get(DcMotor.class, "fld");
+        frontRightDrive = hardwareMap.get(DcMotor.class, "frd");
         landingMotor = hardwareMap.get(DcMotor.class, "lm");
         teamMarkerServo = hardwareMap.get(Servo.class, "tms");
         latchLockServo = hardwareMap.get(CRServo.class, "ll");
-        intakeLifter = hardwareMap.get(CRServo.class, "il");
+        intakeLifter = hardwareMap.get(DcMotor.class, "il");
         intakeMotor = hardwareMap.get(DcMotor.class, "im");
         intakeInOut = hardwareMap.get(DcMotor.class, "io");
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        frontLeftDrive.setDirection(DcMotorSimple.Direction.FORWARD);
-        frontRightDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         landingMotor.setDirection(DcMotor.Direction.REVERSE);
         teamMarkerServo.setDirection(Servo.Direction.FORWARD);
         latchLockServo.setDirection(CRServo.Direction.FORWARD);
-        intakeLifter.setDirection(CRServo.Direction.REVERSE);
+        intakeLifter.setDirection(DcMotor.Direction.REVERSE);
         intakeMotor.setDirection(DcMotor.Direction.FORWARD);
         intakeInOut.setDirection(DcMotor.Direction.FORWARD);
 

@@ -10,6 +10,7 @@ import org.firstinspires.ftc.parent_classes.Teleop_Parent;
 public class Arcade_Drive extends Teleop_Parent {
 
     private Lander_And_Latch_State_Machine landerAndLatchStateMachine;
+    private Thread latchLockThread;
     //Team is using Regular/H drive train
     double forwardPower = 0.0;
     double turnPower = 0.0;
@@ -29,8 +30,9 @@ public class Arcade_Drive extends Teleop_Parent {
     @Override
     public void begin() {
         landerAndLatchStateMachine = new Lander_And_Latch_State_Machine(hardwareMap, telemetry);
-
+        latchLockThread = new Thread(landerAndLatchStateMachine);
         lastCheckedTime = System.currentTimeMillis();
+        latchLockThread.start();
     }
 
 
@@ -51,10 +53,11 @@ public class Arcade_Drive extends Teleop_Parent {
 
         //intake extend/retract
         if (gamepad1.y)
-            setInOut(0.5);
+            setInOut(1.0);
         else if (gamepad1.a)
-            setInOut(-0.5);
-
+            setInOut(-1.0);
+        else
+            setInOut(0.0);
         updatePowers(goalForwardPower, goalTurnPower);
         setArcadeDrive(forwardPower, turnPower);
 
@@ -107,5 +110,16 @@ public class Arcade_Drive extends Teleop_Parent {
         turnPower = Range.clip(turnPower, -MAX_TURN_POWER, MAX_TURN_POWER);
 
         lastCheckedTime = newCheckedTime;
+    }
+
+    @Override
+    public void end()
+    {
+        landerAndLatchStateMachine.stopThread();
+        try {
+            latchLockThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

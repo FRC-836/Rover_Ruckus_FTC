@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.parent_classes;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.PID_Controller;
@@ -22,6 +23,7 @@ public abstract class Autonomous_Parent extends Robot_Parent {
     public void initialize() {
         isAuto = true;
         setup();
+        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override
