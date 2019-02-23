@@ -26,9 +26,6 @@ public abstract class Autonomous_Parent extends Robot_Parent {
 
     @Override
     public void play() {
-        setIntakeLifter(-0.4);
-        sleep(500);
-        setIntakeLifter(0.0);
         if (sampler.init(hardwareMap))
             telemetry.addLine("Camera initialized.");
         else
