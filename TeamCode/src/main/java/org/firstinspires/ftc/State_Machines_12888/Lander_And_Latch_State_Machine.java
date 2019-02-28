@@ -35,14 +35,12 @@ public class Lander_And_Latch_State_Machine implements Runnable {
     private final double LOCKING_TIME = 1000.0;
     private final double UNLOCKING_TIME = 1000.0;
 
-    private Telemetry telemetry;
+    //private Telemetry telemetry;
 
     private Semaphore stateAndTimerLock = new Semaphore(1);
     private Semaphore unlockingTimerLock = new Semaphore(1);
 
     public Lander_And_Latch_State_Machine(HardwareMap hardwareMap, Telemetry telemetry) {
-        this.telemetry = telemetry;
-
         latchLockServo = hardwareMap.get(CRServo.class, "ll");
         landingMotor = hardwareMap.get(DcMotor.class, "lm");
 
@@ -52,30 +50,21 @@ public class Lander_And_Latch_State_Machine implements Runnable {
         landingMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         setState(State_Enum.STANDBY);
-
-        telemetry.addLine("Thread Created");
-        telemetry.update();
     }
 
     @Override
     public void run() {
-        telemetry.addLine("Thread Started");
-        telemetry.update();
-        String state = "None";
         while (opModeIsActive.get()) {
             switch (getState()) {
                 case RAISING:
-                    state = "Raising";
                     landingMotor.setPower(DEPLOY_POWER);
                     latchLockServo.setPower(UNLOCKED_POWER);
                     break;
                 case LOWERING:
-                    state = "Lowering";
                     landingMotor.setPower(-DEPLOY_POWER);
                     lockServo();
                     break;
                 case UNLOCKING:
-                    state = "Unlocking";
                     landingMotor.setPower(0.0);
                     latchLockServo.setPower(UNLOCKING_POWER);
                     while (!unlockingTimerLock.tryAcquire()) {
@@ -87,15 +76,10 @@ public class Lander_And_Latch_State_Machine implements Runnable {
                     unlockingTimerLock.release();
                     break;
                 case STANDBY:
-                    state = "Standby";
                     landingMotor.setPower(0.0);
                     lockServo();
                     break;
             }
-            telemetry.addLine(state);
-            telemetry.addData("Latch Power", latchLockServo.getPower());
-            telemetry.addData("Lander Power", landingMotor.getPower());
-            telemetry.update();
             sleep(15);
         }
     }

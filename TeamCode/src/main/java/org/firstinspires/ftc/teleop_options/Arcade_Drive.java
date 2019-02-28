@@ -74,6 +74,8 @@ public class Arcade_Drive extends Teleop_Parent {
             setMotorIntake(-1.0);
         else
             setMotorIntake(0.0);
+
+        telemetry.addData("Power: ", intakeLifter.getPower());
     }
 
     protected void updatePowers(double goalPowerForward, double goalPowerTurn) {
