@@ -1,20 +1,38 @@
 package org.firstinspires.ftc.teleop_options;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.State_Machines_12888.Lander_And_Latch_State_Machine;
 import org.firstinspires.ftc.parent_classes.Teleop_Parent;
+
+enum State_Enum {
+    RAISING,
+    LOWERING,
+    UNLOCKING,
+    STANDBY
+}
 
 @TeleOp(name = "Teleop Arcade")
 public class Arcade_Drive extends Teleop_Parent {
 
-    private Lander_And_Latch_State_Machine landerAndLatchStateMachine;
-    private Thread latchLockThread;
     //Team is using Regular/H drive train
     double forwardPower = 0.0;
     double turnPower = 0.0;
     long lastCheckedTime;
+
+    private State_Enum currentState = State_Enum.UNLOCKING;
+    private ElapsedTime unlockingTimer = new ElapsedTime();
+    private ElapsedTime lockingTimer = new ElapsedTime();
+    private final double DEPLOY_POWER = 0.4;
+    private final double RAISE_POWER = -1.0;
+    private final double UNLOCKING_POWER = 1.0; // 1.0
+    private final double LOCKED_POWER = -0.2; // 0.4
+    private final double LOCKING_POWER = -1.0; // 0.0
+    private final double UNLOCKED_POWER = 0.2; // 0.6
+    private final double LOCKING_TIME = 750.0;
+    private final double UNLOCKING_TIME = 750.0;
+    private boolean lastButtonWasUp = false;
 
     //original values 0.001 nad 0.004
     private final double DRIVE_POWER_PER_MS_SPEED_UP = 0.003;
@@ -29,12 +47,11 @@ public class Arcade_Drive extends Teleop_Parent {
 
     @Override
     public void begin() {
-        landerAndLatchStateMachine = new Lander_And_Latch_State_Machine(hardwareMap, telemetry);
-        latchLockThread = new Thread(landerAndLatchStateMachine);
+        lockingTimer.reset();
+        unlockingTimer.reset();
+        setState(State_Enum.STANDBY);
         lastCheckedTime = System.currentTimeMillis();
-        latchLockThread.start();
     }
-
 
     @Override
     public void repeat() {
@@ -44,12 +61,12 @@ public class Arcade_Drive extends Teleop_Parent {
 
         //latch
         if (gamepad1.x)
-            landerAndLatchStateMachine.raise();
+            setState(State_Enum.UNLOCKING);
         else if (gamepad1.b)
-            landerAndLatchStateMachine.lower();
+            setState(State_Enum.LOWERING);
         else
-            landerAndLatchStateMachine.standby();
-
+            setState(State_Enum.STANDBY);
+        updateLatchLock();
 
         //intake extend/retract
         if (gamepad1.y)
@@ -61,12 +78,20 @@ public class Arcade_Drive extends Teleop_Parent {
         updatePowers(goalForwardPower, goalTurnPower);
         setArcadeDrive(forwardPower, turnPower);
 
-        if (gamepad1.right_bumper)
-            setIntakeLifter(1.0);
-        else if (gamepad1.right_trigger > 0.5f)
-            setIntakeLifter(-0.7);
-        else
-            setIntakeLifter(0.15);
+        if (gamepad1.right_bumper) {
+            setIntakeLifter(0.6);
+            lastButtonWasUp = true;
+        }
+        else if (gamepad1.right_trigger > 0.5f) {
+            setIntakeLifter(-0.4);
+            lastButtonWasUp = false;
+        }
+        else {
+            if (lastButtonWasUp)
+                setIntakeLifter(0.15);
+            else
+                setIntakeLifter(0.0);
+        }
 
         if (gamepad1.left_bumper)
             setMotorIntake(1.0);
@@ -114,14 +139,53 @@ public class Arcade_Drive extends Teleop_Parent {
         lastCheckedTime = newCheckedTime;
     }
 
-    @Override
-    public void end()
-    {
-        landerAndLatchStateMachine.stopThread();
-        try {
-            latchLockThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    private void updateLatchLock() {
+        switch (currentState) {
+            case RAISING:
+                landingMotor.setPower(DEPLOY_POWER);
+                latchLockServo.setPower(UNLOCKED_POWER);
+                break;
+            case LOWERING:
+                landingMotor.setPower(RAISE_POWER);
+                lockServo();
+                break;
+            case UNLOCKING:
+                landingMotor.setPower(0.0);
+                latchLockServo.setPower(UNLOCKING_POWER);
+                if (unlockingTimer.milliseconds() > UNLOCKING_TIME) {
+                    setState(State_Enum.RAISING);
+                }
+                break;
+            case STANDBY:
+                landingMotor.setPower(0.0);
+                lockServo();
+                break;
         }
+    }
+
+    private void setState(State_Enum state) {
+        if (state == currentState)
+            return;
+        if (state == State_Enum.UNLOCKING && currentState == State_Enum.RAISING)
+            return;
+
+        if (state == State_Enum.UNLOCKING)
+            unlockingTimer.reset();
+        if (currentState == State_Enum.UNLOCKING || currentState == State_Enum.RAISING)
+            lockingTimer.reset();
+
+        currentState = state;
+    }
+
+    private void lockServo() {
+        if (lockingTimer.milliseconds() < LOCKING_TIME)
+            latchLockServo.setPower(LOCKING_POWER);
+        else
+            latchLockServo.setPower(LOCKED_POWER);
+    }
+
+    @Override
+    public void end() {
+
     }
 }
