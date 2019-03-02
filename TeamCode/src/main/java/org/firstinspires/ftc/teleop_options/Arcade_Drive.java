@@ -31,7 +31,7 @@ public class Arcade_Drive extends Teleop_Parent {
     private final double LOCKING_POWER = -1.0; // 0.0
     private final double UNLOCKED_POWER = 0.2; // 0.6
     private final double LOCKING_TIME = 750.0;
-    private final double UNLOCKING_TIME = 750.0;
+    private final double UNLOCKING_TIME = 400.0;
     private boolean lastButtonWasUp = false;
 
     //original values 0.001 nad 0.004
@@ -55,6 +55,15 @@ public class Arcade_Drive extends Teleop_Parent {
 
     @Override
     public void repeat() {
+        if (gamepad1.dpad_down) {
+            setArcadeDrive(0.0, 0.0);
+            setIntakeLifter(-1.0);
+            setInOut(0.0);
+            setMotorIntake(0.0);
+            setState(State_Enum.LOWERING);
+            updateLatchLock();
+            return;
+        }
         // Get powers
         double goalForwardPower = -gamepad1.left_stick_y;
         double goalTurnPower = gamepad1.right_stick_x;
@@ -81,25 +90,22 @@ public class Arcade_Drive extends Teleop_Parent {
         if (gamepad1.right_bumper) {
             setIntakeLifter(0.6);
             lastButtonWasUp = true;
-        }
-        else if (gamepad1.right_trigger > 0.5f) {
+        } else if (gamepad1.right_trigger > 0.5f) {
             setIntakeLifter(-0.4);
             lastButtonWasUp = false;
-        }
-        else {
+        } else {
             if (lastButtonWasUp)
-                setIntakeLifter(0.15);
+                setIntakeLifter(0.01);
             else
                 setIntakeLifter(0.0);
         }
 
-        if (gamepad1.left_bumper)
+        if (gamepad1.left_trigger > 0.5f)
             setMotorIntake(1.0);
-        else if (gamepad1.left_trigger > 0.5f)
+        else if (gamepad1.left_bumper)
             setMotorIntake(-1.0);
         else
             setMotorIntake(0.0);
-
         telemetry.addData("Power: ", intakeLifter.getPower());
     }
 

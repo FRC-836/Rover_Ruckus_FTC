@@ -70,6 +70,7 @@ public abstract class Robot_Parent extends LinearOpMode {
         landingMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeInOut.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeLifter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         setupImu();
 

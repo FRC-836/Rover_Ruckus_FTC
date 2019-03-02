@@ -8,6 +8,7 @@ public abstract class Teleop_Parent extends Robot_Parent {
 
     @Override
     public void initialize() {
+        intakeLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         isAuto = false;
         gamepad1.setJoystickDeadzone(JOYSTICK_DEAD_ZONE);
