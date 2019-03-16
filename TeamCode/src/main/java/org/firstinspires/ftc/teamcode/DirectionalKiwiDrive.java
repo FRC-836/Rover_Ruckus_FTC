@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import java.lang.annotation.Target;
 
-@TeleOp(name = "Kiwi Drive",group = "A")
+@TeleOp(name = "Directional Kiwi Drive",group = "A")
 public class DirectionalKiwiDrive extends OpMode {
 
     private static final double TURN_MAGNITUDE_THRESHOLD = 0.9;
