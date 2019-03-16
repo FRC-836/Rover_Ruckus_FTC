@@ -99,7 +99,7 @@ public class ButtonKiwiDrive extends OpMode {
     private void setKiwiDrive(double forwardPower, double strafePower, double turnPower) {
         forwardPower = Range.clip(forwardPower, -1.0, 1.0);
         strafePower = Range.clip(strafePower, -1.0, 1.0);
-        turnPower = Range.clip(turnPower, -1.0, 1.0);
+        turnPower = Range.clip(turnPower, -0.5, 0.5);
 
         frontRight.setPower(-0.5*strafePower + SQRT_3_OVER_2*forwardPower - turnPower);
         frontLeft.setPower(0.5*strafePower + SQRT_3_OVER_2*forwardPower + turnPower);
