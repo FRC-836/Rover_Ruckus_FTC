@@ -8,10 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
-import java.lang.annotation.Target;
-
-@TeleOp(name = "Directional Kiwi Drive",group = "A")
-public class DirectionalKiwiDrive extends OpMode {
+@TeleOp(name = "Button Kiwi Drive",group = "A")
+public class ButtonKiwiDrive extends OpMode {
 
     private static final double TURN_MAGNITUDE_THRESHOLD = 0.9;
 
@@ -60,8 +58,8 @@ public class DirectionalKiwiDrive extends OpMode {
     public void loop() {
         double movementUp = -gamepad1.left_stick_y;
         double movementRight = gamepad1.left_stick_x;
-        double directionUp = -gamepad1.right_stick_y;
-        double directionRight = gamepad1.right_stick_x;
+        double directionUp = (gamepad1.y ? 1.0 : 0.0) - (gamepad1.a ? 1.0 : 0.0);
+        double directionRight = (gamepad1.b ? 1.0 : 0.0) - (gamepad1.x ? 1.0 : 0.0);
 
         double movementPower = getMagnitude(movementRight, movementUp);
         double movementDirection = getDirection(movementUp, movementRight);
