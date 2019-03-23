@@ -48,8 +48,11 @@ public class KiwiDrive extends OpMode {
     }
 
     private void setFieldCentricDrive(double forwardPower, double strafePower, double turnPower, double heading) {
-        // TODO: Change forward, strafe, and turn powers based on heading.
-        setKiwiDrive(forwardPower, strafePower, turnPower);
+        double hypotenuse = Math.sqrt((forwardPower * forwardPower) + (strafePower * strafePower));
+        double offset = Math.toDegrees(Math.atan2(forwardPower, strafePower)) - heading;
+        double fP = hypotenuse * Math.sin(Math.toRadians(offset));
+        double sP = hypotenuse * Math.cos(Math.toRadians(offset));
+        setKiwiDrive(fP, sP, turnPower);
     }
 
     private void setKiwiDrive(double forwardPower, double strafePower, double turnPower) {
