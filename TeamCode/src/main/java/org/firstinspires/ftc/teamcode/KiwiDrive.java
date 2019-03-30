@@ -34,6 +34,7 @@ public class KiwiDrive extends OpMode {
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         center.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        gamepad1.setJoystickDeadzone(0.1f);
         setupImu(imu);
         TargetDirection.setImu(imu);
         TargetDirection.setCurrentHeading(0.0);
@@ -49,10 +50,16 @@ public class KiwiDrive extends OpMode {
 
     private void setFieldCentricDrive(double forwardPower, double strafePower, double turnPower, double heading) {
         double hypotenuse = Math.sqrt((forwardPower * forwardPower) + (strafePower * strafePower));
-        double offset = Math.toDegrees(Math.atan2(forwardPower, strafePower)) - heading;
-        double fP = hypotenuse * Math.sin(Math.toRadians(offset));
-        double sP = hypotenuse * Math.cos(Math.toRadians(offset));
+        double offset = Math.toDegrees(Math.atan2(strafePower, forwardPower)) - heading;
+        double fP = hypotenuse * Math.cos(Math.toRadians(offset));
+        double sP = hypotenuse * Math.sin(Math.toRadians(offset));
         setKiwiDrive(fP, sP, turnPower);
+        telemetry.addData("forward", fP);
+        telemetry.addData("strafe", sP);
+        telemetry.addData("offset", offset);
+        telemetry.addData("hypotenuse", hypotenuse);
+        telemetry.addData("heading", heading);
+        telemetry.update();
     }
 
     private void setKiwiDrive(double forwardPower, double strafePower, double turnPower) {
