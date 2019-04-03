@@ -77,13 +77,18 @@ public class KiwiPID extends OpMode {
                 pidTimer.reset();
             }
 
-            if (pidTimer.milliseconds() < TIME_TO_START)
+            if (pidTimer.seconds() > TIME_TO_START) {
                 turnPower = pidPower;
-            else
+                telemetry.addLine("Using PID");
+            }
+            else {
                 facingDirection.setToFieldDirection(TargetDirection.getHeading());
+                telemetry.addLine("Waiting for timer");
+            }
         } else {
             turnedLastFrame = true;
             facingDirection.setToFieldDirection(TargetDirection.getHeading());
+            telemetry.addLine("Turning");
         }
             
         setKiwiDrive(forwardPower, strafePower, turnPower);
