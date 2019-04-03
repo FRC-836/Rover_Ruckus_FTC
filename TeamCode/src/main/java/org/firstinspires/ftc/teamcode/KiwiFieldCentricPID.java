@@ -6,13 +6,22 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name = "Kiwi Drive",group = "A")
-public class KiwiDrive extends OpMode {
+@TeleOp(name = "Kiwi Field Centric PID",group = "A")
+public class KiwiFieldCentricPID extends OpMode {
+
+    private static final double THRESHOLD = 0.1;
+    private static final double TIME_TO_START = 0.5;
     protected DcMotor frontRight;
     protected DcMotor frontLeft;
     protected DcMotor center;
     private BNO055IMU imu;
+
+    private PID_Controller turnPid = new PID_Controller(0.018,0.0,0.0015);
+    private ElapsedTime pidTimer = new ElapsedTime();
+    private boolean turnedLastFrame = false;
+    private TargetDirection facingDirection;
 
     private final double SQRT_3_OVER_2 = 0.86602540378443864676372317075294;
 
@@ -41,6 +50,16 @@ public class KiwiDrive extends OpMode {
     }
 
     @Override
+    public void start() {
+        facingDirection = TargetDirection.makeTargetToRobotsLeft(0.0);
+        turnPid.setSetpoint(0.0);
+        turnPid.resetPID();
+        turnPid.update(0.0);
+        turnPid.update(0.0);
+        pidTimer.reset();
+    }
+
+    @Override
     public void loop() {
         forwardPower = -gamepad1.left_stick_y;
         turnPower = gamepad1.right_stick_x;
@@ -53,12 +72,25 @@ public class KiwiDrive extends OpMode {
         double offset = Math.toDegrees(Math.atan2(strafePower, forwardPower)) - heading;
         double fP = hypotenuse * Math.cos(Math.toRadians(offset));
         double sP = hypotenuse * Math.sin(Math.toRadians(offset));
+        double pidPower = turnPid.update(facingDirection.calculateDistanceFromTarget());
+        
+        if (Math.abs(turnPower) < THRESHOLD) {
+            if (turnedLastFrame)
+            {
+                turnedLastFrame = false;
+                pidTimer.reset();
+            }
+
+            if (pidTimer.milliseconds() < TIME_TO_START)
+                turnPower = pidPower;
+            else
+                facingDirection.setToFieldDirection(TargetDirection.getHeading());
+        } else {
+            turnedLastFrame = true;
+            facingDirection.setToFieldDirection(TargetDirection.getHeading());
+        }
+            
         setKiwiDrive(fP, sP, turnPower);
-        telemetry.addData("forward", fP);
-        telemetry.addData("strafe", sP);
-        telemetry.addData("offset", offset);
-        telemetry.addData("hypotenuse", hypotenuse);
-        telemetry.addData("heading", heading);
         telemetry.update();
     }
 
@@ -78,6 +110,5 @@ public class KiwiDrive extends OpMode {
         imuParameters.temperatureUnit = BNO055IMU.TempUnit.FARENHEIT;
 
         imu.initialize(imuParameters);
-
     }
 }
