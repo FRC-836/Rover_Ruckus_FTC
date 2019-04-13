@@ -13,9 +13,9 @@ public class TwoMotorDrive implements DriveInterface {
     private DcMotor rightMotor;
 
     @Override
-    public void setDrive(double fowardPower, double turnpower) {
-        leftMotor.setPower(fowardPower + turnpower);
-        rightMotor.setPower(fowardPower - turnpower);
+    public void setDrive(double forwardPower, double turnPower) {
+        leftMotor.setPower(forwardPower + turnPower);
+        rightMotor.setPower(forwardPower - turnPower);
     }
 
     @Override
