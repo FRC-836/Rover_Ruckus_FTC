@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Autonomous (name = "Color Sensor Test")
-public class Color_Sensor_Test extends OpMode {
+public class ColorSensor_GoldOrSilver extends OpMode {
 
     final double SCALE_FACTOR = 255;
 

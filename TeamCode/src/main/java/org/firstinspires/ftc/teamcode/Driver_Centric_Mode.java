@@ -38,7 +38,8 @@ public class Driver_Centric_Mode extends OpMode
         gamepad2.setJoystickDeadzone(0.1f);
 
         setupImu();
-        TargetDirection.setupImu(0.0, imu);
+        TargetDirection.setImu(imu);
+        TargetDirection.setCurrentHeading(0.0);
     }
 
     @Override
