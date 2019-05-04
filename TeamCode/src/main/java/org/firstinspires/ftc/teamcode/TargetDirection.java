@@ -9,7 +9,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class TargetDirection {
     // Private Variables
-
     private static double absoluteHeadingAtFieldZero;
     private static BNO055IMU imu;
 
@@ -21,14 +20,18 @@ public class TargetDirection {
     }
 
     // Function to be called before using a TargetDirection object
-    public static void setupImu(double robotsCurrentHeading, BNO055IMU imu) {
+    public static void setImu(BNO055IMU imu) {
         TargetDirection.imu = imu;
+    }
+
+    public static void setCurrentHeading(double robotsCurrentHeading){
         TargetDirection.absoluteHeadingAtFieldZero = getAbsoluteHeading() - robotsCurrentHeading;
     }
 
     // Public functions to change directions
     public void moveTargetToRight(double degrees) { fieldHeadingAtTargetZero += degrees; }
     public void moveTargetToLeft(double degrees) { fieldHeadingAtTargetZero -= degrees; }
+    public void setToFieldDirection(double degrees) { this.fieldHeadingAtTargetZero = degrees; }
 
     // Calculation functions
     private static double getAbsoluteHeading() {
