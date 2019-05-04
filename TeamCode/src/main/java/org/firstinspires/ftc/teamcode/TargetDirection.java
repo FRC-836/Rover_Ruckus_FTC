@@ -31,6 +31,7 @@ public class TargetDirection {
     // Public functions to change directions
     public void moveTargetToRight(double degrees) { fieldHeadingAtTargetZero += degrees; }
     public void moveTargetToLeft(double degrees) { fieldHeadingAtTargetZero -= degrees; }
+    public void setToFieldDirection(double degrees) { this.fieldHeadingAtTargetZero = degrees; }
 
     // Calculation functions
     private static double getAbsoluteHeading() {
