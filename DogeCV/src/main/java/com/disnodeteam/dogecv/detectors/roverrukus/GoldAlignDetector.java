@@ -24,6 +24,8 @@ import java.util.List;
  */
 
 public class GoldAlignDetector extends DogeCVDetector {
+    //DogeCVDetector is a base detector that sets up the camera and turns it on and off, it shouldn't be messed with.
+
 
     // Defining Mats to be used.
     private Mat displayMat = new Mat(); // Display debug info to the screen (this is what is returned)
@@ -157,7 +159,7 @@ public class GoldAlignDetector extends DogeCVDetector {
     public void useDefaults() {
         addScorer(ratioScorer);
 
-        // Add diffrent scoreres depending on the selected mode
+        // Add different scorers depending on the selected mode
         if(areaScoringMethod == DogeCV.AreaScoringMethod.MAX_AREA){
             addScorer(maxAreaScorer);
         }

@@ -1,0 +1,34 @@
+Created by Ben on 5/18/2019
+****************************************************************************************************
+This is a guide to this branch, and is designed to show what elements will need to be changed each
+game.
+
+The purpose of this library is to provide a basic collection of libraries and programs for computer
+vision, or CV, in the Android environment. A sample program is also included to see what CV can do.
+
+There are a few key libraries in this branch, such as:
+    -openCVLibrary3: This is the meat of the branch, providing the base programs that every other
+        library relies on. This library should never need to be changed.
+    -endercv: This library takes programs from openCVLibrary3 and adapts them to run on the FTC app.
+       It may need to be changed only if Android or the FTC app changes significantly.
+    -DogeCV: This is the highest-level program, using endercv to run color detection and analysis
+        algorithms. As a result, this is the library that will be changed the most and improved upon.
+
+
+Possible changes:
+    -DogeCV: Every year that CV is used, this library will have to be changed. For example, you might
+        need CV to detect a certain shape or color in a game. You would add this detection in DogeCV.
+        Documentation has been added on (what I think are) important programs. Feel free to read it
+        ignore it. Some certain programs of note in this library are:
+            -The detectors folder. To find this, go to DogeCV -> java. Some built-in detectors for
+                some earlier games are provided, but these are all outdated. Here is where you would
+                combine all the elements of CV (color and shape detection, continuous scanning,
+                camera behavior, finding the best/strongest match) into one program. To see what you
+                would have to do to make a program like this, I've added comments on the
+                GoldAlignDetector in the roverrukus folder.
+            -The filters folder. Here is where you would create color and shape detection algorithms.
+            HSV is the color filter used here; it might be beneficial to use this whenever color
+            detection is required, as it's built-in. Object and edge detection is a different issue.
+            Research on this is highly suggested, and we may need to create/find a library to do this.
+            To explain how object filter/detection works, I've added comments to LeviColorFilter.
+And that's it.

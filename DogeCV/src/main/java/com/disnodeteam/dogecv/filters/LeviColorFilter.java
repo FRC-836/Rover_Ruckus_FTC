@@ -15,7 +15,10 @@ import java.util.List;
 /**
  * Created by Victo on 1/1/2018.
  */
-
+/** This program takes some present colors and scans the image from the camera searching for it.
+    All colors matching the searched color are made white, and all colors not matching the camera are
+ made black and removed from view.
+*/
 public class LeviColorFilter extends DogeCVColorFilter {
     // Color presets
     public enum ColorPreset{
@@ -66,11 +69,13 @@ public class LeviColorFilter extends DogeCVColorFilter {
             case RED:
                 if(threshold == -1){
                     threshold = 164;
+                    //threshold number based on HSV value of color; to add more colors, change around HSV value
                 }
 
                 Imgproc.cvtColor(input, input, Imgproc.COLOR_RGB2Lab);
                 Imgproc.GaussianBlur(input,input,new Size(3,3),0);
-                Core.split(input, channels);
+                //blurs the image based on color match
+                Core.split(input, channels);//separates matches from nonmatches.
                 Imgproc.threshold(channels.get(1), mask, threshold, 255, Imgproc.THRESH_BINARY);
                 break;
             case BLUE:
@@ -112,7 +117,7 @@ public class LeviColorFilter extends DogeCVColorFilter {
             channels.get(i).release();
         }
 
-        input.release();
+        input.release();//clears image from memory to prevent a leak
 
     }
 
